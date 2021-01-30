@@ -34,14 +34,13 @@ import plugily.projects.buildbattle.arena.ArenaRegistry;
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 import plugily.projects.buildbattle.arena.managers.plots.Plot;
 
-/**
- * Created by Tom on 27/07/2014.
- */
+/** Created by Tom on 27/07/2014. */
 public class User {
 
   private static final Main plugin = JavaPlugin.getPlugin(Main.class);
   private final Player player;
-  private final Map<StatsStorage.StatisticType, Integer> stats = new EnumMap<>(StatsStorage.StatisticType.class);
+  private final Map<StatsStorage.StatisticType, Integer> stats =
+      new EnumMap<>(StatsStorage.StatisticType.class);
   private Plot currentPlot;
   private boolean spectator = false;
 
@@ -87,19 +86,26 @@ public class User {
   public void setStat(StatsStorage.StatisticType stat, int i) {
     stats.put(stat, i);
 
-    Bukkit.getScheduler().runTask(plugin, () -> {
-      BBPlayerStatisticChangeEvent event = new BBPlayerStatisticChangeEvent(getArena(), player, stat, i);
-      Bukkit.getPluginManager().callEvent(event);
-    });
+    Bukkit.getScheduler()
+        .runTask(
+            plugin,
+            () -> {
+              BBPlayerStatisticChangeEvent event =
+                  new BBPlayerStatisticChangeEvent(getArena(), player, stat, i);
+              Bukkit.getPluginManager().callEvent(event);
+            });
   }
 
   public void addStat(StatsStorage.StatisticType stat, int i) {
     stats.put(stat, getStat(stat) + i);
 
-    Bukkit.getScheduler().runTask(plugin, () -> {
-      BBPlayerStatisticChangeEvent event = new BBPlayerStatisticChangeEvent(getArena(), player, stat, getStat(stat));
-      Bukkit.getPluginManager().callEvent(event);
-    });
+    Bukkit.getScheduler()
+        .runTask(
+            plugin,
+            () -> {
+              BBPlayerStatisticChangeEvent event =
+                  new BBPlayerStatisticChangeEvent(getArena(), player, stat, getStat(stat));
+              Bukkit.getPluginManager().callEvent(event);
+            });
   }
-
 }

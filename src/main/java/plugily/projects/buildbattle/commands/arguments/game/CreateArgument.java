@@ -41,54 +41,83 @@ import plugily.projects.buildbattle.handlers.setup.SetupInventory;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class CreateArgument {
 
-  private ArgumentsRegistry registry;
+  private final ArgumentsRegistry registry;
 
   public CreateArgument(ArgumentsRegistry registry) {
     this.registry = registry;
-    registry.mapArgument("buildbattle", new LabeledCommandArgument("create", "buildbattle.admin.create", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/bb create &6<arena>", "/bb create <arena>",
-            "&7Create new arena\n&6Permission: &7buildbattle.admin.create")) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        if (args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Type-Arena-Name"));
-          return;
-        }
-        Player player = (Player) sender;
-        for (BaseArena arena : ArenaRegistry.getArenas()) {
-          if (arena.getID().equalsIgnoreCase(args[1])) {
-            player.sendMessage(ChatColor.DARK_RED + "Arena with that ID already exists!");
-            player.sendMessage(ChatColor.DARK_RED + "Usage: /bb create <ID>");
-            return;
+    registry.mapArgument(
+        "buildbattle",
+        new LabeledCommandArgument(
+            "create",
+            "buildbattle.admin.create",
+            CommandArgument.ExecutorType.PLAYER,
+            new LabelData(
+                "/bb create &6<arena>",
+                "/bb create <arena>",
+                "&7Create new arena\n&6Permission: &7buildbattle.admin.create")) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            if (args.length == 1) {
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().colorMessage("Commands.Type-Arena-Name"));
+              return;
+            }
+            Player player = (Player) sender;
+            for (BaseArena arena : ArenaRegistry.getArenas()) {
+              if (arena.getID().equalsIgnoreCase(args[1])) {
+                player.sendMessage(ChatColor.DARK_RED + "Arena with that ID already exists!");
+                player.sendMessage(ChatColor.DARK_RED + "Usage: /bb create <ID>");
+                return;
+              }
+            }
+            if (ConfigUtils.getConfig(registry.getPlugin(), "arenas")
+                .contains("instances." + args[1])) {
+              player.sendMessage(
+                  ChatColor.DARK_RED
+                      + "Instance/Arena already exists! Use another ID or delete it first!");
+            } else {
+              createInstanceInConfig(args[1]);
+              player.sendMessage(ChatColor.BOLD + "------------------------------------------");
+              player.sendMessage(ChatColor.YELLOW + "      Instance " + args[1] + " created!");
+              player.sendMessage("");
+              player.sendMessage(
+                  ChatColor.GREEN
+                      + "Edit this arena via "
+                      + ChatColor.GOLD
+                      + "/bb "
+                      + args[1]
+                      + " edit"
+                      + ChatColor.GREEN
+                      + "!");
+              player.sendMessage(
+                  ChatColor.GOLD + "Don't know where to start? Check out tutorial video:");
+              player.sendMessage(ChatColor.GOLD + SetupInventory.VIDEO_LINK);
+              player.sendMessage(ChatColor.BOLD + "------------------------------------------- ");
+              SetupInventory.sendProTip(player);
+            }
           }
-        }
-        if (ConfigUtils.getConfig(registry.getPlugin(), "arenas").contains("instances." + args[1])) {
-          player.sendMessage(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!");
-        } else {
-          createInstanceInConfig(args[1]);
-          player.sendMessage(ChatColor.BOLD + "------------------------------------------");
-          player.sendMessage(ChatColor.YELLOW + "      Instance " + args[1] + " created!");
-          player.sendMessage("");
-          player.sendMessage(ChatColor.GREEN + "Edit this arena via " + ChatColor.GOLD + "/bb " + args[1] + " edit" + ChatColor.GREEN + "!");
-          player.sendMessage(ChatColor.GOLD + "Don't know where to start? Check out tutorial video:");
-          player.sendMessage(ChatColor.GOLD + SetupInventory.VIDEO_LINK);
-          player.sendMessage(ChatColor.BOLD + "------------------------------------------- ");
-          SetupInventory.sendProTip(player);
-        }
-      }
-    });
+        });
   }
 
   private void createInstanceInConfig(String id) {
     String path = "instances." + id + ".";
     FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "arenas");
-    LocationSerializer.saveLoc(registry.getPlugin(), config, "arenas", path + "lobbylocation", Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
-    LocationSerializer.saveLoc(registry.getPlugin(), config, "arenas", path + "Endlocation", Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
+    LocationSerializer.saveLoc(
+        registry.getPlugin(),
+        config,
+        "arenas",
+        path + "lobbylocation",
+        Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
+    LocationSerializer.saveLoc(
+        registry.getPlugin(),
+        config,
+        "arenas",
+        path + "Endlocation",
+        Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
     config.set(path + "minimumplayers", 2);
     config.set(path + "maximumplayers", 4);
     config.set(path + "mapname", id);
@@ -103,7 +132,8 @@ public class CreateArgument {
     arena.setMinimumPlayers(config.getInt(path + "minimumplayers"));
     arena.setMaximumPlayers(config.getInt(path + "maximumplayers"));
     arena.setMapName(config.getString(path + "mapname"));
-    arena.setLobbyLocation(LocationSerializer.getLocation(config.getString(path + "lobbylocation")));
+    arena.setLobbyLocation(
+        LocationSerializer.getLocation(config.getString(path + "lobbylocation")));
     arena.setEndLocation(LocationSerializer.getLocation(config.getString(path + "Endlocation")));
     arena.setArenaType(BaseArena.ArenaType.SOLO);
     arena.setReady(false);
@@ -112,5 +142,4 @@ public class CreateArgument {
 
     ArenaRegistry.registerArenas();
   }
-
 }

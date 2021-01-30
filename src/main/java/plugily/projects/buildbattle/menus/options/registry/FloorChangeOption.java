@@ -37,43 +37,67 @@ import plugily.projects.buildbattle.menus.options.OptionsRegistry;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
+ *     <p>Created at 23.12.2018
  */
 public class FloorChangeOption {
 
   public FloorChangeOption(OptionsRegistry registry) {
-    //todo material change
-    registry.registerOption(new MenuOption(14, "FLOOR", new ItemBuilder(XMaterial.OAK_LOG.parseItem())
-        .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Floor.Item-Name"))
-        .lore(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Floor.Item-Lore"))
-        .build()) {
-      @Override
-      public void onClick(InventoryClickEvent e) {
-        BaseArena arena = ArenaRegistry.getArena((Player) e.getWhoClicked());
-        ItemStack itemStack = e.getCursor();
-        if (arena == null || itemStack == null) {
-          return;
-        }
-        Material material = itemStack.getType();
-        if (material != XMaterial.WATER_BUCKET.parseMaterial() && material != XMaterial.LAVA_BUCKET.parseMaterial()
-            && !(material.isBlock() && material.isSolid() && material.isOccluding())) {
-            return;
-        }
-        if (registry.getPlugin().getConfigPreferences().getFloorBlacklist().contains(material)) {
-          return;
-        }
-        byte materialData = XMaterial.matchXMaterial(itemStack).getData();
-        arena.getPlotManager().getPlot((Player) e.getWhoClicked()).changeFloor(material, materialData);
-        e.getWhoClicked().sendMessage(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Floor.Floor-Changed"));
-        itemStack.setAmount(0);
-        itemStack.setType(Material.AIR);
-        e.getCurrentItem().setType(Material.AIR);
-        e.getWhoClicked().closeInventory();
-        e.getWhoClicked().getNearbyEntities(5, 5, 5).stream().filter(entity -> entity.getType() == EntityType.DROPPED_ITEM)
-          .forEach(Entity::remove);
-      }
-    });
+    // todo material change
+    registry.registerOption(
+        new MenuOption(
+            14,
+            "FLOOR",
+            new ItemBuilder(XMaterial.OAK_LOG.parseItem())
+                .name(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Floor.Item-Name"))
+                .lore(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Floor.Item-Lore"))
+                .build()) {
+          @Override
+          public void onClick(InventoryClickEvent e) {
+            BaseArena arena = ArenaRegistry.getArena((Player) e.getWhoClicked());
+            ItemStack itemStack = e.getCursor();
+            if (arena == null || itemStack == null) {
+              return;
+            }
+            Material material = itemStack.getType();
+            if (material != XMaterial.WATER_BUCKET.parseMaterial()
+                && material != XMaterial.LAVA_BUCKET.parseMaterial()
+                && !(material.isBlock() && material.isSolid() && material.isOccluding())) {
+              return;
+            }
+            if (registry
+                .getPlugin()
+                .getConfigPreferences()
+                .getFloorBlacklist()
+                .contains(material)) {
+              return;
+            }
+            byte materialData = XMaterial.matchXMaterial(itemStack).getData();
+            arena
+                .getPlotManager()
+                .getPlot((Player) e.getWhoClicked())
+                .changeFloor(material, materialData);
+            e.getWhoClicked()
+                .sendMessage(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Floor.Floor-Changed"));
+            itemStack.setAmount(0);
+            itemStack.setType(Material.AIR);
+            e.getCurrentItem().setType(Material.AIR);
+            e.getWhoClicked().closeInventory();
+            e.getWhoClicked().getNearbyEntities(5, 5, 5).stream()
+                .filter(entity -> entity.getType() == EntityType.DROPPED_ITEM)
+                .forEach(Entity::remove);
+          }
+        });
   }
-
 }

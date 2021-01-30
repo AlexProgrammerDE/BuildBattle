@@ -26,13 +26,12 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Plajer
- * <p>
- * Created at 09.02.2020
+ *     <p>Created at 09.02.2020
  */
 public class GameParty {
 
-  private List<Player> players;
-  private Player leader;
+  private final List<Player> players;
+  private final Player leader;
 
   public GameParty(List<Player> players, Player leader) {
     this.players = players;

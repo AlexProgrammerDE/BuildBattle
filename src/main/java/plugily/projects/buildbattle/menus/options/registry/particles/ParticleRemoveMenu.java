@@ -38,45 +38,67 @@ import pl.plajerlair.commonsbox.minecraft.item.ItemBuilder;
 import plugily.projects.buildbattle.Main;
 import plugily.projects.buildbattle.arena.managers.plots.Plot;
 
-/**
- * Created by Tom on 24/08/2015.
- */
+/** Created by Tom on 24/08/2015. */
 public class ParticleRemoveMenu {
 
-  private static Main plugin = JavaPlugin.getPlugin(Main.class);
+  private static final Main plugin = JavaPlugin.getPlugin(Main.class);
 
-  private ParticleRemoveMenu() {
-  }
+  private ParticleRemoveMenu() {}
 
   public static void openMenu(Player player, Plot buildPlot) {
-    Gui gui = new Gui(plugin, 6, plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Name"));
+    Gui gui =
+        new Gui(
+            plugin,
+            6,
+            plugin
+                .getChatManager()
+                .colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Name"));
     StaticPane pane = new StaticPane(9, 6);
 
     int x = 0;
     int y = 0;
-    for (Entry<Location, Particle> map : new java.util.HashMap<>(buildPlot.getParticles()).entrySet()) {
+    for (Entry<Location, Particle> map :
+        new java.util.HashMap<>(buildPlot.getParticles()).entrySet()) {
       Location location = map.getKey();
-      ParticleItem particleItem = plugin.getOptionsRegistry().getParticleRegistry().getItemByEffect(map.getValue());
+      ParticleItem particleItem =
+          plugin.getOptionsRegistry().getParticleRegistry().getItemByEffect(map.getValue());
       if (particleItem == null) {
         continue;
       }
 
-      ItemStack itemStack = new ItemBuilder(particleItem.getItemStack().clone()).lore(plugin.getChatManager().colorMessage("Menus.Location-Message"),
-          ChatColor.GRAY + "  x: " + Math.round(location.getX()),
-          ChatColor.GRAY + "  y: " + Math.round(location.getY()),
-          ChatColor.GRAY + "  z: " + Math.round(location.getZ())).build();
-      pane.addItem(new GuiItem(itemStack, event -> {
-        buildPlot.getParticles().remove(location);
-        event.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Particle.Particle-Removed"));
-        gui.getItems().forEach(item -> {
-          if (item.getItem().isSimilar(itemStack)) {
-            item.setVisible(false);
-          }
-        });
-        gui.update();
-        event.getWhoClicked().closeInventory();
-        openMenu(player, buildPlot);
-      }), x, y);
+      ItemStack itemStack =
+          new ItemBuilder(particleItem.getItemStack().clone())
+              .lore(
+                  plugin.getChatManager().colorMessage("Menus.Location-Message"),
+                  ChatColor.GRAY + "  x: " + Math.round(location.getX()),
+                  ChatColor.GRAY + "  y: " + Math.round(location.getY()),
+                  ChatColor.GRAY + "  z: " + Math.round(location.getZ()))
+              .build();
+      pane.addItem(
+          new GuiItem(
+              itemStack,
+              event -> {
+                buildPlot.getParticles().remove(location);
+                event
+                    .getWhoClicked()
+                    .sendMessage(
+                        plugin.getChatManager().getPrefix()
+                            + plugin
+                                .getChatManager()
+                                .colorMessage("Menus.Option-Menu.Items.Particle.Particle-Removed"));
+                gui.getItems()
+                    .forEach(
+                        item -> {
+                          if (item.getItem().isSimilar(itemStack)) {
+                            item.setVisible(false);
+                          }
+                        });
+                gui.update();
+                event.getWhoClicked().closeInventory();
+                openMenu(player, buildPlot);
+              }),
+          x,
+          y);
       x++;
       if (x == 9) {
         x = 0;
@@ -84,15 +106,21 @@ public class ParticleRemoveMenu {
       }
     }
 
-    pane.addItem(new GuiItem(new ItemBuilder(new ItemStack(Material.ARROW))
-        .name(plugin.getChatManager().colorMessage("Menus.Buttons.Back-Button.Name"))
-        .lore(plugin.getChatManager().colorMessage("Menus.Buttons.Back-Button.Lore"))
-        .build(), event -> {
-      event.getWhoClicked().closeInventory();
-      event.getWhoClicked().openInventory(plugin.getOptionsRegistry().getParticleRegistry().getPage1());
-    }), 4, 5);
+    pane.addItem(
+        new GuiItem(
+            new ItemBuilder(new ItemStack(Material.ARROW))
+                .name(plugin.getChatManager().colorMessage("Menus.Buttons.Back-Button.Name"))
+                .lore(plugin.getChatManager().colorMessage("Menus.Buttons.Back-Button.Lore"))
+                .build(),
+            event -> {
+              event.getWhoClicked().closeInventory();
+              event
+                  .getWhoClicked()
+                  .openInventory(plugin.getOptionsRegistry().getParticleRegistry().getPage1());
+            }),
+        4,
+        5);
     gui.addPane(pane);
     gui.show(player);
   }
-
 }

@@ -41,49 +41,66 @@ import plugily.projects.buildbattle.handlers.language.LanguageManager;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class ReloadArgument {
 
   private final Set<CommandSender> confirmations = new HashSet<>();
 
   public ReloadArgument(ArgumentsRegistry registry) {
-    registry.mapArgument("buildbattleadmin", new LabeledCommandArgument("reload", "buildbattle.admin.reload", CommandArgument.ExecutorType.BOTH,
-        new LabelData("/bba reload", "/bba reload", "&7Reload all game arenas and configuration files\n&7&lThey will be stopped!\n&6Permission: &7buildbattle.admin.reload")) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        if (!confirmations.contains(sender)) {
-          confirmations.add(sender);
-          Bukkit.getScheduler().runTaskLater(registry.getPlugin(), () -> confirmations.remove(sender), 20 * 10);
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix()
-              + registry.getPlugin().getChatManager().colorRawMessage("&cAre you sure you want to do this action? Type the command again &6within 10 seconds &cto confirm!"));
-          return;
-        }
-        confirmations.remove(sender);
-
-        registry.getPlugin().reloadConfig();
-        LanguageManager.reloadConfig();
-
-        for (BaseArena arena : ArenaRegistry.getArenas()) {
-          for (Player player : arena.getPlayers()) {
-            arena.doBarAction(BaseArena.BarAction.REMOVE, player);
-            arena.teleportToEndLocation(player);
-            if (registry.getPlugin().getConfigPreferences().getOption(ConfigPreferences.Option.INVENTORY_MANAGER_ENABLED)) {
-              InventorySerializer.loadInventory(registry.getPlugin(), player);
-            } else {
-              player.getInventory().clear();
-              player.getInventory().setArmorContents(null);
-              player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
+    registry.mapArgument(
+        "buildbattleadmin",
+        new LabeledCommandArgument(
+            "reload",
+            "buildbattle.admin.reload",
+            CommandArgument.ExecutorType.BOTH,
+            new LabelData(
+                "/bba reload",
+                "/bba reload",
+                "&7Reload all game arenas and configuration files\n&7&lThey will be stopped!\n&6Permission: &7buildbattle.admin.reload")) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            if (!confirmations.contains(sender)) {
+              confirmations.add(sender);
+              Bukkit.getScheduler()
+                  .runTaskLater(registry.getPlugin(), () -> confirmations.remove(sender), 20 * 10);
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorRawMessage(
+                              "&cAre you sure you want to do this action? Type the command again &6within 10 seconds &cto confirm!"));
+              return;
             }
-          }
-          ArenaManager.stopGame(true, arena);
-        }
-        registry.getPlugin().getConfigPreferences().loadOptions();
-        ArenaRegistry.registerArenas();
-        sender.sendMessage(ChatColor.GREEN + "Plugin reloaded!");
-      }
-    });
-  }
+            confirmations.remove(sender);
 
+            registry.getPlugin().reloadConfig();
+            LanguageManager.reloadConfig();
+
+            for (BaseArena arena : ArenaRegistry.getArenas()) {
+              for (Player player : arena.getPlayers()) {
+                arena.doBarAction(BaseArena.BarAction.REMOVE, player);
+                arena.teleportToEndLocation(player);
+                if (registry
+                    .getPlugin()
+                    .getConfigPreferences()
+                    .getOption(ConfigPreferences.Option.INVENTORY_MANAGER_ENABLED)) {
+                  InventorySerializer.loadInventory(registry.getPlugin(), player);
+                } else {
+                  player.getInventory().clear();
+                  player.getInventory().setArmorContents(null);
+                  player
+                      .getActivePotionEffects()
+                      .forEach(pe -> player.removePotionEffect(pe.getType()));
+                }
+              }
+              ArenaManager.stopGame(true, arena);
+            }
+            registry.getPlugin().getConfigPreferences().loadOptions();
+            ArenaRegistry.registerArenas();
+            sender.sendMessage(ChatColor.GREEN + "Plugin reloaded!");
+          }
+        });
+  }
 }

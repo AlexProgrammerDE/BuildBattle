@@ -37,89 +37,121 @@ import plugily.projects.buildbattle.commands.arguments.data.CommandArgument;
 
 /**
  * @author Plajer
- * <p>
- * Created at 03.12.2018
+ *     <p>Created at 03.12.2018
  */
 public class JoinArguments {
 
   public JoinArguments(ArgumentsRegistry registry) {
-    //join argument
-    registry.mapArgument("buildbattle", new CommandArgument("join", "", CommandArgument.ExecutorType.PLAYER) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        if (args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Type-Arena-Name"));
-          return;
-        }
-        if (ArenaRegistry.getArena(((Player) sender)) != null) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("In-Game.Messages.Already-Playing"));
-          return;
-        }
-        for (BaseArena arena : ArenaRegistry.getArenas()) {
-          if (args[1].equalsIgnoreCase(arena.getID())) {
-            ArenaManager.joinAttempt((Player) sender, arena);
-            return;
-          }
-        }
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.No-Arena-Like-That"));
-      }
-    });
-
-    //random join argument, register only for multi arena
-    if (!registry.getPlugin().getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED)) {
-      registry.mapArgument("buildbattle", new CommandArgument("randomjoin", "", CommandArgument.ExecutorType.PLAYER) {
-        @Override
-        public void execute(CommandSender sender, String[] args) {
-          if (ArenaRegistry.getArena(((Player) sender)) != null) {
-            sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("In-Game.Messages.Already-Playing"));
-            return;
-          }
-          if (args.length == 1) {
-            sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Invalid-Args"));
-            return;
-          }
-          switch (args[1].toLowerCase()) {
-            case "solo":
-            case "team":
-            case "gtb":
-            case "guess_the_build":
-              if (args[1].equalsIgnoreCase("gtb")){
-                args[1] = "GUESS_THE_BUILD";
-              }
-              BaseArena.ArenaType type = BaseArena.ArenaType.valueOf(args[1].toUpperCase());
-              //first random get method
-              Map<BaseArena, Integer> arenas = new HashMap<>();
-              for (BaseArena arena : ArenaRegistry.getArenas()) {
-                if (arena.getArenaState() == ArenaState.STARTING && arena.getPlayers().size() < arena.getMaximumPlayers()) {
-                  arenas.put(arena, arena.getPlayers().size());
-                }
-              }
-              if (arenas.size() > 0) {
-                Stream<Map.Entry<BaseArena, Integer>> sorted = arenas.entrySet().stream().sorted(Map.Entry.comparingByValue());
-                BaseArena arena = sorted.findFirst().get().getKey();
-                if (arena != null) {
-                  ArenaManager.joinAttempt((Player) sender, arena);
-                  return;
-                }
-              }
-
-              //fallback safe method
-              for (BaseArena arena : ArenaRegistry.getArenas()) {
-                if (arena.getArenaType() == type) {
-                  if ((arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING)
-                      && arena.getPlayers().size() < arena.getMaximumPlayers()) {
-                    ArenaManager.joinAttempt((Player) sender, arena);
-                    return;
-                  }
-                }
-              }
-              sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.No-Free-Arenas"));
+    // join argument
+    registry.mapArgument(
+        "buildbattle",
+        new CommandArgument("join", "", CommandArgument.ExecutorType.PLAYER) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            if (args.length == 1) {
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().colorMessage("Commands.Type-Arena-Name"));
               return;
-            default:
-              sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Invalid-Args"));
+            }
+            if (ArenaRegistry.getArena(((Player) sender)) != null) {
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("In-Game.Messages.Already-Playing"));
+              return;
+            }
+            for (BaseArena arena : ArenaRegistry.getArenas()) {
+              if (args[1].equalsIgnoreCase(arena.getID())) {
+                ArenaManager.joinAttempt((Player) sender, arena);
+                return;
+              }
+            }
+            sender.sendMessage(
+                registry.getPlugin().getChatManager().colorMessage("Commands.No-Arena-Like-That"));
           }
-        }
-      });
+        });
+
+    // random join argument, register only for multi arena
+    if (!registry
+        .getPlugin()
+        .getConfigPreferences()
+        .getOption(ConfigPreferences.Option.BUNGEE_ENABLED)) {
+      registry.mapArgument(
+          "buildbattle",
+          new CommandArgument("randomjoin", "", CommandArgument.ExecutorType.PLAYER) {
+            @Override
+            public void execute(CommandSender sender, String[] args) {
+              if (ArenaRegistry.getArena(((Player) sender)) != null) {
+                sender.sendMessage(
+                    registry.getPlugin().getChatManager().getPrefix()
+                        + registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("In-Game.Messages.Already-Playing"));
+                return;
+              }
+              if (args.length == 1) {
+                sender.sendMessage(
+                    registry.getPlugin().getChatManager().colorMessage("Commands.Invalid-Args"));
+                return;
+              }
+              switch (args[1].toLowerCase()) {
+                case "solo":
+                case "team":
+                case "gtb":
+                case "guess_the_build":
+                  if (args[1].equalsIgnoreCase("gtb")) {
+                    args[1] = "GUESS_THE_BUILD";
+                  }
+                  BaseArena.ArenaType type = BaseArena.ArenaType.valueOf(args[1].toUpperCase());
+                  // first random get method
+                  Map<BaseArena, Integer> arenas = new HashMap<>();
+                  for (BaseArena arena : ArenaRegistry.getArenas()) {
+                    if (arena.getArenaState() == ArenaState.STARTING
+                        && arena.getPlayers().size() < arena.getMaximumPlayers()) {
+                      arenas.put(arena, arena.getPlayers().size());
+                    }
+                  }
+                  if (arenas.size() > 0) {
+                    Stream<Map.Entry<BaseArena, Integer>> sorted =
+                        arenas.entrySet().stream().sorted(Map.Entry.comparingByValue());
+                    BaseArena arena = sorted.findFirst().get().getKey();
+                    if (arena != null) {
+                      ArenaManager.joinAttempt((Player) sender, arena);
+                      return;
+                    }
+                  }
+
+                  // fallback safe method
+                  for (BaseArena arena : ArenaRegistry.getArenas()) {
+                    if (arena.getArenaType() == type) {
+                      if ((arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS
+                              || arena.getArenaState() == ArenaState.STARTING)
+                          && arena.getPlayers().size() < arena.getMaximumPlayers()) {
+                        ArenaManager.joinAttempt((Player) sender, arena);
+                        return;
+                      }
+                    }
+                  }
+                  sender.sendMessage(
+                      registry.getPlugin().getChatManager().getPrefix()
+                          + registry
+                              .getPlugin()
+                              .getChatManager()
+                              .colorMessage("Commands.No-Free-Arenas"));
+                  return;
+                default:
+                  sender.sendMessage(
+                      registry.getPlugin().getChatManager().getPrefix()
+                          + registry
+                              .getPlugin()
+                              .getChatManager()
+                              .colorMessage("Commands.Invalid-Args"));
+              }
+            }
+          });
     }
   }
 }

@@ -36,56 +36,123 @@ import plugily.projects.buildbattle.utils.Utils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
+ *     <p>Created at 23.12.2018
  */
 public class TimeChangeOption {
 
   public TimeChangeOption(OptionsRegistry registry) {
-    registry.registerOption(new MenuOption(30, "TIME", new ItemBuilder(XMaterial.CLOCK.parseItem())
-        .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Item-Name"))
-        .lore(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Item-Lore"))
-        .build(), registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Inventory-Name")) {
+    registry.registerOption(
+        new MenuOption(
+            30,
+            "TIME",
+            new ItemBuilder(XMaterial.CLOCK.parseItem())
+                .name(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Time.Item-Name"))
+                .lore(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Time.Item-Lore"))
+                .build(),
+            registry
+                .getPlugin()
+                .getChatManager()
+                .colorMessage("Menus.Option-Menu.Items.Time.Inventory-Name")) {
 
-      @Override
-      public void onClick(InventoryClickEvent e) {
-        e.getWhoClicked().closeInventory();
+          @Override
+          public void onClick(InventoryClickEvent e) {
+            e.getWhoClicked().closeInventory();
 
-        Inventory timeInv = Bukkit.createInventory(null, 9, registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Inventory-Name"));
-        timeInv.setItem(0, new ItemBuilder(XMaterial.CLOCK.parseItem())
-            .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Time-Type.World-Time")).build());
-        timeInv.setItem(1, new ItemBuilder(XMaterial.CLOCK.parseItem())
-            .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Time-Type.Day")).build());
-        timeInv.setItem(2, new ItemBuilder(XMaterial.CLOCK.parseItem())
-            .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Time-Type.Sunset")).build());
-        timeInv.setItem(3, new ItemBuilder(XMaterial.CLOCK.parseItem())
-            .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Time-Type.Night")).build());
-        timeInv.setItem(4, new ItemBuilder(XMaterial.CLOCK.parseItem())
-            .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Time-Type.Sunrise")).build());
-        timeInv.addItem(Utils.getGoBackItem());
-        e.getWhoClicked().openInventory(timeInv);
-      }
+            Inventory timeInv =
+                Bukkit.createInventory(
+                    null,
+                    9,
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Time.Inventory-Name"));
+            timeInv.setItem(
+                0,
+                new ItemBuilder(XMaterial.CLOCK.parseItem())
+                    .name(
+                        registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Menus.Option-Menu.Items.Time.Time-Type.World-Time"))
+                    .build());
+            timeInv.setItem(
+                1,
+                new ItemBuilder(XMaterial.CLOCK.parseItem())
+                    .name(
+                        registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Menus.Option-Menu.Items.Time.Time-Type.Day"))
+                    .build());
+            timeInv.setItem(
+                2,
+                new ItemBuilder(XMaterial.CLOCK.parseItem())
+                    .name(
+                        registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Menus.Option-Menu.Items.Time.Time-Type.Sunset"))
+                    .build());
+            timeInv.setItem(
+                3,
+                new ItemBuilder(XMaterial.CLOCK.parseItem())
+                    .name(
+                        registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Menus.Option-Menu.Items.Time.Time-Type.Night"))
+                    .build());
+            timeInv.setItem(
+                4,
+                new ItemBuilder(XMaterial.CLOCK.parseItem())
+                    .name(
+                        registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Menus.Option-Menu.Items.Time.Time-Type.Sunrise"))
+                    .build());
+            timeInv.addItem(Utils.getGoBackItem());
+            e.getWhoClicked().openInventory(timeInv);
+          }
 
-      @Override
-      public void onTargetClick(InventoryClickEvent e) {
-        BaseArena arena = ArenaRegistry.getArena((Player) e.getWhoClicked());
-        if (arena == null) {
-          return;
-        }
-        Plot plot = arena.getPlotManager().getPlot((Player) e.getWhoClicked());
-        plot.setTime(Plot.Time.valueOf(TimeClickPosition.getByPosition(e.getSlot()).toString()));
-        for (Player p : plot.getOwners()) {
-          p.setPlayerTime(Plot.Time.format(plot.getTime(), p.getWorld().getTime()), false);
-          p.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Time.Time-Set"));
-        }
-      }
-    });
+          @Override
+          public void onTargetClick(InventoryClickEvent e) {
+            BaseArena arena = ArenaRegistry.getArena((Player) e.getWhoClicked());
+            if (arena == null) {
+              return;
+            }
+            Plot plot = arena.getPlotManager().getPlot((Player) e.getWhoClicked());
+            plot.setTime(
+                Plot.Time.valueOf(TimeClickPosition.getByPosition(e.getSlot()).toString()));
+            for (Player p : plot.getOwners()) {
+              p.setPlayerTime(Plot.Time.format(plot.getTime(), p.getWorld().getTime()), false);
+              p.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Menus.Option-Menu.Items.Time.Time-Set"));
+            }
+          }
+        });
   }
 
   public enum TimeClickPosition {
-    WORLD_TIME(0), DAY(1), SUNSET(2), NIGHT(3), SUNRISE(4);
+    WORLD_TIME(0),
+    DAY(1),
+    SUNSET(2),
+    NIGHT(3),
+    SUNRISE(4);
 
-    private int position;
+    private final int position;
 
     TimeClickPosition(int position) {
       this.position = position;
@@ -110,5 +177,4 @@ public class TimeChangeOption {
       return position;
     }
   }
-
 }

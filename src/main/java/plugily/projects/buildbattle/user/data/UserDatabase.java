@@ -25,8 +25,7 @@ import plugily.projects.buildbattle.user.User;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.01.2019
+ *     <p>Created at 23.01.2019
  */
 public interface UserDatabase {
 
@@ -51,5 +50,4 @@ public interface UserDatabase {
    * @param user user to load statistic for
    */
   void loadStatistics(User user);
-
 }

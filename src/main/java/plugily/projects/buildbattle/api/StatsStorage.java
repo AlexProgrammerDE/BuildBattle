@@ -45,24 +45,31 @@ import plugily.projects.buildbattle.utils.MessageUtils;
 /**
  * @author Plajer, TomTheDeveloper
  * @since 2.0.0
- * <p>
- * Class for accessing users statistics.
+ *     <p>Class for accessing users statistics.
  */
 public class StatsStorage {
 
-  private static Main plugin = JavaPlugin.getPlugin(Main.class);
+  private static final Main plugin = JavaPlugin.getPlugin(Main.class);
 
   /**
    * Get all UUID's sorted ascending by Statistic Type
    *
    * @param stat Statistic type to get (kills, deaths etc.)
-   * @return Map of UUID keys and Integer values sorted in ascending order of requested statistic type
+   * @return Map of UUID keys and Integer values sorted in ascending order of requested statistic
+   *     type
    */
   public static Map<UUID, Integer> getStats(StatisticType stat) {
     if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.DATABASE_ENABLED)) {
       try (Connection connection = plugin.getMysqlDatabase().getConnection();
-           Statement statement = connection.createStatement();
-           ResultSet set = statement.executeQuery("SELECT UUID, " + stat.getName() + " FROM " + ((MysqlManager) plugin.getUserManager().getDatabase()).getTableName() + " ORDER BY " + stat.getName())) {
+          Statement statement = connection.createStatement();
+          ResultSet set =
+              statement.executeQuery(
+                  "SELECT UUID, "
+                      + stat.getName()
+                      + " FROM "
+                      + ((MysqlManager) plugin.getUserManager().getDatabase()).getTableName()
+                      + " ORDER BY "
+                      + stat.getName())) {
         Map<UUID, Integer> column = new LinkedHashMap<>();
         while (set.next()) {
           column.put(UUID.fromString(set.getString("UUID")), set.getInt(stat.getName()));
@@ -72,7 +79,8 @@ public class StatsStorage {
         e.printStackTrace();
         MessageUtils.errorOccurred();
         Debugger.sendConsoleMsg("Cannot get contents from MySQL database!");
-        Debugger.sendConsoleMsg("Check configuration of mysql.yml file or disable mysql option in config.yml");
+        Debugger.sendConsoleMsg(
+            "Check configuration of mysql.yml file or disable mysql option in config.yml");
         return Collections.emptyMap();
       }
     }
@@ -90,7 +98,7 @@ public class StatsStorage {
   /**
    * Get user statistic based on StatisticType
    *
-   * @param player        Online player to get data from
+   * @param player Online player to get data from
    * @param statisticType Statistic type to get (blocks placed, wins etc.)
    * @return int of statistic
    * @see StatisticType
@@ -99,16 +107,21 @@ public class StatsStorage {
     return plugin.getUserManager().getUser(player).getStat(statisticType);
   }
 
-  /**
-   * Available statistics to get.
-   */
+  /** Available statistics to get. */
   public enum StatisticType {
-    BLOCKS_PLACED("blocksplaced", true), BLOCKS_BROKEN("blocksbroken", true), GAMES_PLAYED("gamesplayed", true), WINS("wins", true),
-    LOSES("loses", true), HIGHEST_WIN("highestwin", true), PARTICLES_USED("particles", true), SUPER_VOTES("supervotes", true),
-    LOCAL_POINTS("points", false), LOCAL_GUESS_THE_BUILD_POINTS("gtb_points", false);
+    BLOCKS_PLACED("blocksplaced", true),
+    BLOCKS_BROKEN("blocksbroken", true),
+    GAMES_PLAYED("gamesplayed", true),
+    WINS("wins", true),
+    LOSES("loses", true),
+    HIGHEST_WIN("highestwin", true),
+    PARTICLES_USED("particles", true),
+    SUPER_VOTES("supervotes", true),
+    LOCAL_POINTS("points", false),
+    LOCAL_GUESS_THE_BUILD_POINTS("gtb_points", false);
 
-    private String name;
-    private boolean persistent;
+    private final String name;
+    private final boolean persistent;
 
     StatisticType(String name, boolean persistent) {
       this.name = name;
@@ -123,5 +136,4 @@ public class StatsStorage {
       return persistent;
     }
   }
-
 }

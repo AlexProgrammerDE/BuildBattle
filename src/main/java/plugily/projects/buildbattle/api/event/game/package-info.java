@@ -18,8 +18,5 @@
  *
  */
 
-/**
- * All arena in-game related events.
- */
-
+/** All arena in-game related events. */
 package plugily.projects.buildbattle.api.event.game;

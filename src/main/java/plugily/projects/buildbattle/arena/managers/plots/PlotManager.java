@@ -35,9 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Created by Tom on 17/08/2015.
- */
+/** Created by Tom on 17/08/2015. */
 public class PlotManager {
 
   private final List<Plot> plots = new ArrayList<>();
@@ -101,7 +99,7 @@ public class PlotManager {
             }
 
             loc = loc.add(0, 1, 0);
-            //teleporting 1 x and z block away from center cause Y is above plot limit
+            // teleporting 1 x and z block away from center cause Y is above plot limit
             if (loc.getY() >= cuboid.getMaxPoint().getY()) {
               loc = cuboid.getCenter().clone().add(1, 0, 1);
             }
@@ -112,26 +110,29 @@ public class PlotManager {
           }
         } else {
           // Should do this in async thread to do not cause dead for the main thread
-          CompletableFuture.supplyAsync(() -> {
-            Location loc = tploc;
-            while (loc.getBlock().getType() != Material.AIR) {
-              if (arena.getArenaState() == ArenaState.IN_GAME && arena.getTimer() > 30) {
-                break; // Thread never ends on flat map?
-              }
+          CompletableFuture.supplyAsync(
+                  () -> {
+                    Location loc = tploc;
+                    while (loc.getBlock().getType() != Material.AIR) {
+                      if (arena.getArenaState() == ArenaState.IN_GAME && arena.getTimer() > 30) {
+                        break; // Thread never ends on flat map?
+                      }
 
-              loc = loc.add(0, 1, 0);
-              //teleporting 1 x and z block away from center cause Y is above plot limit
-              if (loc.getY() >= cuboid.getMaxPoint().getY()) {
-                loc = cuboid.getCenter().clone().add(1, 0, 1);
-              }
-            }
+                      loc = loc.add(0, 1, 0);
+                      // teleporting 1 x and z block away from center cause Y is above plot limit
+                      if (loc.getY() >= cuboid.getMaxPoint().getY()) {
+                        loc = cuboid.getCenter().clone().add(1, 0, 1);
+                      }
+                    }
 
-            return loc;
-          }).thenAccept(loc -> {
-            for (Player p : buildPlot.getOwners()) {
-              p.teleport(cuboid.getCenter());
-            }
-          });
+                    return loc;
+                  })
+              .thenAccept(
+                  loc -> {
+                    for (Player p : buildPlot.getOwners()) {
+                      p.teleport(cuboid.getCenter());
+                    }
+                  });
         }
       }
       BBPlayerPlotReceiveEvent event = new BBPlayerPlotReceiveEvent(arena, buildPlot);
@@ -142,5 +143,4 @@ public class PlotManager {
   public List<Plot> getPlots() {
     return plots;
   }
-
 }

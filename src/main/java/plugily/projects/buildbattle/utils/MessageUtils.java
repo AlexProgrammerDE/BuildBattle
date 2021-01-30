@@ -22,30 +22,40 @@ package plugily.projects.buildbattle.utils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 14.05.2018
+ *     <p>Created at 14.05.2018
  */
 public class MessageUtils {
 
-  private MessageUtils() {
-  }
+  private MessageUtils() {}
 
   public static void thisVersionIsNotSupported() {
-    Debugger.sendConsoleMsg("&c  _   _           _                                                    _                _ ");
-    Debugger.sendConsoleMsg("&c | \\ | |   ___   | |_     ___   _   _   _ __    _ __     ___    _ __  | |_    ___    __| |");
-    Debugger.sendConsoleMsg("&c |  \\| |  / _ \\  | __|   / __| | | | | | '_ \\  | '_ \\   / _ \\  | '__| | __|  / _ \\  / _` |");
-    Debugger.sendConsoleMsg("&c | |\\  | | (_) | | |_    \\__ \\ | |_| | | |_) | | |_) | | (_) | | |    | |_  |  __/ | (_| |");
-    Debugger.sendConsoleMsg("&c |_| \\_|  \\___/   \\__|   |___/  \\__,_| | .__/  | .__/   \\___/  |_|     \\__|  \\___|  \\__,_|");
-    Debugger.sendConsoleMsg("&c                                       |_|     |_|                                        ");
+    Debugger.sendConsoleMsg(
+        "&c  _   _           _                                                    _                _ ");
+    Debugger.sendConsoleMsg(
+        "&c | \\ | |   ___   | |_     ___   _   _   _ __    _ __     ___    _ __  | |_    ___    __| |");
+    Debugger.sendConsoleMsg(
+        "&c |  \\| |  / _ \\  | __|   / __| | | | | | '_ \\  | '_ \\   / _ \\  | '__| | __|  / _ \\  / _` |");
+    Debugger.sendConsoleMsg(
+        "&c | |\\  | | (_) | | |_    \\__ \\ | |_| | | |_) | | |_) | | (_) | | |    | |_  |  __/ | (_| |");
+    Debugger.sendConsoleMsg(
+        "&c |_| \\_|  \\___/   \\__|   |___/  \\__,_| | .__/  | .__/   \\___/  |_|     \\__|  \\___|  \\__,_|");
+    Debugger.sendConsoleMsg(
+        "&c                                       |_|     |_|                                        ");
   }
 
   public static void errorOccurred() {
-    Debugger.sendConsoleMsg("&c  _____                                                                                  _   _ ");
-    Debugger.sendConsoleMsg("&c | ____|  _ __   _ __    ___    _ __      ___     ___    ___   _   _   _ __    ___    __| | | |");
-    Debugger.sendConsoleMsg("&c |  _|   | '__| | '__|  / _ \\  | '__|    / _ \\   / __|  / __| | | | | | '__|  / _ \\  / _` | | |");
-    Debugger.sendConsoleMsg("&c | |___  | |    | |    | (_) | | |      | (_) | | (__  | (__  | |_| | | |    |  __/ | (_| | |_|");
-    Debugger.sendConsoleMsg("&c |_____| |_|    |_|     \\___/  |_|       \\___/   \\___|  \\___|  \\__,_| |_|     \\___|  \\__,_| (_)");
-    Debugger.sendConsoleMsg("&c                                                                                               ");
+    Debugger.sendConsoleMsg(
+        "&c  _____                                                                                  _   _ ");
+    Debugger.sendConsoleMsg(
+        "&c | ____|  _ __   _ __    ___    _ __      ___     ___    ___   _   _   _ __    ___    __| | | |");
+    Debugger.sendConsoleMsg(
+        "&c |  _|   | '__| | '__|  / _ \\  | '__|    / _ \\   / __|  / __| | | | | | '__|  / _ \\  / _` | | |");
+    Debugger.sendConsoleMsg(
+        "&c | |___  | |    | |    | (_) | | |      | (_) | | (__  | (__  | |_| | | |    |  __/ | (_| | |_|");
+    Debugger.sendConsoleMsg(
+        "&c |_____| |_|    |_|     \\___/  |_|       \\___/   \\___|  \\___|  \\__,_| |_|     \\___|  \\__,_| (_)");
+    Debugger.sendConsoleMsg(
+        "&c                                                                                               ");
   }
 
   public static void updateIsHere() {
@@ -59,11 +69,16 @@ public class MessageUtils {
 
   public static void gonnaMigrate() {
     Debugger.sendConsoleMsg("&a  __  __   _                          _     _                    ");
-    Debugger.sendConsoleMsg("&a |  \\/  | (_)   __ _   _ __    __ _  | |_  (_)  _ __     __ _             ");
-    Debugger.sendConsoleMsg("&a | |\\/| | | |  / _` | | '__|  / _` | | __| | | | '_ \\   / _` |            ");
-    Debugger.sendConsoleMsg("&a | |  | | | | | (_| | | |    | (_| | | |_  | | | | | | | (_| |  _   _   _ ");
-    Debugger.sendConsoleMsg("&a |_|  |_| |_|  \\__, | |_|     \\__,_|  \\__| |_| |_| |_|  \\__, | (_) (_) (_)");
-    Debugger.sendConsoleMsg("&a               |___/                                    |___/             ");
+    Debugger.sendConsoleMsg(
+        "&a |  \\/  | (_)   __ _   _ __    __ _  | |_  (_)  _ __     __ _             ");
+    Debugger.sendConsoleMsg(
+        "&a | |\\/| | | |  / _` | | '__|  / _` | | __| | | | '_ \\   / _` |            ");
+    Debugger.sendConsoleMsg(
+        "&a | |  | | | | | (_| | | |    | (_| | | |_  | | | | | | | (_| |  _   _   _ ");
+    Debugger.sendConsoleMsg(
+        "&a |_|  |_| |_|  \\__, | |_|     \\__,_|  \\__| |_| |_| |_|  \\__, | (_) (_) (_)");
+    Debugger.sendConsoleMsg(
+        "&a               |___/                                    |___/             ");
   }
 
   public static void info() {
@@ -74,6 +89,4 @@ public class MessageUtils {
     Debugger.sendConsoleMsg("&e  _| |_| | | | || (_) | |_|");
     Debugger.sendConsoleMsg("&e |_____|_| |_|_| \\___/  (_)");
   }
-
-
 }

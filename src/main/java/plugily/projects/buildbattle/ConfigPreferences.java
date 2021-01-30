@@ -33,16 +33,16 @@ import pl.plajerlair.commonsbox.minecraft.compat.XMaterial;
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 import plugily.projects.buildbattle.utils.Debugger;
 
-/**
- * Created by Tom on 17/08/2015.
- */
+/** Created by Tom on 17/08/2015. */
 public class ConfigPreferences {
 
-  private Main plugin;
+  private final Main plugin;
 
   private final Map<String, List<String>> gameThemes = new HashMap<>();
-  private final List<String> endGameCommands = new ArrayList<>(), whitelistedCommands = new ArrayList<>();
-  private final List<Material> itemBlacklist = new ArrayList<>(), floorBlacklist = new ArrayList<>();
+  private final List<String> endGameCommands = new ArrayList<>(),
+      whitelistedCommands = new ArrayList<>();
+  private final List<Material> itemBlacklist = new ArrayList<>(),
+      floorBlacklist = new ArrayList<>();
   private final Map<Option, Boolean> options = new EnumMap<>(Option.class);
 
   public ConfigPreferences(Main plugin) {
@@ -50,9 +50,7 @@ public class ConfigPreferences {
     loadOptions();
   }
 
-  /**
-   * Clears all options and loads them again
-   */
+  /** Clears all options and loads them again */
   public void loadOptions() {
     options.clear();
     gameThemes.clear();
@@ -69,11 +67,19 @@ public class ConfigPreferences {
   }
 
   private void loadThemes() {
-    gameThemes.put(BaseArena.ArenaType.SOLO.getPrefix(), plugin.getConfig().getStringList("Themes.Classic"));
-    gameThemes.put(BaseArena.ArenaType.TEAM.getPrefix(), plugin.getConfig().getStringList("Themes.Teams"));
-    gameThemes.put(BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix() + "_EASY", plugin.getConfig().getStringList("Themes.Guess-The-Build.Easy"));
-    gameThemes.put(BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix() + "_MEDIUM", plugin.getConfig().getStringList("Themes.Guess-The-Build.Medium"));
-    gameThemes.put(BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix() + "_HARD", plugin.getConfig().getStringList("Themes.Guess-The-Build.Hard"));
+    gameThemes.put(
+        BaseArena.ArenaType.SOLO.getPrefix(), plugin.getConfig().getStringList("Themes.Classic"));
+    gameThemes.put(
+        BaseArena.ArenaType.TEAM.getPrefix(), plugin.getConfig().getStringList("Themes.Teams"));
+    gameThemes.put(
+        BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix() + "_EASY",
+        plugin.getConfig().getStringList("Themes.Guess-The-Build.Easy"));
+    gameThemes.put(
+        BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix() + "_MEDIUM",
+        plugin.getConfig().getStringList("Themes.Guess-The-Build.Medium"));
+    gameThemes.put(
+        BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix() + "_HARD",
+        plugin.getConfig().getStringList("Themes.Guess-The-Build.Hard"));
     Debugger.debug("Themes loaded: " + gameThemes);
   }
 
@@ -115,7 +121,10 @@ public class ConfigPreferences {
       item = item.toUpperCase();
 
       if (!XMaterial.matchXMaterial(item).isPresent()) {
-        Debugger.sendConsoleMsg("&c[BuildBattle] Invalid black listed item! " + item + " doesn't exist, are you sure it's properly named?");
+        Debugger.sendConsoleMsg(
+            "&c[BuildBattle] Invalid black listed item! "
+                + item
+                + " doesn't exist, are you sure it's properly named?");
         continue;
       }
 
@@ -126,11 +135,14 @@ public class ConfigPreferences {
       item = item.toUpperCase();
 
       if (!XMaterial.matchXMaterial(item).isPresent()) {
-          Debugger.sendConsoleMsg("&c[BuildBattle] Invalid black listed item! " + item + " doesn't exist, are you sure it's properly named?");
-          continue;
-        }
+        Debugger.sendConsoleMsg(
+            "&c[BuildBattle] Invalid black listed item! "
+                + item
+                + " doesn't exist, are you sure it's properly named?");
+        continue;
+      }
 
-        floorBlacklist.add(XMaterial.matchXMaterial(item).get().parseMaterial());
+      floorBlacklist.add(XMaterial.matchXMaterial(item).get().parseMaterial());
     }
   }
 
@@ -173,18 +185,33 @@ public class ConfigPreferences {
   }
 
   public enum TimerType {
-    BUILD, LOBBY, PLOT_VOTE, THEME_VOTE, DELAYED_TASK, TIME_SHORTENER, THEME_SELECTION, ALL_GUESSED
+    BUILD,
+    LOBBY,
+    PLOT_VOTE,
+    THEME_VOTE,
+    DELAYED_TASK,
+    TIME_SHORTENER,
+    THEME_SELECTION,
+    ALL_GUESSED
   }
 
   public enum Option {
-    BOSSBAR_ENABLED("Boss-Bar-Enabled", true), BUNGEE_ENABLED("BungeeActivated", false), DATABASE_ENABLED("DatabaseActivated", false),
-    INVENTORY_MANAGER_ENABLED("InventoryManager", true), BLOCK_COMMANDS_IN_GAME("Block-Commands-In-Game", true), REWARDS("Rewards-Enabled", false),
-    HEADS_COMMAND("Command-Instead-Of-Head-Menu.Enabled", false), ENABLE_SHORT_COMMANDS("Enable-Short-Commands", false),
-    DISABLE_SEPARATE_CHAT("Disable-Separate-Chat", false), DISABLE_PARTIES("Disable-Parties", true), ANNOUNCE_PLOTOWNER_LATER("Announce-PlotOwner-Later", false),
-    RUN_COMMAND_ON_REPORT("Run-Command-On-Report.Enabled", false), DISABLE_SPECTATORS("Disable-Spectators", false);
+    BOSSBAR_ENABLED("Boss-Bar-Enabled", true),
+    BUNGEE_ENABLED("BungeeActivated", false),
+    DATABASE_ENABLED("DatabaseActivated", false),
+    INVENTORY_MANAGER_ENABLED("InventoryManager", true),
+    BLOCK_COMMANDS_IN_GAME("Block-Commands-In-Game", true),
+    REWARDS("Rewards-Enabled", false),
+    HEADS_COMMAND("Command-Instead-Of-Head-Menu.Enabled", false),
+    ENABLE_SHORT_COMMANDS("Enable-Short-Commands", false),
+    DISABLE_SEPARATE_CHAT("Disable-Separate-Chat", false),
+    DISABLE_PARTIES("Disable-Parties", true),
+    ANNOUNCE_PLOTOWNER_LATER("Announce-PlotOwner-Later", false),
+    RUN_COMMAND_ON_REPORT("Run-Command-On-Report.Enabled", false),
+    DISABLE_SPECTATORS("Disable-Spectators", false);
 
-    private String path;
-    private boolean def;
+    private final String path;
+    private final boolean def;
 
     Option(String path, boolean def) {
       this.path = path;
@@ -195,18 +222,18 @@ public class ConfigPreferences {
       return path;
     }
 
-    /**
-     * @return default value of option if absent in plugin.getConfig()
-     */
+    /** @return default value of option if absent in plugin.getConfig() */
     public boolean getDefault() {
       return def;
     }
   }
 
   public enum Position {
-    FIRST("First"), SECOND("Second"), THIRD("Third");
+    FIRST("First"),
+    SECOND("Second"),
+    THIRD("Third");
 
-    private String name;
+    private final String name;
 
     Position(String name) {
       this.name = name;
@@ -216,5 +243,4 @@ public class ConfigPreferences {
       return name;
     }
   }
-
 }

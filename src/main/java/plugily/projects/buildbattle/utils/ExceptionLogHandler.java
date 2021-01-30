@@ -30,58 +30,68 @@ import plugily.projects.buildbattle.utils.services.exception.ReportedException;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.03.2019
+ *     <p>Created at 23.03.2019
  */
 public class ExceptionLogHandler extends Handler {
 
-    //these classes if found in stacktraces won't be reported
-    //to the Error Service
-    private final String[] blacklistedClasses = { "plugily.projects.buildbattle.user.data.MysqlManager", "plugily.projects.buildbattle.plajerlair.commonsbox.database.MysqlDatabase" };
-    private Main plugin;
+  // these classes if found in stacktraces won't be reported
+  // to the Error Service
+  private final String[] blacklistedClasses = {
+    "plugily.projects.buildbattle.user.data.MysqlManager",
+    "plugily.projects.buildbattle.plajerlair.commonsbox.database.MysqlDatabase"
+  };
+  private final Main plugin;
 
-    public ExceptionLogHandler(Main plugin) {
-        this.plugin = plugin;
-        Bukkit.getLogger().addHandler(this);
+  public ExceptionLogHandler(Main plugin) {
+    this.plugin = plugin;
+    Bukkit.getLogger().addHandler(this);
+  }
+
+  @Override
+  public void close() {
+    // unused
+  }
+
+  @Override
+  public void flush() {
+    // unused
+  }
+
+  @Override
+  public void publish(LogRecord record) {
+    Throwable throwable = record.getThrown();
+    if (!(throwable instanceof Exception)
+        || !throwable.getClass().getSimpleName().contains("Exception")
+        || throwable.getStackTrace().length <= 0) {
+      return;
     }
-
-    @Override
-    public void close() {
-        //unused
+    if (throwable.getStackTrace().length <= 0
+        || (throwable.getCause() != null
+            && !throwable
+                .getCause()
+                .getStackTrace()[0]
+                .getClassName()
+                .contains("plugily.projects.buildbattle"))) {
+      return;
     }
-
-    @Override
-    public void flush() {
-        //unused
+    if (!throwable.getStackTrace()[0].getClassName().contains("plugily.projects.buildbattle")
+        || containsBlacklistedClass(throwable)) {
+      return;
     }
+    new ReportedException(plugin, (Exception) throwable);
+    record.setThrown(null);
+    record.setMessage(
+        "[BuildBattle] We have found a bug in the code. Contact us at our official discord server (Invite link: https://discordapp.com/invite/UXzUdTP) with the following error given above!");
+  }
 
-    @Override
-    public void publish(LogRecord record) {
-        Throwable throwable = record.getThrown();
-        if (!(throwable instanceof Exception) || !throwable.getClass().getSimpleName().contains("Exception") || throwable.getStackTrace().length <= 0) {
-            return;
+  private boolean containsBlacklistedClass(Throwable throwable) {
+    for (StackTraceElement element : throwable.getStackTrace()) {
+      for (String blacklist : blacklistedClasses) {
+        if (element.getClassName().contains(blacklist)) {
+          return true;
         }
-        if (throwable.getStackTrace().length <= 0 || (throwable.getCause() != null &&
-              !throwable.getCause().getStackTrace()[0].getClassName().contains("plugily.projects.buildbattle"))) {
-            return;
-        }
-        if (!throwable.getStackTrace()[0].getClassName().contains("plugily.projects.buildbattle") || containsBlacklistedClass(throwable)) {
-            return;
-        }
-        new ReportedException(plugin, (Exception) throwable);
-        record.setThrown(null);
-        record.setMessage("[BuildBattle] We have found a bug in the code. Contact us at our official discord server (Invite link: https://discordapp.com/invite/UXzUdTP) with the following error given above!");
+      }
     }
-
-    private boolean containsBlacklistedClass(Throwable throwable) {
-        for (StackTraceElement element : throwable.getStackTrace()) {
-            for (String blacklist : blacklistedClasses) {
-                if (element.getClassName().contains(blacklist)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
+    return false;
+  }
 }

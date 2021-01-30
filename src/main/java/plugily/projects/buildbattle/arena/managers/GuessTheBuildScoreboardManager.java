@@ -38,8 +38,7 @@ import java.util.Map;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class GuessTheBuildScoreboardManager extends ScoreboardManager {
 
@@ -50,28 +49,47 @@ public class GuessTheBuildScoreboardManager extends ScoreboardManager {
     super(arena);
     this.arena = (GuessTheBuildArena) arena;
     for (ArenaState state : ArenaState.values()) {
-      //not registering RESTARTING state and registering IN_GAME and ENDING later
-      if (state == ArenaState.RESTARTING || state == ArenaState.IN_GAME || state == ArenaState.ENDING) {
+      // not registering RESTARTING state and registering IN_GAME and ENDING later
+      if (state == ArenaState.RESTARTING
+          || state == ArenaState.IN_GAME
+          || state == ArenaState.ENDING) {
         continue;
       }
-      //todo migrator
-      List<String> lines = LanguageManager.getLanguageList("Scoreboard.Content." + state.getFormattedName());
+      // todo migrator
+      List<String> lines =
+          LanguageManager.getLanguageList("Scoreboard.Content." + state.getFormattedName());
       scoreboardContents.put(state.getFormattedName(), lines);
     }
-    List<String> playing = LanguageManager.getLanguageList("Scoreboard.Content.Playing-States." + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix());
-    List<String> ending = LanguageManager.getLanguageList("Scoreboard.Content.Ending-States." + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix());
-    //todo locale
-    scoreboardContents.put(ArenaState.IN_GAME.getFormattedName() + "_" + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix(), playing);
-    scoreboardContents.put(ArenaState.ENDING.getFormattedName() + "_" + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix(), ending);
+    List<String> playing =
+        LanguageManager.getLanguageList(
+            "Scoreboard.Content.Playing-States." + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix());
+    List<String> ending =
+        LanguageManager.getLanguageList(
+            "Scoreboard.Content.Ending-States." + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix());
+    // todo locale
+    scoreboardContents.put(
+        ArenaState.IN_GAME.getFormattedName()
+            + "_"
+            + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix(),
+        playing);
+    scoreboardContents.put(
+        ArenaState.ENDING.getFormattedName()
+            + "_"
+            + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix(),
+        ending);
   }
 
-  //todo maybe not needed and private
+  // todo maybe not needed and private
   @Override
   public List<Entry> formatScoreboard(User user) {
     EntryBuilder builder = new EntryBuilder();
     List<String> lines = scoreboardContents.get(arena.getArenaState().getFormattedName());
     if (arena.getArenaState() == ArenaState.IN_GAME || arena.getArenaState() == ArenaState.ENDING) {
-      lines = scoreboardContents.get(arena.getArenaState().getFormattedName() + "_" + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix());
+      lines =
+          scoreboardContents.get(
+              arena.getArenaState().getFormattedName()
+                  + "_"
+                  + BaseArena.ArenaType.GUESS_THE_BUILD.getPrefix());
     }
     for (String line : lines) {
       builder.next(formatScoreboardLine(line, user));
@@ -83,23 +101,47 @@ public class GuessTheBuildScoreboardManager extends ScoreboardManager {
   public String formatScoreboardLine(String string, User user) {
     Player player = user.getPlayer();
     String returnString = string;
-    returnString = StringUtils.replace(returnString, "%PLAYERS%", Integer.toString(arena.getPlayers().size()));
+    returnString =
+        StringUtils.replace(returnString, "%PLAYERS%", Integer.toString(arena.getPlayers().size()));
     returnString = StringUtils.replace(returnString, "%PLAYER%", player.getName());
     if (arena.isThemeSet()) {
-      returnString = StringUtils.replace(returnString, "%CURRENT_TIMER%", getPlugin().getChatManager().colorMessage("Scoreboard.GTB-Current-Timer.Build-Time"));
+      returnString =
+          StringUtils.replace(
+              returnString,
+              "%CURRENT_TIMER%",
+              getPlugin().getChatManager().colorMessage("Scoreboard.GTB-Current-Timer.Build-Time"));
     } else {
-      returnString = StringUtils.replace(returnString, "%CURRENT_TIMER%", getPlugin().getChatManager().colorMessage("Scoreboard.GTB-Current-Timer.Starts-In"));
+      returnString =
+          StringUtils.replace(
+              returnString,
+              "%CURRENT_TIMER%",
+              getPlugin().getChatManager().colorMessage("Scoreboard.GTB-Current-Timer.Starts-In"));
     }
     if (arena.getCurrentBuilder() != null) {
-      if ((arena.getCurrentBuilder().equals(player) && arena.getCurrentTheme() != null) || arena.getWhoGuessed().contains(player)) {
-        returnString = StringUtils.replace(returnString, "%THEME%", arena.getCurrentTheme().getTheme());
+      if ((arena.getCurrentBuilder().equals(player) && arena.getCurrentTheme() != null)
+          || arena.getWhoGuessed().contains(player)) {
+        returnString =
+            StringUtils.replace(returnString, "%THEME%", arena.getCurrentTheme().getTheme());
       } else {
-        returnString = StringUtils.replace(returnString, "%THEME%", getPlugin().getChatManager().colorMessage("Scoreboard.Theme-Unknown"));
+        returnString =
+            StringUtils.replace(
+                returnString,
+                "%THEME%",
+                getPlugin().getChatManager().colorMessage("Scoreboard.Theme-Unknown"));
       }
-      returnString = StringUtils.replace(returnString, "%BUILDER%", arena.getCurrentBuilder().getName());
+      returnString =
+          StringUtils.replace(returnString, "%BUILDER%", arena.getCurrentBuilder().getName());
     } else {
-      returnString = StringUtils.replace(returnString, "%THEME%", getPlugin().getChatManager().colorMessage("Scoreboard.Theme-Unknown"));
-      returnString = StringUtils.replace(returnString, "%BUILDER%", getPlugin().getChatManager().colorMessage("Scoreboard.Theme-Unknown"));
+      returnString =
+          StringUtils.replace(
+              returnString,
+              "%THEME%",
+              getPlugin().getChatManager().colorMessage("Scoreboard.Theme-Unknown"));
+      returnString =
+          StringUtils.replace(
+              returnString,
+              "%BUILDER%",
+              getPlugin().getChatManager().colorMessage("Scoreboard.Theme-Unknown"));
     }
     if (arena.getArenaState() == ArenaState.IN_GAME || arena.getArenaState() == ArenaState.ENDING) {
       int max = arena.getArenaState() == ArenaState.IN_GAME ? 3 : 10;
@@ -111,8 +153,11 @@ public class GuessTheBuildScoreboardManager extends ScoreboardManager {
           continue;
         }
         Map.Entry<Player, Integer> entry = list.get(i);
-        returnString = StringUtils.replace(returnString, "%" + (i + 1) + "%", entry.getKey().getName());
-        returnString = StringUtils.replace(returnString, "%" + (i + 1) + "_PTS%", String.valueOf(entry.getValue()));
+        returnString =
+            StringUtils.replace(returnString, "%" + (i + 1) + "%", entry.getKey().getName());
+        returnString =
+            StringUtils.replace(
+                returnString, "%" + (i + 1) + "_PTS%", String.valueOf(entry.getValue()));
       }
     }
     returnString = replaceValues(returnString);
@@ -122,5 +167,4 @@ public class GuessTheBuildScoreboardManager extends ScoreboardManager {
     returnString = getPlugin().getChatManager().colorRawMessage(returnString);
     return returnString;
   }
-
 }

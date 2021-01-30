@@ -34,12 +34,11 @@ import plugily.projects.buildbattle.utils.Utils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
+ *     <p>Created at 23.12.2018
  */
 public class OptionsMenuHandler implements Listener {
 
-  private Main plugin;
+  private final Main plugin;
 
   public OptionsMenuHandler(Main plugin) {
     this.plugin = plugin;
@@ -51,7 +50,10 @@ public class OptionsMenuHandler implements Listener {
     if (!(e.getWhoClicked() instanceof Player) || e.getCurrentItem() == null) {
       return;
     }
-    if (!ItemUtils.isItemStackNamed(e.getCurrentItem()) || !e.getView().getTitle().equals(plugin.getChatManager().colorMessage("Menus.Option-Menu.Inventory-Name"))) {
+    if (!ItemUtils.isItemStackNamed(e.getCurrentItem())
+        || !e.getView()
+            .getTitle()
+            .equals(plugin.getChatManager().colorMessage("Menus.Option-Menu.Inventory-Name"))) {
       return;
     }
     BaseArena arena = ArenaRegistry.getArena((Player) e.getWhoClicked());
@@ -77,7 +79,10 @@ public class OptionsMenuHandler implements Listener {
       if (!option.isInventoryEnabled()) {
         continue;
       }
-      if (Utils.getGoBackItem().getItemMeta().getDisplayName().equalsIgnoreCase(e.getCurrentItem().getItemMeta().getDisplayName())) {
+      if (Utils.getGoBackItem()
+          .getItemMeta()
+          .getDisplayName()
+          .equalsIgnoreCase(e.getCurrentItem().getItemMeta().getDisplayName())) {
         e.getWhoClicked().openInventory(plugin.getOptionsRegistry().formatInventory());
         return;
       }
@@ -88,5 +93,4 @@ public class OptionsMenuHandler implements Listener {
       }
     }
   }
-
 }

@@ -30,22 +30,32 @@ import plugily.projects.buildbattle.menus.options.OptionsRegistry;
 
 /**
  * @author Plajer
- * <p>
- * Created at 16.07.2019
+ *     <p>Created at 16.07.2019
  */
 public class BannerCreatorOption {
 
   public BannerCreatorOption(OptionsRegistry registry) {
-    registry.registerOption(new MenuOption(16, "BANNER_CREATOR", new ItemBuilder(XMaterial.WHITE_BANNER.parseItem())
-        .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Banner-Creator.Item-Name"))
-        .lore(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Banner-Creator.Item-Lore"))
-        .build()) {
-      @Override
-      public void onClick(InventoryClickEvent e) {
-        e.getWhoClicked().closeInventory();
-        new BannerMenu((Player) e.getWhoClicked()).openInventory(BannerMenu.PatternStage.BASE);
-      }
-    });
+    registry.registerOption(
+        new MenuOption(
+            16,
+            "BANNER_CREATOR",
+            new ItemBuilder(XMaterial.WHITE_BANNER.parseItem())
+                .name(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Banner-Creator.Item-Name"))
+                .lore(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Banner-Creator.Item-Lore"))
+                .build()) {
+          @Override
+          public void onClick(InventoryClickEvent e) {
+            e.getWhoClicked().closeInventory();
+            new BannerMenu((Player) e.getWhoClicked()).openInventory(BannerMenu.PatternStage.BASE);
+          }
+        });
   }
-
 }

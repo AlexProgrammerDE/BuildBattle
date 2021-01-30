@@ -18,8 +18,5 @@
  *
  */
 
-/**
- * Package with all API events and methods to hook with BuildBattle.
- */
-
+/** Package with all API events and methods to hook with BuildBattle. */
 package plugily.projects.buildbattle.api;

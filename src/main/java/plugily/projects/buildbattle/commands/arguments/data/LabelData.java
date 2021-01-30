@@ -26,13 +26,12 @@ import plugily.projects.buildbattle.Main;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class LabelData {
 
-  private Main plugin = JavaPlugin.getPlugin(Main.class);
-  private String text;
+  private final Main plugin = JavaPlugin.getPlugin(Main.class);
+  private final String text;
   private String command;
   private String description;
 
@@ -61,5 +60,4 @@ public class LabelData {
   public void setDescription(String description) {
     this.description = description;
   }
-
 }

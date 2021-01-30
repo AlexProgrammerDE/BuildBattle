@@ -33,34 +33,48 @@ import plugily.projects.buildbattle.utils.Debugger;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class LeaveArgument {
 
   public LeaveArgument(ArgumentsRegistry registry) {
-    registry.mapArgument("buildbattle", new CommandArgument("leave", "", CommandArgument.ExecutorType.PLAYER) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        if (!registry.getPlugin().getConfig().getBoolean("Disable-Leave-Command", false)) {
-          Player p = (Player) sender;
-          BaseArena arena = ArenaRegistry.getArena(p);
-          if (arena == null) {
-            p.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.No-Playing"));
-            return;
+    registry.mapArgument(
+        "buildbattle",
+        new CommandArgument("leave", "", CommandArgument.ExecutorType.PLAYER) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            if (!registry.getPlugin().getConfig().getBoolean("Disable-Leave-Command", false)) {
+              Player p = (Player) sender;
+              BaseArena arena = ArenaRegistry.getArena(p);
+              if (arena == null) {
+                p.sendMessage(
+                    registry.getPlugin().getChatManager().getPrefix()
+                        + registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Commands.No-Playing"));
+                return;
+              }
+              p.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Commands.Teleported-To-The-Lobby"));
+              if (registry
+                  .getPlugin()
+                  .getConfigPreferences()
+                  .getOption(ConfigPreferences.Option.BUNGEE_ENABLED)) {
+                registry.getPlugin().getBungeeManager().connectToHub(p);
+                Debugger.debug(p.getName() + " was teleported to the Hub server");
+              } else {
+                arena.teleportToEndLocation(p);
+                ArenaManager.leaveAttempt(p, arena);
+                Debugger.debug(
+                    p.getName() + " has left the arena! He is teleported to the end location.");
+              }
+            }
           }
-          p.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Teleported-To-The-Lobby"));
-          if (registry.getPlugin().getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED)) {
-            registry.getPlugin().getBungeeManager().connectToHub(p);
-            Debugger.debug(p.getName() + " was teleported to the Hub server");
-          } else {
-            arena.teleportToEndLocation(p);
-            ArenaManager.leaveAttempt(p, arena);
-            Debugger.debug(p.getName() + " has left the arena! He is teleported to the end location.");
-          }
-        }
-      }
-    });
+        });
   }
-
 }

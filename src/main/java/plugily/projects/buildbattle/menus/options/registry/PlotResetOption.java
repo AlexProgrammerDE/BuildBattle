@@ -33,28 +33,44 @@ import plugily.projects.buildbattle.menus.options.OptionsRegistry;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
+ *     <p>Created at 23.12.2018
  */
 public class PlotResetOption {
 
   public PlotResetOption(OptionsRegistry registry) {
-    registry.registerOption(new MenuOption(34, "RESET", new ItemBuilder(Material.BARRIER)
-        .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Reset.Item-Name"))
-        .lore(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Reset.Item-Lore"))
-        .build()) {
-      @Override
-      public void onClick(InventoryClickEvent e) {
-        e.getWhoClicked().closeInventory();
-        BaseArena arena = ArenaRegistry.getArena((Player) e.getWhoClicked());
-        if (arena == null) {
-          return;
-        }
-        Plot plot = arena.getPlotManager().getPlot((Player) e.getWhoClicked());
-        plot.resetPlot();
-        e.getWhoClicked().sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Reset.Plot-Reset"));
-      }
-    });
+    registry.registerOption(
+        new MenuOption(
+            34,
+            "RESET",
+            new ItemBuilder(Material.BARRIER)
+                .name(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Reset.Item-Name"))
+                .lore(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Reset.Item-Lore"))
+                .build()) {
+          @Override
+          public void onClick(InventoryClickEvent e) {
+            e.getWhoClicked().closeInventory();
+            BaseArena arena = ArenaRegistry.getArena((Player) e.getWhoClicked());
+            if (arena == null) {
+              return;
+            }
+            Plot plot = arena.getPlotManager().getPlot((Player) e.getWhoClicked());
+            plot.resetPlot();
+            e.getWhoClicked()
+                .sendMessage(
+                    registry.getPlugin().getChatManager().getPrefix()
+                        + registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Menus.Option-Menu.Items.Reset.Plot-Reset"));
+          }
+        });
   }
-
 }

@@ -44,8 +44,7 @@ import plugily.projects.buildbattle.menus.options.registry.playerheads.PlayerHea
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
+ *     <p>Created at 23.12.2018
  */
 public class OptionsRegistry {
 
@@ -54,12 +53,13 @@ public class OptionsRegistry {
   private PlayerHeadsRegistry playerHeadsRegistry;
   private final Set<MenuOption> registeredOptions = new HashSet<>();
   private int inventorySize = 5 * 9;
-  private ItemBuilder menuItem;
-  private Main plugin;
+  private final ItemBuilder menuItem;
+  private final Main plugin;
 
   public OptionsRegistry(Main plugin) {
     this.plugin = plugin;
-    this.menuItem = new ItemBuilder(Material.NETHER_STAR)
+    this.menuItem =
+        new ItemBuilder(Material.NETHER_STAR)
             .name(plugin.getChatManager().colorMessage("Menus.Option-Menu.Option-Item"))
             .lore(plugin.getChatManager().colorMessage("Menus.Option-Menu.Option-Item-Lore"));
     registerOptions();
@@ -71,11 +71,11 @@ public class OptionsRegistry {
 
     new FloorChangeOption(this);
 
-    //register particles
+    // register particles
     particleRegistry = new ParticleRegistry(this);
     new ParticlesOption(this);
 
-    //register player heads
+    // register player heads
     playerHeadsRegistry = new PlayerHeadsRegistry(this);
     new PlayerHeadsOption(this);
 
@@ -89,8 +89,8 @@ public class OptionsRegistry {
    * Registers new menu option available in options menu in game.
    *
    * @param option option to register
-   * @throws IllegalArgumentException if option slot is same as one of already registered ones
-   *                                  or ID of option is same as one of registered one
+   * @throws IllegalArgumentException if option slot is same as one of already registered ones or ID
+   *     of option is same as one of registered one
    */
   public void registerOption(MenuOption option) {
     for (MenuOption opt : registeredOptions) {
@@ -132,7 +132,11 @@ public class OptionsRegistry {
    * @return options inventory
    */
   public Inventory formatInventory() {
-    Inventory inv = Bukkit.createInventory(null, inventorySize, plugin.getChatManager().colorMessage("Menus.Option-Menu.Inventory-Name"));
+    Inventory inv =
+        Bukkit.createInventory(
+            null,
+            inventorySize,
+            plugin.getChatManager().colorMessage("Menus.Option-Menu.Inventory-Name"));
     for (MenuOption option : registeredOptions) {
       inv.setItem(option.getSlot(), option.getItemStack());
     }

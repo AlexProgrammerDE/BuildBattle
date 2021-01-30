@@ -33,8 +33,7 @@ import pl.plajerlair.commonsbox.minecraft.compat.XMaterial;
 
 /**
  * @author Plajer
- * <p>
- * Created at 16.07.2019
+ *     <p>Created at 16.07.2019
  */
 public class Banner {
 

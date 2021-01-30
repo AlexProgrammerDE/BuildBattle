@@ -41,23 +41,56 @@ import plugily.projects.buildbattle.arena.ArenaRegistry;
 import plugily.projects.buildbattle.arena.ArenaState;
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 
-/**
- * Created by Tom on 31/08/2014.
- */
+/** Created by Tom on 31/08/2014. */
 public class BungeeManager implements Listener {
 
-  private Main plugin;
+  private final Main plugin;
   private final Map<ArenaState, String> gameStateToString = new EnumMap<>(ArenaState.class);
-  private String MOTD;
+  private final String MOTD;
 
   public BungeeManager(Main plugin) {
     this.plugin = plugin;
-    gameStateToString.put(ArenaState.WAITING_FOR_PLAYERS, plugin.getChatManager().colorRawMessage(ConfigUtils.getConfig(plugin, "bungee").getString("MOTD.Game-States.Inactive", "Inactive")));
-    gameStateToString.put(ArenaState.STARTING, plugin.getChatManager().colorRawMessage(ConfigUtils.getConfig(plugin, "bungee").getString("MOTD.Game-States.Starting", "Starting")));
-    gameStateToString.put(ArenaState.IN_GAME, plugin.getChatManager().colorRawMessage(ConfigUtils.getConfig(plugin, "bungee").getString("MOTD.Game-States.In-Game", "In-Game")));
-    gameStateToString.put(ArenaState.ENDING, plugin.getChatManager().colorRawMessage(ConfigUtils.getConfig(plugin, "bungee").getString("MOTD.Game-States.Ending", "Ending")));
-    gameStateToString.put(ArenaState.RESTARTING, plugin.getChatManager().colorRawMessage(ConfigUtils.getConfig(plugin, "bungee").getString("MOTD.Game-States.Restarting", "Restarting")));
-    MOTD = plugin.getChatManager().colorRawMessage(ConfigUtils.getConfig(plugin, "bungee").getString("MOTD.Message", "The actual game state of bb is %state%"));
+    gameStateToString.put(
+        ArenaState.WAITING_FOR_PLAYERS,
+        plugin
+            .getChatManager()
+            .colorRawMessage(
+                ConfigUtils.getConfig(plugin, "bungee")
+                    .getString("MOTD.Game-States.Inactive", "Inactive")));
+    gameStateToString.put(
+        ArenaState.STARTING,
+        plugin
+            .getChatManager()
+            .colorRawMessage(
+                ConfigUtils.getConfig(plugin, "bungee")
+                    .getString("MOTD.Game-States.Starting", "Starting")));
+    gameStateToString.put(
+        ArenaState.IN_GAME,
+        plugin
+            .getChatManager()
+            .colorRawMessage(
+                ConfigUtils.getConfig(plugin, "bungee")
+                    .getString("MOTD.Game-States.In-Game", "In-Game")));
+    gameStateToString.put(
+        ArenaState.ENDING,
+        plugin
+            .getChatManager()
+            .colorRawMessage(
+                ConfigUtils.getConfig(plugin, "bungee")
+                    .getString("MOTD.Game-States.Ending", "Ending")));
+    gameStateToString.put(
+        ArenaState.RESTARTING,
+        plugin
+            .getChatManager()
+            .colorRawMessage(
+                ConfigUtils.getConfig(plugin, "bungee")
+                    .getString("MOTD.Game-States.Restarting", "Restarting")));
+    MOTD =
+        plugin
+            .getChatManager()
+            .colorRawMessage(
+                ConfigUtils.getConfig(plugin, "bungee")
+                    .getString("MOTD.Message", "The actual game state of bb is %state%"));
     plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
@@ -72,14 +105,14 @@ public class BungeeManager implements Listener {
     player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
   }
 
-
   public String getHubServerName() {
     return ConfigUtils.getConfig(plugin, "bungee").getString("Hub");
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onServerListPing(ServerListPingEvent event) {
-    if (!ConfigUtils.getConfig(plugin, "bungee").getBoolean("MOTD.Manager") || ArenaRegistry.getArenas().isEmpty()) {
+    if (!ConfigUtils.getConfig(plugin, "bungee").getBoolean("MOTD.Manager")
+        || ArenaRegistry.getArenas().isEmpty()) {
       return;
     }
     BaseArena arena = ArenaRegistry.getArenas().get(ArenaRegistry.getBungeeArena());
@@ -87,20 +120,27 @@ public class BungeeManager implements Listener {
     event.setMotd(MOTD.replace("%state%", gameStateToString.get(arena.getArenaState())));
   }
 
-
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onJoin(final PlayerJoinEvent event) {
     event.setJoinMessage("");
-    plugin.getServer().getScheduler().runTaskLater(plugin, () -> ArenaManager.joinAttempt(event.getPlayer(), ArenaRegistry.getArenas().get(ArenaRegistry.getBungeeArena())), 1L);
+    plugin
+        .getServer()
+        .getScheduler()
+        .runTaskLater(
+            plugin,
+            () ->
+                ArenaManager.joinAttempt(
+                    event.getPlayer(),
+                    ArenaRegistry.getArenas().get(ArenaRegistry.getBungeeArena())),
+            1L);
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onQuit(PlayerQuitEvent event) {
     event.setQuitMessage("");
     if (ArenaRegistry.getArena(event.getPlayer()) != null) {
-      ArenaManager.leaveAttempt(event.getPlayer(), ArenaRegistry.getArenas().get(ArenaRegistry.getBungeeArena()));
+      ArenaManager.leaveAttempt(
+          event.getPlayer(), ArenaRegistry.getArenas().get(ArenaRegistry.getBungeeArena()));
     }
   }
-
-
 }

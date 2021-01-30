@@ -22,14 +22,12 @@ package plugily.projects.buildbattle.handlers.items;
 
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Created by Tom on 5/02/2016.
- */
+/** Created by Tom on 5/02/2016. */
 public class SpecialItem {
 
-  private String name;
-  private ItemStack itemStack;
-  private int slot;
+  private final String name;
+  private final ItemStack itemStack;
+  private final int slot;
 
   public SpecialItem(String name, ItemStack itemStack, int slot) {
     this.name = name;
@@ -48,6 +46,4 @@ public class SpecialItem {
   public ItemStack getItemStack() {
     return itemStack;
   }
-
-
 }

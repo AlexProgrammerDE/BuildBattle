@@ -35,39 +35,64 @@ import plugily.projects.buildbattle.commands.arguments.data.LabeledCommandArgume
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class ForceStartArguments {
 
   public ForceStartArguments(ArgumentsRegistry registry) {
-    registry.mapArgument("buildbattleadmin", new LabeledCommandArgument("forcestart", "buildbattle.admin.forcestart", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/bba forcestart &c[theme]", "/bba forcestart",
-            "&7Force starts arena you're in\n&6Permission: &7buildbattle.admin.forcestart")) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        BaseArena arena = ArenaRegistry.getArena((Player) sender);
-        if (arena == null) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Not-Playing"));
-          return;
-        }
-        if (args.length == 2 && !sender.hasPermission("buildbattle.admin.forcestart.theme")) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.No-Permission"));
-          return;
-        }
-        if (arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING) {
-          arena.setArenaState(ArenaState.STARTING);
-          arena.setForceStart(true);
-          arena.setTimer(0);
-          if (args.length == 2 && arena instanceof SoloArena) {
-            ((SoloArena) arena).setThemeVoteTime(false);
-            arena.setTimer(registry.getPlugin().getConfigPreferences().getTimer(ConfigPreferences.TimerType.BUILD, arena));
-            arena.setTheme(args[1]);
+    registry.mapArgument(
+        "buildbattleadmin",
+        new LabeledCommandArgument(
+            "forcestart",
+            "buildbattle.admin.forcestart",
+            CommandArgument.ExecutorType.PLAYER,
+            new LabelData(
+                "/bba forcestart &c[theme]",
+                "/bba forcestart",
+                "&7Force starts arena you're in\n&6Permission: &7buildbattle.admin.forcestart")) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            BaseArena arena = ArenaRegistry.getArena((Player) sender);
+            if (arena == null) {
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry.getPlugin().getChatManager().colorMessage("Commands.Not-Playing"));
+              return;
+            }
+            if (args.length == 2 && !sender.hasPermission("buildbattle.admin.forcestart.theme")) {
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Commands.No-Permission"));
+              return;
+            }
+            if (arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS
+                || arena.getArenaState() == ArenaState.STARTING) {
+              arena.setArenaState(ArenaState.STARTING);
+              arena.setForceStart(true);
+              arena.setTimer(0);
+              if (args.length == 2 && arena instanceof SoloArena) {
+                ((SoloArena) arena).setThemeVoteTime(false);
+                arena.setTimer(
+                    registry
+                        .getPlugin()
+                        .getConfigPreferences()
+                        .getTimer(ConfigPreferences.TimerType.BUILD, arena));
+                arena.setTheme(args[1]);
+              }
+              registry
+                  .getPlugin()
+                  .getChatManager()
+                  .broadcast(
+                      arena,
+                      registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("In-Game.Messages.Admin-Messages.Set-Starting-In-To-0"));
+            }
           }
-          registry.getPlugin().getChatManager().broadcast(arena, registry.getPlugin().getChatManager().colorMessage("In-Game.Messages.Admin-Messages.Set-Starting-In-To-0"));
-        }
-      }
-    });
+        });
   }
-
 }

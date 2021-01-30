@@ -24,28 +24,32 @@ import java.util.List;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class LabeledCommandArgument extends CommandArgument {
 
-  private LabelData labelData;
+  private final LabelData labelData;
 
-  public LabeledCommandArgument(String argumentName, List<String> permissions, CommandArgument.ExecutorType validExecutors, LabelData labelData) {
+  public LabeledCommandArgument(
+      String argumentName,
+      List<String> permissions,
+      CommandArgument.ExecutorType validExecutors,
+      LabelData labelData) {
     super(argumentName, permissions, validExecutors);
     this.labelData = labelData;
   }
 
-  public LabeledCommandArgument(String argumentName, String permissions, CommandArgument.ExecutorType validExecutors, LabelData labelData) {
+  public LabeledCommandArgument(
+      String argumentName,
+      String permissions,
+      CommandArgument.ExecutorType validExecutors,
+      LabelData labelData) {
     super(argumentName, permissions, validExecutors);
     this.labelData = labelData;
   }
 
-  /**
-   * @return label data of command (description and usages of command)
-   */
+  /** @return label data of command (description and usages of command) */
   public LabelData getLabelData() {
     return labelData;
   }
-
 }

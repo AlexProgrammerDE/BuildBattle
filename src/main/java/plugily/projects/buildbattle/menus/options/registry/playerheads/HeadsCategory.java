@@ -25,14 +25,11 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
- * Represents category of heads
- * ex. category of animal heads
+ *     <p>Created at 23.12.2018 Represents category of heads ex. category of animal heads
  */
 public class HeadsCategory {
 
-  private String categoryID;
+  private final String categoryID;
   private ItemStack itemStack;
   private String permission;
   private Inventory inventoryView;

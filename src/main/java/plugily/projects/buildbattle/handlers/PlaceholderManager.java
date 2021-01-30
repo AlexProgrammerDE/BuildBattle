@@ -29,8 +29,7 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Plajer
- * <p>
- * Created at 06.05.2018
+ *     <p>Created at 06.05.2018
  */
 public class PlaceholderManager extends PlaceholderExpansion {
 
@@ -61,19 +60,24 @@ public class PlaceholderManager extends PlaceholderExpansion {
     }
     switch (id.toLowerCase()) {
       case "blocks_broken":
-        return String.valueOf(StatsStorage.getUserStats(player, StatsStorage.StatisticType.BLOCKS_BROKEN));
+        return String.valueOf(
+            StatsStorage.getUserStats(player, StatsStorage.StatisticType.BLOCKS_BROKEN));
       case "blocks_placed":
-        return String.valueOf(StatsStorage.getUserStats(player, StatsStorage.StatisticType.BLOCKS_PLACED));
+        return String.valueOf(
+            StatsStorage.getUserStats(player, StatsStorage.StatisticType.BLOCKS_PLACED));
       case "games_played":
-        return String.valueOf(StatsStorage.getUserStats(player, StatsStorage.StatisticType.GAMES_PLAYED));
+        return String.valueOf(
+            StatsStorage.getUserStats(player, StatsStorage.StatisticType.GAMES_PLAYED));
       case "wins":
         return String.valueOf(StatsStorage.getUserStats(player, StatsStorage.StatisticType.WINS));
       case "loses":
         return String.valueOf(StatsStorage.getUserStats(player, StatsStorage.StatisticType.LOSES));
       case "highest_win":
-        return String.valueOf(StatsStorage.getUserStats(player, StatsStorage.StatisticType.HIGHEST_WIN));
+        return String.valueOf(
+            StatsStorage.getUserStats(player, StatsStorage.StatisticType.HIGHEST_WIN));
       case "particles_used":
-        return String.valueOf(StatsStorage.getUserStats(player, StatsStorage.StatisticType.PARTICLES_USED));
+        return String.valueOf(
+            StatsStorage.getUserStats(player, StatsStorage.StatisticType.PARTICLES_USED));
       default:
         return handleArenaPlaceholderRequest(id);
     }
@@ -85,7 +89,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
     }
     String[] data = id.split(":");
     BaseArena arena = ArenaRegistry.getArena(data[0]);
-    if(arena == null) {
+    if (arena == null) {
       return null;
     }
     switch (data[1].toLowerCase()) {
@@ -107,5 +111,4 @@ public class PlaceholderManager extends PlaceholderExpansion {
         return null;
     }
   }
-
 }

@@ -22,15 +22,14 @@ package plugily.projects.buildbattle.menus.themevoter;
 
 /**
  * @author Plajer
- * <p>
- * Created at 15.09.2018
+ *     <p>Created at 15.09.2018
  * @deprecated Use {@link BBTheme}
  */
 @Deprecated
 public class GTBTheme {
 
-  private String theme;
-  private Difficulty difficulty;
+  private final String theme;
+  private final Difficulty difficulty;
 
   public GTBTheme(String theme, Difficulty difficulty) {
     this.theme = theme;
@@ -46,9 +45,11 @@ public class GTBTheme {
   }
 
   public enum Difficulty {
-    EASY(1), MEDIUM(2), HARD(3);
+    EASY(1),
+    MEDIUM(2),
+    HARD(3);
 
-    private int pointsReward;
+    private final int pointsReward;
 
     Difficulty(int pointsReward) {
       this.pointsReward = pointsReward;
@@ -58,5 +59,4 @@ public class GTBTheme {
       return pointsReward;
     }
   }
-
 }

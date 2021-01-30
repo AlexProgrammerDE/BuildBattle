@@ -32,8 +32,7 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Plajer
- * <p>
- * Created at 09.02.2020
+ *     <p>Created at 09.02.2020
  */
 public class PartiesPartyHandlerImpl implements PartyHandler {
 
@@ -51,7 +50,11 @@ public class PartiesPartyHandlerImpl implements PartyHandler {
     PartiesAPI api = Parties.getApi();
     PartyPlayer partyPlayer = api.getPartyPlayer(player.getUniqueId());
     Party party = api.getParty(partyPlayer.getPartyName());
-    return new GameParty(party.getOnlineMembers(true).stream().map(localPlayer -> Bukkit.getPlayer(localPlayer.getPlayerUUID())).collect(Collectors.toList()), Bukkit.getPlayer(party.getLeader()));
+    return new GameParty(
+        party.getOnlineMembers(true).stream()
+            .map(localPlayer -> Bukkit.getPlayer(localPlayer.getPlayerUUID()))
+            .collect(Collectors.toList()),
+        Bukkit.getPlayer(party.getLeader()));
   }
 
   @Override

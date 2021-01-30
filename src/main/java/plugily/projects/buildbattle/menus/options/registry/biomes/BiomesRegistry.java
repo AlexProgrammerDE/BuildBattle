@@ -40,14 +40,13 @@ import plugily.projects.buildbattle.utils.Utils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 03.02.2019
+ *     <p>Created at 03.02.2019
  */
 public class BiomesRegistry {
 
   private Inventory inventory;
   private final Set<BiomeItem> biomes = new HashSet<>();
-  private Main plugin;
+  private final Main plugin;
 
   public BiomesRegistry(OptionsRegistry registry) {
     this.plugin = registry.getPlugin();
@@ -61,15 +60,29 @@ public class BiomesRegistry {
     int i = 0;
     for (String biome : config.getKeys(false)) {
       if (i >= 52) {
-        Debugger.debug(Debugger.Level.WARN, "There are too many biomes to register! Menu can't hold any more!");
+        Debugger.debug(
+            Debugger.Level.WARN,
+            "There are too many biomes to register! Menu can't hold any more!");
         break;
       }
-      BiomeItem biomeItem = new BiomeItem(new ItemBuilder(XMaterial.matchXMaterial(config
-          .getString(biome + ".material-name", "bedrock").toUpperCase()).orElse(XMaterial.BEDROCK).parseItem())
-          .name(plugin.getChatManager().colorRawMessage(config.getString(biome + ".displayname")))
-          .lore(config.getStringList(biome + ".lore")
-              .stream().map(lore -> lore = plugin.getChatManager().colorRawMessage(lore)).collect(Collectors.toList()))
-          .build(), config.getString(biome + ".permission"), XBiome.matchXBiome(biome).orElse(XBiome.BADLANDS));
+      BiomeItem biomeItem =
+          new BiomeItem(
+              new ItemBuilder(
+                      XMaterial.matchXMaterial(
+                              config.getString(biome + ".material-name", "bedrock").toUpperCase())
+                          .orElse(XMaterial.BEDROCK)
+                          .parseItem())
+                  .name(
+                      plugin
+                          .getChatManager()
+                          .colorRawMessage(config.getString(biome + ".displayname")))
+                  .lore(
+                      config.getStringList(biome + ".lore").stream()
+                          .map(lore -> lore = plugin.getChatManager().colorRawMessage(lore))
+                          .collect(Collectors.toList()))
+                  .build(),
+              config.getString(biome + ".permission"),
+              XBiome.matchXBiome(biome).orElse(XBiome.BADLANDS));
       biomes.add(biomeItem);
       i++;
     }
@@ -77,8 +90,11 @@ public class BiomesRegistry {
   }
 
   private void registerInventory() {
-    Inventory inv = Bukkit.createInventory(null, Utils.serializeInt(biomes.size() + 1),
-        plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Biome.Inventory-Name"));
+    Inventory inv =
+        Bukkit.createInventory(
+            null,
+            Utils.serializeInt(biomes.size() + 1),
+            plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Biome.Inventory-Name"));
 
     biomes.stream().map(BiomeItem::getItemStack).forEach(inv::addItem);
 
@@ -106,5 +122,4 @@ public class BiomesRegistry {
   public Set<BiomeItem> getBiomes() {
     return biomes;
   }
-
 }

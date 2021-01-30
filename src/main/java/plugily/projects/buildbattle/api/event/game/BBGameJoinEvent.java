@@ -27,14 +27,12 @@ import org.bukkit.event.HandlerList;
 import plugily.projects.buildbattle.api.event.BBEvent;
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 
-/**
- * Called when player joins arena
- */
+/** Called when player joins arena */
 public class BBGameJoinEvent extends BBEvent implements Cancellable {
 
   private static final HandlerList handlers = new HandlerList();
   private boolean cancelled;
-  private Player player;
+  private final Player player;
 
   public BBGameJoinEvent(Player player, BaseArena arena) {
     super(arena);
@@ -68,5 +66,4 @@ public class BBGameJoinEvent extends BBEvent implements Cancellable {
   public HandlerList getHandlers() {
     return handlers;
   }
-
 }

@@ -39,77 +39,141 @@ import plugily.projects.buildbattle.user.data.MysqlManager;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class LeaderboardArgument {
 
   public LeaderboardArgument(ArgumentsRegistry registry) {
-    registry.mapArgument("buildbattle", new CommandArgument("top", "", CommandArgument.ExecutorType.PLAYER) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        try {
-          if (args.length == 1) {
-            sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Statistics.Type-Name"));
-            return;
-          }
-          StatsStorage.StatisticType statisticType = StatsStorage.StatisticType.valueOf(args[1].toUpperCase());
-          if (!statisticType.isPersistent()) {
-            sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Statistics.Invalid-Name"));
-            return;
-          }
-          LinkedHashMap<UUID, Integer> stats = (LinkedHashMap<UUID, Integer>) StatsStorage.getStats(statisticType);
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Statistics.Header"));
-          String statistic = StringUtils.capitalize(statisticType.toString().toLowerCase().replace("_", " "));
-          for (int i = 0; i < 10; i++) {
+    registry.mapArgument(
+        "buildbattle",
+        new CommandArgument("top", "", CommandArgument.ExecutorType.PLAYER) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
             try {
-              UUID current = (UUID) stats.keySet().toArray()[stats.keySet().toArray().length - 1];
-              String message = registry.getPlugin().getChatManager().colorMessage("Commands.Statistics.Format");
-              message = StringUtils.replace(message, "%position%", String.valueOf(i + 1));
-              message = StringUtils.replace(message, "%name%", Bukkit.getOfflinePlayer(current).getName());
-              message = StringUtils.replace(message, "%value%", String.valueOf(stats.get(current)));
-              message = StringUtils.replace(message, "%statistic%", statistic); //Games_played > Games played etc
-              sender.sendMessage(message);
-              stats.remove(current);
-            } catch (IndexOutOfBoundsException ex) {
-              String message = registry.getPlugin().getChatManager().colorMessage("Commands.Statistics.Format");
-              message = StringUtils.replace(message, "%position%", String.valueOf(i + 1));
-              message = StringUtils.replace(message, "%name%", "Empty");
-              message = StringUtils.replace(message, "%value%", "0");
-              message = StringUtils.replace(message, "%statistic%", statistic); //Games_played > Games played etc
-              sender.sendMessage(message);
-            } catch (NullPointerException ex) {
-              UUID current = (UUID) stats.keySet().toArray()[stats.keySet().toArray().length - 1];
-              if (registry.getPlugin().getConfigPreferences().getOption(ConfigPreferences.Option.DATABASE_ENABLED)) {
-                try (Connection connection = registry.getPlugin().getMysqlDatabase().getConnection();
-                     Statement statement = connection.createStatement();
-                     ResultSet set = statement.executeQuery("SELECT name FROM " + ((MysqlManager) registry.getPlugin().getUserManager().getDatabase()).getTableName() + " WHERE UUID='" + current.toString() + "'")) {
-                  if (set.next()) {
-                    String message = registry.getPlugin().getChatManager().colorMessage("Commands.Statistics.Format");
-                    message = StringUtils.replace(message, "%position%", String.valueOf(i + 1));
-                    message = StringUtils.replace(message, "%name%", set.getString(1));
-                    message = StringUtils.replace(message, "%value%", String.valueOf(stats.get(current)));
-                    message = StringUtils.replace(message, "%statistic%", statistic); //Games_played > Games played etc
-                    sender.sendMessage(message);
-                    continue;
+              if (args.length == 1) {
+                sender.sendMessage(
+                    registry.getPlugin().getChatManager().getPrefix()
+                        + registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Commands.Statistics.Type-Name"));
+                return;
+              }
+              StatsStorage.StatisticType statisticType =
+                  StatsStorage.StatisticType.valueOf(args[1].toUpperCase());
+              if (!statisticType.isPersistent()) {
+                sender.sendMessage(
+                    registry.getPlugin().getChatManager().getPrefix()
+                        + registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Commands.Statistics.Invalid-Name"));
+                return;
+              }
+              LinkedHashMap<UUID, Integer> stats =
+                  (LinkedHashMap<UUID, Integer>) StatsStorage.getStats(statisticType);
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().colorMessage("Commands.Statistics.Header"));
+              String statistic =
+                  StringUtils.capitalize(statisticType.toString().toLowerCase().replace("_", " "));
+              for (int i = 0; i < 10; i++) {
+                try {
+                  UUID current =
+                      (UUID) stats.keySet().toArray()[stats.keySet().toArray().length - 1];
+                  String message =
+                      registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Commands.Statistics.Format");
+                  message = StringUtils.replace(message, "%position%", String.valueOf(i + 1));
+                  message =
+                      StringUtils.replace(
+                          message, "%name%", Bukkit.getOfflinePlayer(current).getName());
+                  message =
+                      StringUtils.replace(message, "%value%", String.valueOf(stats.get(current)));
+                  message =
+                      StringUtils.replace(
+                          message, "%statistic%", statistic); // Games_played > Games played etc
+                  sender.sendMessage(message);
+                  stats.remove(current);
+                } catch (IndexOutOfBoundsException ex) {
+                  String message =
+                      registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Commands.Statistics.Format");
+                  message = StringUtils.replace(message, "%position%", String.valueOf(i + 1));
+                  message = StringUtils.replace(message, "%name%", "Empty");
+                  message = StringUtils.replace(message, "%value%", "0");
+                  message =
+                      StringUtils.replace(
+                          message, "%statistic%", statistic); // Games_played > Games played etc
+                  sender.sendMessage(message);
+                } catch (NullPointerException ex) {
+                  UUID current =
+                      (UUID) stats.keySet().toArray()[stats.keySet().toArray().length - 1];
+                  if (registry
+                      .getPlugin()
+                      .getConfigPreferences()
+                      .getOption(ConfigPreferences.Option.DATABASE_ENABLED)) {
+                    try (Connection connection =
+                            registry.getPlugin().getMysqlDatabase().getConnection();
+                        Statement statement = connection.createStatement();
+                        ResultSet set =
+                            statement.executeQuery(
+                                "SELECT name FROM "
+                                    + ((MysqlManager)
+                                            registry.getPlugin().getUserManager().getDatabase())
+                                        .getTableName()
+                                    + " WHERE UUID='"
+                                    + current.toString()
+                                    + "'")) {
+                      if (set.next()) {
+                        String message =
+                            registry
+                                .getPlugin()
+                                .getChatManager()
+                                .colorMessage("Commands.Statistics.Format");
+                        message = StringUtils.replace(message, "%position%", String.valueOf(i + 1));
+                        message = StringUtils.replace(message, "%name%", set.getString(1));
+                        message =
+                            StringUtils.replace(
+                                message, "%value%", String.valueOf(stats.get(current)));
+                        message =
+                            StringUtils.replace(
+                                message,
+                                "%statistic%",
+                                statistic); // Games_played > Games played etc
+                        sender.sendMessage(message);
+                        continue;
+                      }
+                    } catch (SQLException ignored) {
+                      // fail silently
+                    }
                   }
-                } catch (SQLException ignored) {
-                  //fail silently
+                  String message =
+                      registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Commands.Statistics.Format");
+                  message = StringUtils.replace(message, "%position%", String.valueOf(i + 1));
+                  message = StringUtils.replace(message, "%name%", "Unknown Player");
+                  message =
+                      StringUtils.replace(message, "%value%", String.valueOf(stats.get(current)));
+                  message =
+                      StringUtils.replace(
+                          message, "%statistic%", statistic); // Games_played > Games played etc
+                  sender.sendMessage(message);
                 }
               }
-              String message = registry.getPlugin().getChatManager().colorMessage("Commands.Statistics.Format");
-              message = StringUtils.replace(message, "%position%", String.valueOf(i + 1));
-              message = StringUtils.replace(message, "%name%", "Unknown Player");
-              message = StringUtils.replace(message, "%value%", String.valueOf(stats.get(current)));
-              message = StringUtils.replace(message, "%statistic%", statistic); //Games_played > Games played etc
-              sender.sendMessage(message);
+            } catch (IllegalArgumentException e) {
+              sender.sendMessage(
+                  registry
+                      .getPlugin()
+                      .getChatManager()
+                      .colorMessage("Commands.Statistics.Invalid-Name"));
             }
           }
-        } catch (IllegalArgumentException e) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Statistics.Invalid-Name"));
-        }
-      }
-    });
+        });
   }
-
 }

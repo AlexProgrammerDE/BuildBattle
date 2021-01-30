@@ -36,13 +36,11 @@ import pl.plajerlair.commonsbox.minecraft.item.ItemBuilder;
 import plugily.projects.buildbattle.Main;
 import plugily.projects.buildbattle.utils.Debugger;
 
-/**
- * Created by Tom on 5/02/2016.
- */
+/** Created by Tom on 5/02/2016. */
 public class SpecialItemsRegistry {
 
-  private static Set<SpecialItem> specialItems = new HashSet<>();
-  private Main plugin;
+  private static final Set<SpecialItem> specialItems = new HashSet<>();
+  private final Main plugin;
 
   public SpecialItemsRegistry(Main plugin) {
     this.plugin = plugin;
@@ -81,7 +79,9 @@ public class SpecialItemsRegistry {
         continue;
       }
       config.set(key + ".material-name", Material.PAPER.toString());
-      Debugger.debug(Debugger.Level.WARN, "Found outdated item in lobbyitems.yml! We've converted it to the newest version!");
+      Debugger.debug(
+          Debugger.Level.WARN,
+          "Found outdated item in lobbyitems.yml! We've converted it to the newest version!");
     }
     ConfigUtils.saveConfig(plugin, config, "lobbyitems");
   }
@@ -89,12 +89,24 @@ public class SpecialItemsRegistry {
   private void registerItems() {
     FileConfiguration config = ConfigUtils.getConfig(plugin, "lobbyitems");
     for (String key : config.getKeys(false)) {
-      addItem(new SpecialItem(key, new ItemBuilder(XMaterial.matchXMaterial(config.getString(key + ".material-name", "BEDROCK")
-          .toUpperCase()).orElse(XMaterial.BEDROCK).parseItem())
-          .name(plugin.getChatManager().colorRawMessage(config.getString(key + ".displayname")))
-          .lore(config.getStringList(key + ".lore").stream().map(lore -> lore = plugin.getChatManager().colorRawMessage(lore))
-              .collect(Collectors.toList()))
-          .build(), config.getInt(key + ".slot")));
+      addItem(
+          new SpecialItem(
+              key,
+              new ItemBuilder(
+                      XMaterial.matchXMaterial(
+                              config.getString(key + ".material-name", "BEDROCK").toUpperCase())
+                          .orElse(XMaterial.BEDROCK)
+                          .parseItem())
+                  .name(
+                      plugin
+                          .getChatManager()
+                          .colorRawMessage(config.getString(key + ".displayname")))
+                  .lore(
+                      config.getStringList(key + ".lore").stream()
+                          .map(lore -> lore = plugin.getChatManager().colorRawMessage(lore))
+                          .collect(Collectors.toList()))
+                  .build(),
+              config.getInt(key + ".slot")));
     }
   }
 }

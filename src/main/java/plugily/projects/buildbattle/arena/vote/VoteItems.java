@@ -36,14 +36,13 @@ import plugily.projects.buildbattle.utils.Debugger;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Tom on 17/08/2015.
- */
+/** Created by Tom on 17/08/2015. */
 public class VoteItems {
 
   private static final Set<VoteItem> VOTEITEMS = new HashSet<>();
   private static ItemStack reportItem = new ItemStack(Material.BEDROCK, 32);
-  private static final FileConfiguration config = ConfigUtils.getConfig(JavaPlugin.getPlugin(Main.class), "voteItems");
+  private static final FileConfiguration config =
+      ConfigUtils.getConfig(JavaPlugin.getPlugin(Main.class), "voteItems");
 
   public VoteItems() {
     updateVoteItemsConfig();
@@ -56,10 +55,17 @@ public class VoteItems {
         continue;
       }
 
-      ItemStack stack = new ItemBuilder(XMaterial.matchXMaterial(config.getString(key + ".material-name", "BEDROCK")
-          .toUpperCase()).orElse(XMaterial.BEDROCK).parseItem())
-          .name(JavaPlugin.getPlugin(Main.class).getChatManager().colorRawMessage(config.getString(key + ".displayname")))
-          .build();
+      ItemStack stack =
+          new ItemBuilder(
+                  XMaterial.matchXMaterial(
+                          config.getString(key + ".material-name", "BEDROCK").toUpperCase())
+                      .orElse(XMaterial.BEDROCK)
+                      .parseItem())
+              .name(
+                  JavaPlugin.getPlugin(Main.class)
+                      .getChatManager()
+                      .colorRawMessage(config.getString(key + ".displayname")))
+              .build();
 
       if (config.getBoolean(key + ".report-item-function", false)) {
         reportItem = stack;
@@ -79,7 +85,9 @@ public class VoteItems {
         continue;
       }
       config.set(key + ".material-name", XMaterial.GREEN_TERRACOTTA.name());
-      Debugger.debug(Debugger.Level.WARN, "Found outdated item in votingItems.yml! We've converted it to the newest version!");
+      Debugger.debug(
+          Debugger.Level.WARN,
+          "Found outdated item in votingItems.yml! We've converted it to the newest version!");
     }
     ConfigUtils.saveConfig(JavaPlugin.getPlugin(Main.class), config, "voteItems");
   }
@@ -117,9 +125,7 @@ public class VoteItems {
     return 1;
   }
 
-  /**
-   * @return itemStack that represents report building function
-   */
+  /** @return itemStack that represents report building function */
   public ItemStack getReportItem() {
     return reportItem;
   }
@@ -155,5 +161,4 @@ public class VoteItems {
       return sound;
     }
   }
-
 }

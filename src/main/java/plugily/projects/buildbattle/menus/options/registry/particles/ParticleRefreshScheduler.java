@@ -33,9 +33,7 @@ import plugily.projects.buildbattle.arena.ArenaRegistry;
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 import plugily.projects.buildbattle.arena.managers.plots.Plot;
 
-/**
- * Created by Tom on 23/08/2015.
- */
+/** Created by Tom on 23/08/2015. */
 public class ParticleRefreshScheduler {
 
   public BukkitTask task;
@@ -45,18 +43,29 @@ public class ParticleRefreshScheduler {
       task.cancel();
     }
 
-    task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-      for (BaseArena arena : ArenaRegistry.getArenas()) {
-        if (!arena.getPlayers().isEmpty()) {
-          for (Plot buildPlot : arena.getPlotManager().getPlots()) {
-            for (Entry<Location, Particle> map : buildPlot.getParticles().entrySet()) {
-                MiscUtils.spawnParticle(map.getValue(), map.getKey(), plugin.getConfig().getInt("Amount-One-Particle-Effect-Contains", 20),
-                        1, 1, 1, 1);
-              }
-            }
-        }
-      }
-    }, plugin.getConfig().getInt("Particle-Refresh-Per-Tick", 10), plugin.getConfig().getInt("Particle-Refresh-Per-Tick", 10));
+    task =
+        Bukkit.getScheduler()
+            .runTaskTimer(
+                plugin,
+                () -> {
+                  for (BaseArena arena : ArenaRegistry.getArenas()) {
+                    if (!arena.getPlayers().isEmpty()) {
+                      for (Plot buildPlot : arena.getPlotManager().getPlots()) {
+                        for (Entry<Location, Particle> map : buildPlot.getParticles().entrySet()) {
+                          MiscUtils.spawnParticle(
+                              map.getValue(),
+                              map.getKey(),
+                              plugin.getConfig().getInt("Amount-One-Particle-Effect-Contains", 20),
+                              1,
+                              1,
+                              1,
+                              1);
+                        }
+                      }
+                    }
+                  }
+                },
+                plugin.getConfig().getInt("Particle-Refresh-Per-Tick", 10),
+                plugin.getConfig().getInt("Particle-Refresh-Per-Tick", 10));
   }
-
 }

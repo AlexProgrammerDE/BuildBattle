@@ -25,18 +25,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.buildbattle.Main;
 import plugily.projects.buildbattle.utils.Debugger;
 
-/**
- * Created by Tom on 14/08/2014.
- */
+/** Created by Tom on 14/08/2014. */
 public class PermissionManager {
 
-  private static Main plugin = JavaPlugin.getPlugin(Main.class);
+  private static final Main plugin = JavaPlugin.getPlugin(Main.class);
   private static String joinFullPerm = "buildbattle.fullgames";
   private static String joinPerm = "buildbattle.join.<arena>";
   private static String editGames = "buildbattle.editgames";
 
-  private PermissionManager() {
-  }
+  private PermissionManager() {}
 
   public static void init() {
     setupPermissions();
@@ -67,10 +64,12 @@ public class PermissionManager {
   }
 
   private static void setupPermissions() {
-    setJoinFullGames(plugin.getConfig().getString("Basic-Permissions.Full-Games-Permission", "buildbattle.fullgames"));
+    setJoinFullGames(
+        plugin
+            .getConfig()
+            .getString("Basic-Permissions.Full-Games-Permission", "buildbattle.fullgames"));
     setEditGames(plugin.getConfig().getString("Basic-Permissions.Arena-Edit-Permission"));
     setJoinPerm(plugin.getConfig().getString("Basic-Permissions.Join-Permission"));
     Debugger.debug("Basic permissions registered");
   }
-
 }

@@ -47,11 +47,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * @author 2Wild4You
- * <p>
- * Created at 09.08.2020
+ *     <p>Created at 09.08.2020
  */
 public class ArenaSelectorArgument implements Listener {
 
@@ -59,73 +57,104 @@ public class ArenaSelectorArgument implements Listener {
 
   public ArenaSelectorArgument(ArgumentsRegistry registry) {
     registry.getPlugin().getServer().getPluginManager().registerEvents(this, registry.getPlugin());
-    registry.mapArgument("buildbattle", new LabeledCommandArgument("arenas", "buildbattle.arenas", CommandArgument.ExecutorType.PLAYER,
-      new LabelData("/bb arenas", "/bb arenas", "&7Select an arena\n&6Permission: &7buildbattle.arenas")) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
-        if (ArenaRegistry.getArenas().size() == 0) {
-          player.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.No-Arena-Like-That"));
-          return;
-        }
-        Inventory inventory = Bukkit.createInventory(player, Utils.serializeInt(ArenaRegistry.getArenas().size()), registry.getPlugin().getChatManager().colorMessage("Arena-Selector.Inv-Title"));
+    registry.mapArgument(
+        "buildbattle",
+        new LabeledCommandArgument(
+            "arenas",
+            "buildbattle.arenas",
+            CommandArgument.ExecutorType.PLAYER,
+            new LabelData(
+                "/bb arenas",
+                "/bb arenas",
+                "&7Select an arena\n&6Permission: &7buildbattle.arenas")) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            Player player = (Player) sender;
+            if (ArenaRegistry.getArenas().size() == 0) {
+              player.sendMessage(
+                  registry
+                      .getPlugin()
+                      .getChatManager()
+                      .colorMessage("Commands.No-Arena-Like-That"));
+              return;
+            }
+            Inventory inventory =
+                Bukkit.createInventory(
+                    player,
+                    Utils.serializeInt(ArenaRegistry.getArenas().size()),
+                    registry.getPlugin().getChatManager().colorMessage("Arena-Selector.Inv-Title"));
 
-        int slot = 0;
-        arenas.clear();
+            int slot = 0;
+            arenas.clear();
 
-        for (BaseArena arena : ArenaRegistry.getArenas()) {
-          arenas.put(slot, arena);
-          ItemStack itemStack;
-          switch (arena.getArenaState()) {
-            case WAITING_FOR_PLAYERS:
-              itemStack = XMaterial.LIME_CONCRETE.parseItem();
-              break;
-            case STARTING:
-              itemStack = XMaterial.YELLOW_CONCRETE.parseItem();
-              break;
-            default:
-              itemStack = XMaterial.RED_CONCRETE.parseItem();
-              break;
+            for (BaseArena arena : ArenaRegistry.getArenas()) {
+              arenas.put(slot, arena);
+              ItemStack itemStack;
+              switch (arena.getArenaState()) {
+                case WAITING_FOR_PLAYERS:
+                  itemStack = XMaterial.LIME_CONCRETE.parseItem();
+                  break;
+                case STARTING:
+                  itemStack = XMaterial.YELLOW_CONCRETE.parseItem();
+                  break;
+                default:
+                  itemStack = XMaterial.RED_CONCRETE.parseItem();
+                  break;
+              }
+              ItemMeta itemMeta = itemStack.getItemMeta();
+              itemMeta.setDisplayName(
+                  formatItem(
+                      LanguageManager.getLanguageMessage("Arena-Selector.Item.Name"),
+                      arena,
+                      registry.getPlugin()));
+
+              ArrayList<String> lore = new ArrayList<>();
+              for (String string : LanguageManager.getLanguageList("Arena-Selector.Item.Lore")) {
+                lore.add(formatItem(string, arena, registry.getPlugin()));
+              }
+
+              itemMeta.setLore(lore);
+              itemStack.setItemMeta(itemMeta);
+              inventory.addItem(itemStack);
+              slot++;
+            }
+            player.openInventory(inventory);
           }
-          ItemMeta itemMeta = itemStack.getItemMeta();
-          itemMeta.setDisplayName(formatItem(LanguageManager.getLanguageMessage("Arena-Selector.Item.Name"), arena, registry.getPlugin()));
-
-          ArrayList<String> lore = new ArrayList<>();
-          for (String string : LanguageManager.getLanguageList("Arena-Selector.Item.Lore")) {
-            lore.add(formatItem(string, arena, registry.getPlugin()));
-          }
-
-          itemMeta.setLore(lore);
-          itemStack.setItemMeta(itemMeta);
-          inventory.addItem(itemStack);
-          slot++;
-        }
-        player.openInventory(inventory);
-      }
-    });
-
+        });
   }
 
   private String formatItem(String string, BaseArena arena, Main plugin) {
     String formatted = string;
     formatted = StringUtils.replace(formatted, "%mapname%", arena.getMapName());
     if (arena.getPlayers().size() >= arena.getMaximumPlayers()) {
-      formatted = StringUtils.replace(formatted, "%state%", plugin.getChatManager().colorMessage("Signs.Game-States.Full-Game"));
+      formatted =
+          StringUtils.replace(
+              formatted,
+              "%state%",
+              plugin.getChatManager().colorMessage("Signs.Game-States.Full-Game"));
     } else {
-      formatted = StringUtils.replace(formatted, "%state%", plugin.getSignManager().getGameStateToString().get(arena.getArenaState()));
+      formatted =
+          StringUtils.replace(
+              formatted,
+              "%state%",
+              plugin.getSignManager().getGameStateToString().get(arena.getArenaState()));
     }
     formatted = StringUtils.replace(formatted, "%type%", String.valueOf(arena.getArenaType()));
-    formatted = StringUtils.replace(formatted, "%playersize%", String.valueOf(arena.getPlayers().size()));
-    formatted = StringUtils.replace(formatted, "%maxplayers%", String.valueOf(arena.getMaximumPlayers()));
+    formatted =
+        StringUtils.replace(formatted, "%playersize%", String.valueOf(arena.getPlayers().size()));
+    formatted =
+        StringUtils.replace(formatted, "%maxplayers%", String.valueOf(arena.getMaximumPlayers()));
     formatted = plugin.getChatManager().colorRawMessage(formatted);
     return formatted;
   }
 
-  private static Main plugin = JavaPlugin.getPlugin(Main.class);
+  private static final Main plugin = JavaPlugin.getPlugin(Main.class);
 
   @EventHandler
   public void onArenaSelectorMenuClick(InventoryClickEvent e) {
-    if (!e.getView().getTitle().equals(plugin.getChatManager().colorMessage("Arena-Selector.Inv-Title"))) {
+    if (!e.getView()
+        .getTitle()
+        .equals(plugin.getChatManager().colorMessage("Arena-Selector.Inv-Title"))) {
       return;
     }
     if (e.getCurrentItem() == null || !e.getCurrentItem().hasItemMeta()) {
@@ -134,13 +163,13 @@ public class ArenaSelectorArgument implements Listener {
     Player player = (Player) e.getWhoClicked();
     player.closeInventory();
 
-
     BaseArena arena = arenas.get(e.getRawSlot());
     if (arena != null) {
       ArenaManager.joinAttempt(player, arena);
     } else {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("Commands.No-Arena-Like-That"));
+      player.sendMessage(
+          plugin.getChatManager().getPrefix()
+              + plugin.getChatManager().colorMessage("Commands.No-Arena-Like-That"));
     }
   }
-
 }

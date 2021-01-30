@@ -38,44 +38,70 @@ import plugily.projects.buildbattle.commands.arguments.data.LabeledCommandArgume
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class DeleteArgument {
 
   private final Set<CommandSender> confirmations = new HashSet<>();
 
   public DeleteArgument(ArgumentsRegistry registry) {
-    registry.mapArgument("buildbattleadmin", new LabeledCommandArgument("delete", "buildbattle.admin.delete", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/bba delete &6<arena>", "/bba delete <arena>",
-            "&7Deletes specified arena\n&6Permission: &7buildbattle.admin.delete")) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        if (args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Type-Arena-Name"));
-          return;
-        }
-        BaseArena arena = ArenaRegistry.getArena(args[1]);
-        if (arena == null) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.No-Arena-Like-That"));
-          return;
-        }
-        if (!confirmations.contains(sender)) {
-          confirmations.add(sender);
-          Bukkit.getScheduler().runTaskLater(registry.getPlugin(), () -> confirmations.remove(sender), 20 * 10);
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix()
-              + registry.getPlugin().getChatManager().colorRawMessage("&cAre you sure you want to do this action? Type the command again &6within 10 seconds &cto confirm!"));
-          return;
-        }
-        confirmations.remove(sender);
-        ArenaManager.stopGame(false, arena);
-        FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "arenas");
-        config.set("instances." + args[1], null);
-        ConfigUtils.saveConfig(registry.getPlugin(), config, "arenas");
-        ArenaRegistry.unregisterArena(arena);
-        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Removed-Game-Instance"));
-      }
-    });
+    registry.mapArgument(
+        "buildbattleadmin",
+        new LabeledCommandArgument(
+            "delete",
+            "buildbattle.admin.delete",
+            CommandArgument.ExecutorType.PLAYER,
+            new LabelData(
+                "/bba delete &6<arena>",
+                "/bba delete <arena>",
+                "&7Deletes specified arena\n&6Permission: &7buildbattle.admin.delete")) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            if (args.length == 1) {
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Commands.Type-Arena-Name"));
+              return;
+            }
+            BaseArena arena = ArenaRegistry.getArena(args[1]);
+            if (arena == null) {
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Commands.No-Arena-Like-That"));
+              return;
+            }
+            if (!confirmations.contains(sender)) {
+              confirmations.add(sender);
+              Bukkit.getScheduler()
+                  .runTaskLater(registry.getPlugin(), () -> confirmations.remove(sender), 20 * 10);
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorRawMessage(
+                              "&cAre you sure you want to do this action? Type the command again &6within 10 seconds &cto confirm!"));
+              return;
+            }
+            confirmations.remove(sender);
+            ArenaManager.stopGame(false, arena);
+            FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "arenas");
+            config.set("instances." + args[1], null);
+            ConfigUtils.saveConfig(registry.getPlugin(), config, "arenas");
+            ArenaRegistry.unregisterArena(arena);
+            sender.sendMessage(
+                registry.getPlugin().getChatManager().getPrefix()
+                    + registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Commands.Removed-Game-Instance"));
+          }
+        });
   }
-
 }

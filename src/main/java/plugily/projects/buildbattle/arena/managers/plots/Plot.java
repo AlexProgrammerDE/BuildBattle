@@ -44,9 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Tom on 17/08/2015.
- */
+/** Created by Tom on 17/08/2015. */
 public class Plot {
 
   private static final Main plugin = JavaPlugin.getPlugin(Main.class);
@@ -148,8 +146,8 @@ public class Plot {
     }
 
     for (Block block : cuboid.blockList()) {
-      //to ensure 1.14 blocks support (that will be seen as air in api-version 1.13)
-      //we set all blocks to air so 1.14 ones will update too
+      // to ensure 1.14 blocks support (that will be seen as air in api-version 1.13)
+      // we set all blocks to air so 1.14 ones will update too
       block.setType(Material.AIR);
     }
 
@@ -164,7 +162,8 @@ public class Plot {
     if (cuboid.getCenter().getWorld() != null) {
       for (Entity entity : cuboid.getCenter().getWorld().getEntities()) {
         if (cuboid.isInWithMarge(entity.getLocation(), 5)) {
-          if (plugin.getServer().getPluginManager().isPluginEnabled("Citizens") && CitizensAPI.getNPCRegistry().isNPC(entity)) {
+          if (plugin.getServer().getPluginManager().isPluginEnabled("Citizens")
+              && CitizensAPI.getNPCRegistry().isNPC(entity)) {
             continue;
           }
 
@@ -186,11 +185,18 @@ public class Plot {
             continue;
           }
           if (ServerVersion.Version.isCurrentEqual(ServerVersion.Version.v1_16_R1)) {
-            PacketUtils.sendPacket(p, PacketUtils.getNMSClass("PacketPlayOutMapChunk").getConstructor(PacketUtils.getNMSClass("Chunk"), int.class, boolean.class)
-                .newInstance(chunk.getClass().getMethod("getHandle").invoke(chunk), 65535, false));
+            PacketUtils.sendPacket(
+                p,
+                PacketUtils.getNMSClass("PacketPlayOutMapChunk")
+                    .getConstructor(PacketUtils.getNMSClass("Chunk"), int.class, boolean.class)
+                    .newInstance(
+                        chunk.getClass().getMethod("getHandle").invoke(chunk), 65535, false));
           } else {
-            PacketUtils.sendPacket(p, PacketUtils.getNMSClass("PacketPlayOutMapChunk").getConstructor(PacketUtils.getNMSClass("Chunk"), int.class)
-                .newInstance(chunk.getClass().getMethod("getHandle").invoke(chunk), 65535));
+            PacketUtils.sendPacket(
+                p,
+                PacketUtils.getNMSClass("PacketPlayOutMapChunk")
+                    .getConstructor(PacketUtils.getNMSClass("Chunk"), int.class)
+                    .newInstance(chunk.getClass().getMethod("getHandle").invoke(chunk), 65535));
           }
         }
       }
@@ -198,15 +204,29 @@ public class Plot {
       exception.printStackTrace();
     }
 
-    changeFloor(XMaterial.matchXMaterial(plugin.getConfig().getString("Default-Floor-Material-Name", "LOG")
-        .toUpperCase()).orElse(XMaterial.OAK_LOG).parseMaterial());
+    changeFloor(
+        XMaterial.matchXMaterial(
+                plugin.getConfig().getString("Default-Floor-Material-Name", "LOG").toUpperCase())
+            .orElse(XMaterial.OAK_LOG)
+            .parseMaterial());
 
     if (ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_15_R1)) {
       int y = Math.min(cuboid.getMinPoint().getBlockY(), cuboid.getMaxPoint().getBlockY());
 
-      cuboid.getCenter().getWorld().setBiome(cuboid.getMinPoint().getBlockX(), y, cuboid.getMaxPoint().getBlockZ(), plotDefaultBiome);
+      cuboid
+          .getCenter()
+          .getWorld()
+          .setBiome(
+              cuboid.getMinPoint().getBlockX(),
+              y,
+              cuboid.getMaxPoint().getBlockZ(),
+              plotDefaultBiome);
     } else {
-      cuboid.getCenter().getWorld().setBiome(cuboid.getMinPoint().getBlockX(), cuboid.getMaxPoint().getBlockZ(), plotDefaultBiome);
+      cuboid
+          .getCenter()
+          .getWorld()
+          .setBiome(
+              cuboid.getMinPoint().getBlockX(), cuboid.getMaxPoint().getBlockZ(), plotDefaultBiome);
     }
 
     BBPlotResetEvent event = new BBPlotResetEvent(arena, this);
@@ -260,14 +280,16 @@ public class Plot {
 
   public Location getTeleportLocation() {
     Location tploc = cuboid.getCenter();
-    while (tploc.getBlock().getType() != Material.AIR || tploc.add(0, 1, 0).getBlock().getType() != Material.AIR) {
+    while (tploc.getBlock().getType() != Material.AIR
+        || tploc.add(0, 1, 0).getBlock().getType() != Material.AIR) {
       tploc = tploc.add(0, 1, 0);
     }
     boolean enclosed = false;
     int counter = 0;
     Location location = tploc.clone();
     while (counter != 10) {
-      if (!(location.getBlock().getType() == Material.BARRIER || location.getBlock().getType() == Material.AIR)) {
+      if (!(location.getBlock().getType() == Material.BARRIER
+          || location.getBlock().getType() == Material.AIR)) {
         enclosed = true;
         tploc = location;
         counter = 9;
@@ -276,18 +298,21 @@ public class Plot {
       counter++;
     }
     if (enclosed) {
-      while (tploc.getBlock().getType() != Material.AIR || tploc.add(0, 1, 0).getBlock().getType() != Material.AIR) {
+      while (tploc.getBlock().getType() != Material.AIR
+          || tploc.add(0, 1, 0).getBlock().getType() != Material.AIR) {
         tploc = tploc.add(0, 1, 0);
       }
     }
     return tploc;
   }
 
-  /**
-   * Enum that represents current plot time
-   */
+  /** Enum that represents current plot time */
   public enum Time {
-    WORLD_TIME(-1), DAY(1000), SUNSET(12000), SUNRISE(23000), NIGHT(13000);
+    WORLD_TIME(-1),
+    DAY(1000),
+    SUNSET(12000),
+    SUNRISE(23000),
+    NIGHT(13000);
 
     private final long ticks;
 
@@ -303,5 +328,4 @@ public class Plot {
       return ticks;
     }
   }
-
 }

@@ -30,20 +30,25 @@ import plugily.projects.buildbattle.commands.arguments.data.LabeledCommandArgume
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class PlotWandArgument {
 
   public PlotWandArgument(ArgumentsRegistry registry) {
-    registry.mapArgument("buildbattleadmin", new LabeledCommandArgument("plotwand", "buildbattle.admin.plotwand", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/bba plotwand", "/bba plotwand",
-            "&7Get plot wand to create plots\n&6Permission: &7buildbattle.admin.plotwand")) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        registry.getPlugin().getCuboidSelector().giveSelectorWand((Player) sender);
-      }
-    });
+    registry.mapArgument(
+        "buildbattleadmin",
+        new LabeledCommandArgument(
+            "plotwand",
+            "buildbattle.admin.plotwand",
+            CommandArgument.ExecutorType.PLAYER,
+            new LabelData(
+                "/bba plotwand",
+                "/bba plotwand",
+                "&7Get plot wand to create plots\n&6Permission: &7buildbattle.admin.plotwand")) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            registry.getPlugin().getCuboidSelector().giveSelectorWand((Player) sender);
+          }
+        });
   }
-
 }

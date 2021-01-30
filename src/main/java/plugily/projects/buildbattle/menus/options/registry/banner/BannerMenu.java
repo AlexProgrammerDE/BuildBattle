@@ -44,15 +44,14 @@ import plugily.projects.buildbattle.utils.Utils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 16.07.2019
+ *     <p>Created at 16.07.2019
  */
 public class BannerMenu {
 
   private static Main plugin;
   private final Map<PatternStage, Gui> guiStages = new EnumMap<>(PatternStage.class);
-  private Banner banner;
-  private Player player;
+  private final Banner banner;
+  private final Player player;
 
   public BannerMenu(Player player) {
     this(player, new Banner());
@@ -72,7 +71,13 @@ public class BannerMenu {
 
   @SuppressWarnings("deprecation")
   private void prepareBaseStageGui() {
-    Gui gui = new Gui(plugin, 6, plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Banner-Creator.Inventories.Color-Choose"));
+    Gui gui =
+        new Gui(
+            plugin,
+            6,
+            plugin
+                .getChatManager()
+                .colorMessage("Menus.Option-Menu.Items.Banner-Creator.Inventories.Color-Choose"));
     OutlinePane pane = new OutlinePane(1, 1, 7, 3);
     for (DyeColor color : DyeColor.values()) {
       ItemStack item;
@@ -80,7 +85,7 @@ public class BannerMenu {
         item = XMaterial.WHITE_BANNER.parseItem();
         BannerMeta meta = (BannerMeta) item.getItemMeta();
         if (Version.isCurrentEqualOrLower(Version.v1_12_R1)) {
-            meta.setBaseColor(color);
+          meta.setBaseColor(color);
         } else {
           ((org.bukkit.block.Banner) item).setBaseColor(color);
         }
@@ -89,11 +94,14 @@ public class BannerMenu {
         String banner = color.toString().toUpperCase() + "_BANNER";
         item = XMaterial.matchXMaterial(banner).get().parseItem();
       }
-      pane.addItem(new GuiItem(item, e -> {
-        e.setCancelled(true);
-        banner.setBaseColor(color);
-        new BannerMenu(player, banner).openInventory(PatternStage.LAYER);
-      }));
+      pane.addItem(
+          new GuiItem(
+              item,
+              e -> {
+                e.setCancelled(true);
+                banner.setBaseColor(color);
+                new BannerMenu(player, banner).openInventory(PatternStage.LAYER);
+              }));
     }
     gui.addPane(pane);
     addCreatorItem(gui);
@@ -102,7 +110,13 @@ public class BannerMenu {
   }
 
   private void prepareLayerStageGui() {
-    Gui gui = new Gui(plugin, 6, plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Banner-Creator.Inventories.Add-Layer"));
+    Gui gui =
+        new Gui(
+            plugin,
+            6,
+            plugin
+                .getChatManager()
+                .colorMessage("Menus.Option-Menu.Items.Banner-Creator.Inventories.Add-Layer"));
     OutlinePane pane = new OutlinePane(0, 0, 9, 5);
     gui.addPane(pane);
     for (PatternType pattern : PatternType.values()) {
@@ -111,11 +125,14 @@ public class BannerMenu {
       DyeColor color = banner.getColor() == DyeColor.BLACK ? DyeColor.WHITE : DyeColor.BLACK;
       meta.addPattern(new Pattern(color, pattern));
       item.setItemMeta(meta);
-      pane.addItem(new GuiItem(item, e -> {
-        e.setCancelled(true);
-        banner.addPattern(new BannerPattern(color, pattern));
-        new BannerMenu(player, banner).openInventory(PatternStage.LAYER_COLOR);
-      }));
+      pane.addItem(
+          new GuiItem(
+              item,
+              e -> {
+                e.setCancelled(true);
+                banner.addPattern(new BannerPattern(color, pattern));
+                new BannerMenu(player, banner).openInventory(PatternStage.LAYER_COLOR);
+              }));
     }
     addCreatorItem(gui);
     addGoBackItem(gui);
@@ -123,7 +140,14 @@ public class BannerMenu {
   }
 
   private void prepareLayerColorStageGui() {
-    Gui gui = new Gui(plugin, 6, plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Banner-Creator.Inventories.Add-Layer-Color"));
+    Gui gui =
+        new Gui(
+            plugin,
+            6,
+            plugin
+                .getChatManager()
+                .colorMessage(
+                    "Menus.Option-Menu.Items.Banner-Creator.Inventories.Add-Layer-Color"));
     OutlinePane pane = new OutlinePane(1, 1, 7, 3);
     gui.addPane(pane);
     for (DyeColor color : DyeColor.values()) {
@@ -132,11 +156,15 @@ public class BannerMenu {
       Pattern pattern = new Pattern(color, banner.getLastPattern().getPatternType());
       meta.addPattern(pattern);
       item.setItemMeta(meta);
-      pane.addItem(new GuiItem(item, e -> {
-        e.setCancelled(true);
-        banner.replaceLastPattern(new BannerPattern(color, banner.getLastPattern().getPatternType()));
-        new BannerMenu(player, banner).openInventory(PatternStage.LAYER);
-      }));
+      pane.addItem(
+          new GuiItem(
+              item,
+              e -> {
+                e.setCancelled(true);
+                banner.replaceLastPattern(
+                    new BannerPattern(color, banner.getLastPattern().getPatternType()));
+                new BannerMenu(player, banner).openInventory(PatternStage.LAYER);
+              }));
     }
     addCreatorItem(gui);
     addGoBackItem(gui);
@@ -147,25 +175,43 @@ public class BannerMenu {
     StaticPane bannerPane = new StaticPane(4, 5, 2, 1);
     gui.addPane(bannerPane);
 
-    bannerPane.addItem(new GuiItem(new ItemBuilder(banner.buildBanner())
-        .name(plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Banner-Creator.Create-Banner-Item.Name"))
-        .lore(plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Banner-Creator.Create-Banner-Item.Lore"))
-        .build(), e -> {
-      e.setCancelled(true);
-      e.getWhoClicked().closeInventory();
-      player.getInventory().addItem(banner.buildBanner());
-    }), 0, 0);
+    bannerPane.addItem(
+        new GuiItem(
+            new ItemBuilder(banner.buildBanner())
+                .name(
+                    plugin
+                        .getChatManager()
+                        .colorMessage(
+                            "Menus.Option-Menu.Items.Banner-Creator.Create-Banner-Item.Name"))
+                .lore(
+                    plugin
+                        .getChatManager()
+                        .colorMessage(
+                            "Menus.Option-Menu.Items.Banner-Creator.Create-Banner-Item.Lore"))
+                .build(),
+            e -> {
+              e.setCancelled(true);
+              e.getWhoClicked().closeInventory();
+              player.getInventory().addItem(banner.buildBanner());
+            }),
+        0,
+        0);
   }
 
   private void addGoBackItem(Gui gui) {
     StaticPane bannerPane = new StaticPane(2, 5, 2, 1);
     gui.addPane(bannerPane);
 
-    bannerPane.addItem(new GuiItem(Utils.getGoBackItem(), e -> {
-      e.setCancelled(true);
-      e.getWhoClicked().closeInventory();
-      player.openInventory(plugin.getOptionsRegistry().formatInventory());
-    }), 0, 0);
+    bannerPane.addItem(
+        new GuiItem(
+            Utils.getGoBackItem(),
+            e -> {
+              e.setCancelled(true);
+              e.getWhoClicked().closeInventory();
+              player.openInventory(plugin.getOptionsRegistry().formatInventory());
+            }),
+        0,
+        0);
   }
 
   public void openInventory(PatternStage stage) {
@@ -173,7 +219,8 @@ public class BannerMenu {
   }
 
   public enum PatternStage {
-    BASE, LAYER, LAYER_COLOR
+    BASE,
+    LAYER,
+    LAYER_COLOR
   }
-
 }

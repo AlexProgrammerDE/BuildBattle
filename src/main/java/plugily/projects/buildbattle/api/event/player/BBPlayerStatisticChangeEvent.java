@@ -33,17 +33,20 @@ import plugily.projects.buildbattle.arena.impl.BaseArena;
  * @author Plajer
  * @see StatsStorage.StatisticType
  * @since 3.4.1
- * <p>
- * Called when player receive new statistic.
+ *     <p>Called when player receive new statistic.
  */
 public class BBPlayerStatisticChangeEvent extends BBEvent {
 
   private static final HandlerList HANDLERS = new HandlerList();
-  private Player player;
-  private StatsStorage.StatisticType statisticType;
-  private int number;
+  private final Player player;
+  private final StatsStorage.StatisticType statisticType;
+  private final int number;
 
-  public BBPlayerStatisticChangeEvent(@Nullable BaseArena eventArena, Player player, StatsStorage.StatisticType statisticType, int number) {
+  public BBPlayerStatisticChangeEvent(
+      @Nullable BaseArena eventArena,
+      Player player,
+      StatsStorage.StatisticType statisticType,
+      int number) {
     super(eventArena);
     this.player = player;
     this.statisticType = statisticType;

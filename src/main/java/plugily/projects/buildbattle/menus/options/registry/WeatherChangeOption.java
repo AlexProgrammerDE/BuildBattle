@@ -37,49 +37,102 @@ import plugily.projects.buildbattle.utils.Utils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
+ *     <p>Created at 23.12.2018
  */
 public class WeatherChangeOption {
 
   public WeatherChangeOption(OptionsRegistry registry) {
-    registry.registerOption(new MenuOption(28, "WEATHER", new ItemBuilder(Material.BUCKET)
-        .name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Weather.Item-Name"))
-        .lore(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Weather.Item-Lore"))
-        .build(), registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Weather.Inventory-Name")) {
+    registry.registerOption(
+        new MenuOption(
+            28,
+            "WEATHER",
+            new ItemBuilder(Material.BUCKET)
+                .name(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Weather.Item-Name"))
+                .lore(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Weather.Item-Lore"))
+                .build(),
+            registry
+                .getPlugin()
+                .getChatManager()
+                .colorMessage("Menus.Option-Menu.Items.Weather.Inventory-Name")) {
 
-      @Override
-      public void onClick(InventoryClickEvent e) {
-        e.getWhoClicked().closeInventory();
+          @Override
+          public void onClick(InventoryClickEvent e) {
+            e.getWhoClicked().closeInventory();
 
-        Inventory weatherInv = Bukkit.createInventory(null, 9, registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Weather.Inventory-Name"));
-        weatherInv.addItem(new ItemBuilder(Material.BUCKET).name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Weather.Weather-Type.Clear")).build());
-        weatherInv.addItem(new ItemBuilder(Material.BUCKET).name(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Weather.Weather-Type.Downfall")).build());
-        weatherInv.addItem(Utils.getGoBackItem());
-        e.getWhoClicked().openInventory(weatherInv);
-      }
+            Inventory weatherInv =
+                Bukkit.createInventory(
+                    null,
+                    9,
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Weather.Inventory-Name"));
+            weatherInv.addItem(
+                new ItemBuilder(Material.BUCKET)
+                    .name(
+                        registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Menus.Option-Menu.Items.Weather.Weather-Type.Clear"))
+                    .build());
+            weatherInv.addItem(
+                new ItemBuilder(Material.BUCKET)
+                    .name(
+                        registry
+                            .getPlugin()
+                            .getChatManager()
+                            .colorMessage("Menus.Option-Menu.Items.Weather.Weather-Type.Downfall"))
+                    .build());
+            weatherInv.addItem(Utils.getGoBackItem());
+            e.getWhoClicked().openInventory(weatherInv);
+          }
 
-      @Override
-      public void onTargetClick(InventoryClickEvent e) {
-        if (e.getCurrentItem() == null)
-          return;
+          @Override
+          public void onTargetClick(InventoryClickEvent e) {
+            if (e.getCurrentItem() == null) return;
 
-        BaseArena arena = ArenaRegistry.getArena((Player) e.getWhoClicked());
-        if (arena == null) {
-          return;
-        }
-        Plot plot = arena.getPlotManager().getPlot((Player) e.getWhoClicked());
-        if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Weather.Weather-Type.Downfall"))) {
-          plot.setWeatherType(WeatherType.DOWNFALL);
-        } else if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Weather.Weather-Type.Clear"))) {
-          plot.setWeatherType(WeatherType.CLEAR);
-        }
-        for (Player p : plot.getOwners()) {
-          p.setPlayerWeather(plot.getWeatherType());
-          p.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Menus.Option-Menu.Items.Weather.Weather-Set"));
-        }
-      }
-    });
+            BaseArena arena = ArenaRegistry.getArena((Player) e.getWhoClicked());
+            if (arena == null) {
+              return;
+            }
+            Plot plot = arena.getPlotManager().getPlot((Player) e.getWhoClicked());
+            if (e.getCurrentItem()
+                .getItemMeta()
+                .getDisplayName()
+                .equalsIgnoreCase(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Weather.Weather-Type.Downfall"))) {
+              plot.setWeatherType(WeatherType.DOWNFALL);
+            } else if (e.getCurrentItem()
+                .getItemMeta()
+                .getDisplayName()
+                .equalsIgnoreCase(
+                    registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Weather.Weather-Type.Clear"))) {
+              plot.setWeatherType(WeatherType.CLEAR);
+            }
+            for (Player p : plot.getOwners()) {
+              p.setPlayerWeather(plot.getWeatherType());
+              p.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Menus.Option-Menu.Items.Weather.Weather-Set"));
+            }
+          }
+        });
   }
-
 }

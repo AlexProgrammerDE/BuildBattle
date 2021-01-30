@@ -27,15 +27,15 @@ import pl.plajerlair.commonsbox.minecraft.compat.XBiome;
 
 /**
  * @author Plajer
- * <p>
- * Created at 03.02.2019
+ *     <p>Created at 03.02.2019
  */
 public class BiomeItem {
 
-  public static final BiomeItem INVALID_BIOME = new BiomeItem(new ItemStack(Material.DIRT), "", XBiome.PLAINS);
-  private ItemStack itemStack;
-  private String permission;
-  private XBiome biome;
+  public static final BiomeItem INVALID_BIOME =
+      new BiomeItem(new ItemStack(Material.DIRT), "", XBiome.PLAINS);
+  private final ItemStack itemStack;
+  private final String permission;
+  private final XBiome biome;
 
   public BiomeItem(ItemStack itemStack, String permission, XBiome biome) {
     this.itemStack = itemStack;

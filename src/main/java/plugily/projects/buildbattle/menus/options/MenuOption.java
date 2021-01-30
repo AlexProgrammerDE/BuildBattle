@@ -26,14 +26,13 @@ import plugily.projects.buildbattle.utils.Utils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
+ *     <p>Created at 23.12.2018
  */
 public class MenuOption {
 
   private int slot;
-  private String id;
-  private ItemStack itemStack;
+  private final String id;
+  private final ItemStack itemStack;
   private String inventoryName;
   private boolean inventoryEnabled = true;
 
@@ -71,9 +70,7 @@ public class MenuOption {
     return inventoryName;
   }
 
-  /**
-   * @return true if MenuOption custom inventory is enabled
-   */
+  /** @return true if MenuOption custom inventory is enabled */
   public boolean isInventoryEnabled() {
     return inventoryEnabled;
   }
@@ -83,18 +80,16 @@ public class MenuOption {
    *
    * @param e passed InventoryClickEvent from Options Menu
    */
-  public void onClick(InventoryClickEvent e) {
-  }
+  public void onClick(InventoryClickEvent e) {}
 
   /**
-   * Called when anything is clicked in inventory registered in onClick method
-   * Method won't be called if inventory is not enabled.
-   * Method won't be called also if e.getCurrentItem() is not named or null
+   * Called when anything is clicked in inventory registered in onClick method Method won't be
+   * called if inventory is not enabled. Method won't be called also if e.getCurrentItem() is not
+   * named or null
    *
    * @param e passed InventoryClickEvent when anything is clicked within target MenuOption
    * @see #onClick(InventoryClickEvent)
    * @see #isInventoryEnabled()
    */
-  public void onTargetClick(InventoryClickEvent e) {
-  }
+  public void onTargetClick(InventoryClickEvent e) {}
 }

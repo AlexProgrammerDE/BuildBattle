@@ -37,52 +37,60 @@ import plugily.projects.buildbattle.user.User;
 
 /**
  * @author Plajer
- * <p>
- * Created at 28.09.2018
+ *     <p>Created at 28.09.2018
  */
 public class MysqlManager implements UserDatabase {
 
-  private Main plugin;
-  private MysqlDatabase database;
+  private final Main plugin;
+  private final MysqlDatabase database;
 
   public MysqlManager(Main plugin) {
     this.plugin = plugin;
     database = plugin.getMysqlDatabase();
-    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-      try (Connection connection = database.getConnection();
-           Statement statement = connection.createStatement()) {
-        statement.executeUpdate(
-            "CREATE TABLE IF NOT EXISTS `" + getTableName() + "` (\n"
-                + "  `UUID` char(36) NOT NULL PRIMARY KEY,\n"
-                + "  `name` varchar(32) NOT NULL,\n"
-                + "  `loses` int(11) NOT NULL DEFAULT '0',\n"
-                + "  `wins` int(11) NOT NULL DEFAULT '0',\n"
-                + "  `highestwin` int(11) NOT NULL DEFAULT '0',\n"
-                + "  `gamesplayed` int(11) NOT NULL DEFAULT '0',\n"
-                + "  `blocksbroken` int(11) NOT NULL DEFAULT '0',\n"
-                + "  `blocksplaced` int(11) NOT NULL DEFAULT '0',\n"
-                + "  `supervotes` int(11) NOT NULL DEFAULT '0',\n"
-                + "  `particles` int(11) NOT NULL DEFAULT '0');");
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            () -> {
+              try (Connection connection = database.getConnection();
+                  Statement statement = connection.createStatement()) {
+                statement.executeUpdate(
+                    "CREATE TABLE IF NOT EXISTS `"
+                        + getTableName()
+                        + "` (\n"
+                        + "  `UUID` char(36) NOT NULL PRIMARY KEY,\n"
+                        + "  `name` varchar(32) NOT NULL,\n"
+                        + "  `loses` int(11) NOT NULL DEFAULT '0',\n"
+                        + "  `wins` int(11) NOT NULL DEFAULT '0',\n"
+                        + "  `highestwin` int(11) NOT NULL DEFAULT '0',\n"
+                        + "  `gamesplayed` int(11) NOT NULL DEFAULT '0',\n"
+                        + "  `blocksbroken` int(11) NOT NULL DEFAULT '0',\n"
+                        + "  `blocksplaced` int(11) NOT NULL DEFAULT '0',\n"
+                        + "  `supervotes` int(11) NOT NULL DEFAULT '0',\n"
+                        + "  `particles` int(11) NOT NULL DEFAULT '0');");
 
-        //temporary workaround
-        try {
-          statement.executeUpdate("ALTER TABLE " + getTableName() + " ADD supervotes int(11) NOT NULL DEFAULT '0'");
-        } catch (SQLException e) {
-          if (!e.getMessage().contains("Duplicate column name")) {
-            e.printStackTrace();
-          }
-        }
-        try {
-          statement.executeUpdate("ALTER TABLE " + getTableName() + " ADD name text NOT NULL");
-        } catch (SQLException e) {
-          if (!e.getMessage().contains("Duplicate column name")) {
-            e.printStackTrace();
-          }
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
+                // temporary workaround
+                try {
+                  statement.executeUpdate(
+                      "ALTER TABLE "
+                          + getTableName()
+                          + " ADD supervotes int(11) NOT NULL DEFAULT '0'");
+                } catch (SQLException e) {
+                  if (!e.getMessage().contains("Duplicate column name")) {
+                    e.printStackTrace();
+                  }
+                }
+                try {
+                  statement.executeUpdate(
+                      "ALTER TABLE " + getTableName() + " ADD name text NOT NULL");
+                } catch (SQLException e) {
+                  if (!e.getMessage().contains("Duplicate column name")) {
+                    e.printStackTrace();
+                  }
+                }
+              } catch (SQLException e) {
+                e.printStackTrace();
+              }
+            });
   }
 
   public MysqlDatabase getDatabase() {
@@ -91,7 +99,20 @@ public class MysqlManager implements UserDatabase {
 
   @Override
   public void saveStatistic(User user, StatsStorage.StatisticType stat) {
-    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> database.executeUpdate("UPDATE " + getTableName() + " SET " + stat.getName() + "=" + user.getStat(stat) + " WHERE UUID='" + user.getPlayer().getUniqueId().toString() + "';"));
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            () ->
+                database.executeUpdate(
+                    "UPDATE "
+                        + getTableName()
+                        + " SET "
+                        + stat.getName()
+                        + "="
+                        + user.getStat(stat)
+                        + " WHERE UUID='"
+                        + user.getPlayer().getUniqueId().toString()
+                        + "';"));
   }
 
   @Override
@@ -101,48 +122,73 @@ public class MysqlManager implements UserDatabase {
       if (!stat.isPersistent()) {
         continue;
       }
-      if (update.toString().equalsIgnoreCase(" SET ")){
+      if (update.toString().equalsIgnoreCase(" SET ")) {
         update.append(stat.getName()).append('=').append(user.getStat(stat));
       }
       update.append(", ").append(stat.getName()).append('=').append(user.getStat(stat));
     }
     String finalUpdate = update.toString();
 
-    Bukkit.getScheduler().runTaskAsynchronously(plugin, () ->
-            database.executeUpdate("UPDATE " + getTableName() + finalUpdate + " WHERE UUID='" + user.getPlayer().getUniqueId().toString() + "';"));
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            () ->
+                database.executeUpdate(
+                    "UPDATE "
+                        + getTableName()
+                        + finalUpdate
+                        + " WHERE UUID='"
+                        + user.getPlayer().getUniqueId().toString()
+                        + "';"));
   }
 
   @Override
   public void loadStatistics(User user) {
-    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-      String uuid = user.getPlayer().getUniqueId().toString();
-      try (Connection connection = database.getConnection();
-           Statement statement = connection.createStatement()) {
-        ResultSet rs = statement.executeQuery("SELECT * from " + getTableName() + " WHERE UUID='" + uuid + "'");
-        if (rs.next()) {
-          //player already exists - get the stats
-          for (StatsStorage.StatisticType stat : StatsStorage.StatisticType.values()) {
-            if (!stat.isPersistent()) continue;
-            int val = rs.getInt(stat.getName());
-            user.setStat(stat, val);
-          }
-        } else {
-          //player doesn't exist - make a new record
-          statement.executeUpdate("INSERT INTO " + getTableName() + " (UUID,name) VALUES ('" + uuid + "','" + user.getPlayer().getName() + "')");
-          for (StatsStorage.StatisticType stat : StatsStorage.StatisticType.values()) {
-            if (!stat.isPersistent()) continue;
-            user.setStat(stat, 0);
-          }
-        }
-      } catch (SQLException e) {
-        plugin.getLogger().log(Level.WARNING, "Could not connect to MySQL database! Cause: {0} ({1})", new Object[] {e.getSQLState(), e.getErrorCode()});
-      }
-    });
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            () -> {
+              String uuid = user.getPlayer().getUniqueId().toString();
+              try (Connection connection = database.getConnection();
+                  Statement statement = connection.createStatement()) {
+                ResultSet rs =
+                    statement.executeQuery(
+                        "SELECT * from " + getTableName() + " WHERE UUID='" + uuid + "'");
+                if (rs.next()) {
+                  // player already exists - get the stats
+                  for (StatsStorage.StatisticType stat : StatsStorage.StatisticType.values()) {
+                    if (!stat.isPersistent()) continue;
+                    int val = rs.getInt(stat.getName());
+                    user.setStat(stat, val);
+                  }
+                } else {
+                  // player doesn't exist - make a new record
+                  statement.executeUpdate(
+                      "INSERT INTO "
+                          + getTableName()
+                          + " (UUID,name) VALUES ('"
+                          + uuid
+                          + "','"
+                          + user.getPlayer().getName()
+                          + "')");
+                  for (StatsStorage.StatisticType stat : StatsStorage.StatisticType.values()) {
+                    if (!stat.isPersistent()) continue;
+                    user.setStat(stat, 0);
+                  }
+                }
+              } catch (SQLException e) {
+                plugin
+                    .getLogger()
+                    .log(
+                        Level.WARNING,
+                        "Could not connect to MySQL database! Cause: {0} ({1})",
+                        new Object[] {e.getSQLState(), e.getErrorCode()});
+              }
+            });
   }
 
   public String getTableName() {
     FileConfiguration config = ConfigUtils.getConfig(plugin, "mysql");
     return config.getString("table", "buildbattlestats");
   }
-
 }

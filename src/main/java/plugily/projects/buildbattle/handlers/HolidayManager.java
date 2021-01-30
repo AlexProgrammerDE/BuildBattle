@@ -27,8 +27,7 @@ import plugily.projects.buildbattle.utils.Debugger;
 
 /**
  * @author Plajer
- * <p>
- * Created at 24.03.2019
+ *     <p>Created at 24.03.2019
  */
 public class HolidayManager {
 
@@ -49,54 +48,90 @@ public class HolidayManager {
       case 2:
         if (day >= 10 && day <= 18) {
           currentHoliday = HolidayType.VALENTINES_DAY;
-          //replace themes
+          // replace themes
           plugin.getConfigPreferences().getGameThemes().clear();
-          plugin.getConfigPreferences().getGameThemes().put("Classic", plugin.getConfig().getStringList("Holiday-Themes.Valentines-Day"));
-          plugin.getConfigPreferences().getGameThemes().put("Team", plugin.getConfig().getStringList("Holiday-Themes.Valentines-Day"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Classic", plugin.getConfig().getStringList("Holiday-Themes.Valentines-Day"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Team", plugin.getConfig().getStringList("Holiday-Themes.Valentines-Day"));
         }
         break;
       case 3:
-        //4 days before april fools
+        // 4 days before april fools
         if (day >= 28) {
           currentHoliday = HolidayType.APRIL_FOOLS;
           plugin.getConfigPreferences().getGameThemes().clear();
-          plugin.getConfigPreferences().getGameThemes().put("Classic", plugin.getConfig().getStringList("Holiday-Themes.April-Fools"));
-          plugin.getConfigPreferences().getGameThemes().put("Team", plugin.getConfig().getStringList("Holiday-Themes.April-Fools"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Classic", plugin.getConfig().getStringList("Holiday-Themes.April-Fools"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Team", plugin.getConfig().getStringList("Holiday-Themes.April-Fools"));
         }
         break;
       case 4:
-        //4 days after april fools
+        // 4 days after april fools
         if (day <= 5) {
           currentHoliday = HolidayType.APRIL_FOOLS;
           plugin.getConfigPreferences().getGameThemes().clear();
-          plugin.getConfigPreferences().getGameThemes().put("Classic", plugin.getConfig().getStringList("Holiday-Themes.April-Fools"));
-          plugin.getConfigPreferences().getGameThemes().put("Team", plugin.getConfig().getStringList("Holiday-Themes.April-Fools"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Classic", plugin.getConfig().getStringList("Holiday-Themes.April-Fools"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Team", plugin.getConfig().getStringList("Holiday-Themes.April-Fools"));
         }
         break;
       case 10:
-        //4 days before halloween
+        // 4 days before halloween
         if (day >= 27) {
           currentHoliday = HolidayType.HALLOWEEN;
           plugin.getConfigPreferences().getGameThemes().clear();
-          plugin.getConfigPreferences().getGameThemes().put("Classic", plugin.getConfig().getStringList("Holiday-Themes.Halloween"));
-          plugin.getConfigPreferences().getGameThemes().put("Team", plugin.getConfig().getStringList("Holiday-Themes.Halloween"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Classic", plugin.getConfig().getStringList("Holiday-Themes.Halloween"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Team", plugin.getConfig().getStringList("Holiday-Themes.Halloween"));
         }
         break;
       case 11:
-        //4 days after halloween
+        // 4 days after halloween
         if (day <= 4) {
           currentHoliday = HolidayType.HALLOWEEN;
           plugin.getConfigPreferences().getGameThemes().clear();
-          plugin.getConfigPreferences().getGameThemes().put("Classic", plugin.getConfig().getStringList("Holiday-Themes.Halloween"));
-          plugin.getConfigPreferences().getGameThemes().put("Team", plugin.getConfig().getStringList("Holiday-Themes.Halloween"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Classic", plugin.getConfig().getStringList("Holiday-Themes.Halloween"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Team", plugin.getConfig().getStringList("Holiday-Themes.Halloween"));
         }
         break;
       case 12:
         if (day >= 21 && day <= 29) {
           currentHoliday = HolidayType.CHRISTMAS;
           plugin.getConfigPreferences().getGameThemes().clear();
-          plugin.getConfigPreferences().getGameThemes().put("Classic", plugin.getConfig().getStringList("Holiday-Themes.Christmas"));
-          plugin.getConfigPreferences().getGameThemes().put("Team", plugin.getConfig().getStringList("Holiday-Themes.Christmas"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Classic", plugin.getConfig().getStringList("Holiday-Themes.Christmas"));
+          plugin
+              .getConfigPreferences()
+              .getGameThemes()
+              .put("Team", plugin.getConfig().getStringList("Holiday-Themes.Christmas"));
         }
       default:
         break;
@@ -110,7 +145,10 @@ public class HolidayManager {
   }
 
   public enum HolidayType {
-    HALLOWEEN, APRIL_FOOLS, CHRISTMAS, NONE, VALENTINES_DAY
+    HALLOWEEN,
+    APRIL_FOOLS,
+    CHRISTMAS,
+    NONE,
+    VALENTINES_DAY
   }
-
 }

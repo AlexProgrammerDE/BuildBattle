@@ -48,17 +48,16 @@ import java.util.Map;
 
 /**
  * @author Plajer
- * <p>
- * Created at 18.01.2019
+ *     <p>Created at 18.01.2019
  */
 public class BaseArena extends BukkitRunnable {
 
   private final List<Player> players = new ArrayList<>();
   private final List<Player> spectators = new ArrayList<>();
 
-  //instead of 2 (lobby, end) location fields we use map with GameLocation enum
+  // instead of 2 (lobby, end) location fields we use map with GameLocation enum
   private final Map<GameLocation, Location> gameLocations = new EnumMap<>(GameLocation.class);
-  //all arena values that are integers, contains constant and floating values
+  // all arena values that are integers, contains constant and floating values
   private final Map<ArenaOption, Integer> arenaOptions = new EnumMap<>(ArenaOption.class);
 
   private final Main plugin;
@@ -66,7 +65,7 @@ public class BaseArena extends BukkitRunnable {
   private final PlotManager plotManager;
   private final ScoreboardManager scoreboardManager;
   private String mapName = "";
-  //todo move?
+  // todo move?
   private String theme = "Theme";
   private ArenaState arenaState;
   private BossBar gameBar;
@@ -81,7 +80,11 @@ public class BaseArena extends BukkitRunnable {
     this.plugin = plugin;
     this.id = id == null ? "" : id;
     if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BOSSBAR_ENABLED)) {
-      gameBar = Bukkit.createBossBar(plugin.getChatManager().colorMessage("Bossbar.Waiting-For-Players"), BarColor.BLUE, BarStyle.SOLID);
+      gameBar =
+          Bukkit.createBossBar(
+              plugin.getChatManager().colorMessage("Bossbar.Waiting-For-Players"),
+              BarColor.BLUE,
+              BarStyle.SOLID);
     }
     plotManager = new PlotManager(this);
     scoreboardManager = new ScoreboardManager(this);
@@ -116,8 +119,7 @@ public class BaseArena extends BukkitRunnable {
   }
 
   @Override
-  public void run() {
-  }
+  public void run() {}
 
   public void start() {
     runTaskTimer(plugin, 20L, 20L);
@@ -127,10 +129,12 @@ public class BaseArena extends BukkitRunnable {
    * Executes boss bar action for arena
    *
    * @param action add or remove a player from boss bar
-   * @param p      player
+   * @param p player
    */
   public void doBarAction(@NotNull BarAction action, Player p) {
-    if (p == null || gameBar == null || !plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BOSSBAR_ENABLED)) {
+    if (p == null
+        || gameBar == null
+        || !plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BOSSBAR_ENABLED)) {
       return;
     }
     switch (action) {
@@ -145,16 +149,21 @@ public class BaseArena extends BukkitRunnable {
     }
   }
 
-  public void updateBossBar() {
+  public void updateBossBar() {}
 
-  }
-
-  public void distributePlots() {
-  }
+  public void distributePlots() {}
 
   public void sendBuildLeftTimeMessage() {
-    String message = getPlugin().getChatManager().colorMessage("In-Game.Messages.Time-Left-To-Build").replace("%FORMATTEDTIME%", StringFormatUtils.formatIntoMMSS(getTimer()));
-    String subtitle = getPlugin().getChatManager().colorMessage("In-Game.Messages.Time-Left-Subtitle").replace("%FORMATTEDTIME%", String.valueOf(getTimer()));
+    String message =
+        getPlugin()
+            .getChatManager()
+            .colorMessage("In-Game.Messages.Time-Left-To-Build")
+            .replace("%FORMATTEDTIME%", StringFormatUtils.formatIntoMMSS(getTimer()));
+    String subtitle =
+        getPlugin()
+            .getChatManager()
+            .colorMessage("In-Game.Messages.Time-Left-Subtitle")
+            .replace("%FORMATTEDTIME%", String.valueOf(getTimer()));
     for (Player p : getPlayers()) {
       MiscUtils.sendActionBar(p, message);
       p.sendMessage(getPlugin().getChatManager().getPrefix() + message);
@@ -175,8 +184,7 @@ public class BaseArena extends BukkitRunnable {
   }
 
   /**
-   * Get arena ID, ID != map name
-   * ID is used to get and manage arenas
+   * Get arena ID, ID != map name ID is used to get and manage arenas
    *
    * @return arena ID
    */
@@ -213,8 +221,7 @@ public class BaseArena extends BukkitRunnable {
   }
 
   /**
-   * Get map name, map name != ID
-   * Map name is used in signs
+   * Get map name, map name != ID Map name is used in signs
    *
    * @return map name String
    */
@@ -285,15 +292,15 @@ public class BaseArena extends BukkitRunnable {
   }
 
   /**
-   * Changes arena state of arena
-   * Calls BBGameChangeStateEvent
+   * Changes arena state of arena Calls BBGameChangeStateEvent
    *
    * @param arenaState arena state to change
    * @see BBGameChangeStateEvent
    */
   public void setArenaState(@NotNull ArenaState arenaState) {
     if (this.arenaState != null) {
-      BBGameChangeStateEvent gameChangeStateEvent = new BBGameChangeStateEvent(arenaState, this, this.arenaState);
+      BBGameChangeStateEvent gameChangeStateEvent =
+          new BBGameChangeStateEvent(arenaState, this, this.arenaState);
       plugin.getServer().getPluginManager().callEvent(gameChangeStateEvent);
     }
 
@@ -320,7 +327,8 @@ public class BaseArena extends BukkitRunnable {
   }
 
   public void teleportAllToEndLocation() {
-    if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED) && ConfigUtils.getConfig(plugin, "bungee").getBoolean("End-Location-Hub", true)) {
+    if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED)
+        && ConfigUtils.getConfig(plugin, "bungee").getBoolean("End-Location-Hub", true)) {
       players.forEach(plugin.getBungeeManager()::connectToHub);
       spectators.forEach(plugin.getBungeeManager()::connectToHub);
       return;
@@ -353,7 +361,8 @@ public class BaseArena extends BukkitRunnable {
   }
 
   public void teleportToEndLocation(Player player) {
-    if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED) && ConfigUtils.getConfig(plugin, "bungee").getBoolean("End-Location-Hub", true)) {
+    if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED)
+        && ConfigUtils.getConfig(plugin, "bungee").getBoolean("End-Location-Hub", true)) {
       plugin.getBungeeManager().connectToHub(player);
       return;
     }
@@ -369,8 +378,7 @@ public class BaseArena extends BukkitRunnable {
     }
   }
 
-  public void giveRewards() {
-  }
+  public void giveRewards() {}
 
   /**
    * Get current arena theme
@@ -417,7 +425,9 @@ public class BaseArena extends BukkitRunnable {
   }
 
   public enum ArenaType {
-    SOLO("Classic"), TEAM("Teams"), GUESS_THE_BUILD("Guess-The-Build");
+    SOLO("Classic"),
+    TEAM("Teams"),
+    GUESS_THE_BUILD("Guess-The-Build");
 
     private final String prefix;
 
@@ -431,11 +441,12 @@ public class BaseArena extends BukkitRunnable {
   }
 
   public enum GameLocation {
-    LOBBY, END
+    LOBBY,
+    END
   }
 
   public enum BarAction {
-    ADD, REMOVE
+    ADD,
+    REMOVE
   }
-
 }

@@ -18,8 +18,5 @@
  *
  */
 
-/**
- * All in-game player related events.
- */
-
+/** All in-game player related events. */
 package plugily.projects.buildbattle.api.event.player;

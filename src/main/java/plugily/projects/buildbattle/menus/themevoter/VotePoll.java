@@ -36,15 +36,14 @@ import plugily.projects.buildbattle.handlers.reward.Reward;
 
 /**
  * @author Plajer
- * <p>
- * Created at 08.07.2018
+ *     <p>Created at 08.07.2018
  */
 public class VotePoll {
 
-  private SoloArena arena;
+  private final SoloArena arena;
   private final Map<String, Integer> votedThemes = new LinkedHashMap<>();
   private final Map<Player, String> playerVote = new HashMap<>();
-  private static Main plugin = JavaPlugin.getPlugin(Main.class);
+  private static final Main plugin = JavaPlugin.getPlugin(Main.class);
 
   public VotePoll(SoloArena arena, List<String> votedThemes) {
     this.arena = arena;
@@ -80,7 +79,8 @@ public class VotePoll {
   }
 
   public String getVotedTheme() {
-    LinkedHashMap<String, Integer> bestTheme = (LinkedHashMap<String, Integer>) SortUtils.sortByValue(votedThemes);
+    LinkedHashMap<String, Integer> bestTheme =
+        (LinkedHashMap<String, Integer>) SortUtils.sortByValue(votedThemes);
     return (String) bestTheme.keySet().toArray()[bestTheme.keySet().toArray().length - 1];
   }
 
@@ -97,5 +97,4 @@ public class VotePoll {
     }
     return "none";
   }
-
 }

@@ -41,33 +41,41 @@ import plugily.projects.buildbattle.commands.arguments.data.CommandArgument;
 
 /**
  * @author Plajer
- * <p>
- * Created at 27.05.2018
+ *     <p>Created at 27.05.2018
  */
 public class TabCompletion implements TabCompleter {
 
-  private ArgumentsRegistry registry;
+  private final ArgumentsRegistry registry;
 
   public TabCompletion(ArgumentsRegistry registry) {
     this.registry = registry;
   }
 
   @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, Command cmd, @NotNull String label, String[] args) {
+  public List<String> onTabComplete(
+      @NotNull CommandSender sender, Command cmd, @NotNull String label, String[] args) {
     List<String> completionList = new ArrayList<>(), cmds = new ArrayList<>();
     String partOfCommand = null;
 
     if (cmd.getName().equalsIgnoreCase("buildbattleadmin")) {
       if (args.length == 1) {
-        cmds.addAll(registry.getMappedArguments().get(cmd.getName().toLowerCase()).stream().map(CommandArgument::getArgumentName)
-            .collect(Collectors.toList()));
+        cmds.addAll(
+            registry.getMappedArguments().get(cmd.getName().toLowerCase()).stream()
+                .map(CommandArgument::getArgumentName)
+                .collect(Collectors.toList()));
         partOfCommand = args[0];
       } else if (args.length == 2) {
-        if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("removeplot")
-          || args[0].equalsIgnoreCase("addnpc") || args[0].equalsIgnoreCase("addplot")) {
-            cmds.addAll(ArenaRegistry.getArenas().stream().map(BaseArena::getID).collect(Collectors.toList()));
+        if (args[0].equalsIgnoreCase("delete")
+            || args[0].equalsIgnoreCase("removeplot")
+            || args[0].equalsIgnoreCase("addnpc")
+            || args[0].equalsIgnoreCase("addplot")) {
+          cmds.addAll(
+              ArenaRegistry.getArenas().stream()
+                  .map(BaseArena::getID)
+                  .collect(Collectors.toList()));
         } else if (args[0].equalsIgnoreCase("settheme")) {
-          for (List<String> l : registry.getPlugin().getConfigPreferences().getGameThemes().values()) {
+          for (List<String> l :
+              registry.getPlugin().getConfigPreferences().getGameThemes().values()) {
             cmds.addAll(l);
           }
         } else if (args[0].equalsIgnoreCase("votes")) {
@@ -77,23 +85,31 @@ public class TabCompletion implements TabCompleter {
       } else if (args.length == 3 && args[0].equalsIgnoreCase("removeplot")) {
         FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "arenas");
         String path = "instances." + ArenaRegistry.getArena(args[1]).getID() + ".plots";
-        cmds.addAll(config.isConfigurationSection(path) ? new ArrayList<>(config.getConfigurationSection(path)
-                .getKeys(false)) : Collections.emptyList());
+        cmds.addAll(
+            config.isConfigurationSection(path)
+                ? new ArrayList<>(config.getConfigurationSection(path).getKeys(false))
+                : Collections.emptyList());
         partOfCommand = args[2];
       }
     }
 
     if (cmd.getName().equalsIgnoreCase("buildbattle")) {
-      if (args.length == 2 && (args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("randomjoin"))) {
+      if (args.length == 2
+          && (args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("randomjoin"))) {
         if (args[0].equalsIgnoreCase("randomjoin")) {
           cmds.addAll(Arrays.asList("solo", "team", "gtb", "guess_the_build"));
         } else {
-          cmds.addAll(ArenaRegistry.getArenas().stream().map(BaseArena::getID).collect(Collectors.toList()));
+          cmds.addAll(
+              ArenaRegistry.getArenas().stream()
+                  .map(BaseArena::getID)
+                  .collect(Collectors.toList()));
         }
         partOfCommand = args[1];
       } else if (args.length == 1) {
-        cmds.addAll(registry.getMappedArguments().get(cmd.getName().toLowerCase()).stream().map(CommandArgument::getArgumentName)
-            .collect(Collectors.toList()));
+        cmds.addAll(
+            registry.getMappedArguments().get(cmd.getName().toLowerCase()).stream()
+                .map(CommandArgument::getArgumentName)
+                .collect(Collectors.toList()));
         partOfCommand = args[0];
       }
     }

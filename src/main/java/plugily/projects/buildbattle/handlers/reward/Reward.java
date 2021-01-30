@@ -1,5 +1,3 @@
-
-
 /*
  *
  * BuildBattle - Ultimate building competition minigame
@@ -29,15 +27,14 @@ import java.util.logging.Level;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.11.2018
+ *     <p>Created at 23.11.2018
  */
 public class Reward {
 
-  private RewardType type;
-  private RewardExecutor executor;
+  private final RewardType type;
+  private final RewardExecutor executor;
   private String executableCode;
-  private double chance;
+  private final double chance;
   private int place = -1;
 
   public Reward(RewardType type, String rawCode, int place) {
@@ -49,7 +46,7 @@ public class Reward {
     this.type = type;
     String processedCode = rawCode;
 
-    //set reward executor based on provided code
+    // set reward executor based on provided code
     if (rawCode.contains("p:")) {
       this.executor = RewardExecutor.PLAYER;
       processedCode = StringUtils.replace(processedCode, "p:", "");
@@ -60,13 +57,17 @@ public class Reward {
       this.executor = RewardExecutor.CONSOLE;
     }
 
-    //search for chance modifier
+    // search for chance modifier
     if (processedCode.contains("chance(")) {
       int loc = processedCode.indexOf(')');
-      //modifier is invalid
+      // modifier is invalid
       if (loc == -1) {
-        Bukkit.getLogger().log(Level.WARNING, "[BuildBattle] rewards.yml configuration is broken! Make sure you did not forget using ) character in chance condition! Command: {0}", rawCode);
-        //invalid code, 0% chance to execute
+        Bukkit.getLogger()
+            .log(
+                Level.WARNING,
+                "[BuildBattle] rewards.yml configuration is broken! Make sure you did not forget using ) character in chance condition! Command: {0}",
+                rawCode);
+        // invalid code, 0% chance to execute
         this.chance = 0.0;
         return;
       }
@@ -101,11 +102,16 @@ public class Reward {
   }
 
   public enum RewardType {
-    END_GAME("endgame"), GTB_GUESS("guess"), GTB_ALL_GUESSED("allguessed"), VOTE("vote"), REPORT("report"), PLACE("place"),
+    END_GAME("endgame"),
+    GTB_GUESS("guess"),
+    GTB_ALL_GUESSED("allguessed"),
+    VOTE("vote"),
+    REPORT("report"),
+    PLACE("place"),
     START_GAME("startgame"),
     ;
 
-    private String path;
+    private final String path;
 
     RewardType(String path) {
       this.path = path;
@@ -114,11 +120,11 @@ public class Reward {
     public String getPath() {
       return path;
     }
-
   }
 
   public enum RewardExecutor {
-    CONSOLE, PLAYER, SCRIPT
+    CONSOLE,
+    PLAYER,
+    SCRIPT
   }
-
 }

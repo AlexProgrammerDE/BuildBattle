@@ -23,15 +23,12 @@ package plugily.projects.buildbattle.utils.services.locale;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Registry class for holding locales
- */
+/** Registry class for holding locales */
 public class LocaleRegistry {
 
-  private static List<Locale> registeredLocales = new ArrayList<>();
+  private static final List<Locale> registeredLocales = new ArrayList<>();
 
-  private LocaleRegistry() {
-  }
+  private LocaleRegistry() {}
 
   /**
    * Register new locale into registry

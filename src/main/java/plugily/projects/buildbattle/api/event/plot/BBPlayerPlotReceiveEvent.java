@@ -29,13 +29,12 @@ import plugily.projects.buildbattle.arena.managers.plots.Plot;
 /**
  * @author Plajer
  * @since 4.0.0-pre-12
- * <p>
- * Called when player receive plot in game after the game starts
+ *     <p>Called when player receive plot in game after the game starts
  */
 public class BBPlayerPlotReceiveEvent extends BBEvent {
 
   private static final HandlerList HANDLERS = new HandlerList();
-  private Plot plot;
+  private final Plot plot;
 
   public BBPlayerPlotReceiveEvent(BaseArena eventArena, Plot plot) {
     super(eventArena);

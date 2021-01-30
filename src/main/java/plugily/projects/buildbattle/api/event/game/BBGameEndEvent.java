@@ -25,9 +25,7 @@ import org.bukkit.event.HandlerList;
 import plugily.projects.buildbattle.api.event.BBEvent;
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 
-/**
- * Called when game is ended
- */
+/** Called when game is ended */
 public class BBGameEndEvent extends BBEvent {
 
   private static final HandlerList handlers = new HandlerList();

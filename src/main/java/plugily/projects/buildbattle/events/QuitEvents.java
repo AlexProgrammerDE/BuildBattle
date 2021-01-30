@@ -34,8 +34,7 @@ import plugily.projects.buildbattle.user.User;
 
 /**
  * @author Plajer
- * <p>
- * Created at 29.04.2018
+ *     <p>Created at 29.04.2018
  */
 public class QuitEvents implements Listener {
 
@@ -58,7 +57,8 @@ public class QuitEvents implements Listener {
 
   private void onQuit(Player player) {
     BaseArena arena = ArenaRegistry.getArena(player);
-    if (arena != null && !plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED)) {
+    if (arena != null
+        && !plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED)) {
       ArenaManager.leaveAttempt(player, arena);
     }
 
@@ -66,5 +66,4 @@ public class QuitEvents implements Listener {
     plugin.getUserManager().saveAllStatistic(user);
     plugin.getUserManager().removeUser(user);
   }
-
 }

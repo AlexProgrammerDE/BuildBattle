@@ -35,8 +35,7 @@ import plugily.projects.buildbattle.arena.impl.BaseArena;
 
 /**
  * @author Plajer
- * <p>
- * Created at 31.12.2018
+ *     <p>Created at 31.12.2018
  */
 public class LobbyEvents implements Listener {
 
@@ -51,7 +50,9 @@ public class LobbyEvents implements Listener {
     }
     Player player = (Player) e.getEntity();
     BaseArena arena = ArenaRegistry.getArena(player);
-    if (arena != null && (arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS)) {
+    if (arena != null
+        && (arena.getArenaState() == ArenaState.STARTING
+            || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS)) {
       e.setCancelled(true);
     }
   }
@@ -69,5 +70,4 @@ public class LobbyEvents implements Listener {
     e.setCancelled(true);
     player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
   }
-
 }

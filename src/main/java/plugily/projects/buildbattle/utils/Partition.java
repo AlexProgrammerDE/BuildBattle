@@ -24,7 +24,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
-//Class used to split players into pairs of 2 for teams game mode
+// Class used to split players into pairs of 2 for teams game mode
 public final class Partition<T> extends AbstractList<List<T>> {
 
   private final List<T> list;
@@ -45,7 +45,8 @@ public final class Partition<T> extends AbstractList<List<T>> {
     int end = Math.min(start + chunkSize, list.size());
 
     if (start > end) {
-      throw new IndexOutOfBoundsException("Index " + index + " is out of the list range <0," + (size() - 1) + ">");
+      throw new IndexOutOfBoundsException(
+          "Index " + index + " is out of the list range <0," + (size() - 1) + ">");
     }
 
     return new ArrayList<>(list.subList(start, end));

@@ -24,9 +24,7 @@ import org.bukkit.event.Event;
 
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 
-/**
- * Represents BuildBattle game related events.
- */
+/** Represents BuildBattle game related events. */
 public abstract class BBEvent extends Event {
 
   protected BaseArena arena;
@@ -36,10 +34,9 @@ public abstract class BBEvent extends Event {
   }
 
   /**
-   * Returns event arena
-   * Returns null when called from BBPlayerStatisticChangeEvent when super votes are added via command
-   * To get more information about arena you can check instanceof SoloArena, TeamArena and GuessTheBuildArena
-   * and then cast it.
+   * Returns event arena Returns null when called from BBPlayerStatisticChangeEvent when super votes
+   * are added via command To get more information about arena you can check instanceof SoloArena,
+   * TeamArena and GuessTheBuildArena and then cast it.
    *
    * @return event arena
    */

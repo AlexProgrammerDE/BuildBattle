@@ -20,7 +20,6 @@
 
 package plugily.projects.buildbattle.handlers.party;
 
-
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -31,8 +30,7 @@ import de.simonsator.partyandfriends.api.party.PlayerParty;
 
 /**
  * @author Plajer
- * <p>
- * Created at 09.02.2020
+ *     <p>Created at 09.02.2020
  */
 public class PAFSPartyHandlerImpl implements PartyHandler {
 
@@ -45,7 +43,11 @@ public class PAFSPartyHandlerImpl implements PartyHandler {
   public GameParty getParty(Player player) {
     PartyManager api = PartyManager.getInstance();
     PlayerParty party = api.getParty(player.getUniqueId());
-    return new GameParty(party.getAllPlayers().stream().map(localPlayer -> Bukkit.getPlayer(localPlayer.getUniqueId())).collect(Collectors.toList()), Bukkit.getPlayer(party.getLeader().getUniqueId()));
+    return new GameParty(
+        party.getAllPlayers().stream()
+            .map(localPlayer -> Bukkit.getPlayer(localPlayer.getUniqueId()))
+            .collect(Collectors.toList()),
+        Bukkit.getPlayer(party.getLeader().getUniqueId()));
   }
 
   @Override

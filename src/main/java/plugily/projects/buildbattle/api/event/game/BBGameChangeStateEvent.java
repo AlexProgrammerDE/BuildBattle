@@ -26,14 +26,12 @@ import plugily.projects.buildbattle.api.event.BBEvent;
 import plugily.projects.buildbattle.arena.ArenaState;
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 
-/**
- * Called when arena states changes
- */
+/** Called when arena states changes */
 public class BBGameChangeStateEvent extends BBEvent {
 
   private static final HandlerList handlers = new HandlerList();
-  private ArenaState gameState;
-  private ArenaState previous;
+  private final ArenaState gameState;
+  private final ArenaState previous;
 
   public BBGameChangeStateEvent(ArenaState gameState, BaseArena arena, ArenaState previous) {
     super(arena);

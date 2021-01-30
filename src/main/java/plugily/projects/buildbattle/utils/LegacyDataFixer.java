@@ -29,13 +29,12 @@ import plugily.projects.buildbattle.api.StatsStorage;
 
 /**
  * @author Plajer
- * <p>
- * Created at 14.12.2018
+ *     <p>Created at 14.12.2018
  */
 public class LegacyDataFixer {
 
   public static final int DATA_VERSION = 1;
-  private Main plugin;
+  private final Main plugin;
 
   public LegacyDataFixer(Main plugin) {
     this.plugin = plugin;
@@ -44,10 +43,12 @@ public class LegacyDataFixer {
 
   private void initiate() {
     FileConfiguration config = ConfigUtils.getConfig(plugin, "stats");
-    if (config.getInt("data-version", 0) >= DATA_VERSION || plugin.getConfigPreferences().getOption(ConfigPreferences.Option.DATABASE_ENABLED)) {
+    if (config.getInt("data-version", 0) >= DATA_VERSION
+        || plugin.getConfigPreferences().getOption(ConfigPreferences.Option.DATABASE_ENABLED)) {
       return;
     }
-    Debugger.debug(Debugger.Level.TASK, "Legacy fixer started, fixing player data for yaml storage...");
+    Debugger.debug(
+        Debugger.Level.TASK, "Legacy fixer started, fixing player data for yaml storage...");
 
     int migrated = 0;
 
@@ -67,16 +68,20 @@ public class LegacyDataFixer {
           continue;
         }
         int value = config.getInt(key + "." + stat);
-        config.set(key + "." + stat.getName(), config.getInt(key + "." + stat.getName(), 0) + value);
+        config.set(
+            key + "." + stat.getName(), config.getInt(key + "." + stat.getName(), 0) + value);
         config.set(key + "." + stat, null);
         migratedLocal++;
       }
-      Debugger.debug(Debugger.Level.TASK, "[Legacy fixer] Migrated new record, " + migratedLocal + " records fixed");
+      Debugger.debug(
+          Debugger.Level.TASK,
+          "[Legacy fixer] Migrated new record, " + migratedLocal + " records fixed");
       migrated++;
     }
     config.set("data-version", DATA_VERSION);
     ConfigUtils.saveConfig(plugin, config, "stats");
-    Debugger.debug(Debugger.Level.TASK, "[Legacy fixer] Fixed and migrated " + migrated + " records. Data scheme fixed.");
+    Debugger.debug(
+        Debugger.Level.TASK,
+        "[Legacy fixer] Fixed and migrated " + migrated + " records. Data scheme fixed.");
   }
-
 }

@@ -31,14 +31,14 @@ import plugily.projects.buildbattle.arena.impl.BaseArena;
 import plugily.projects.buildbattle.utils.MaterialUtil;
 
 /**
- * Created for 1.14 compatibility purposes, it will cache block behind sign that will be
- * accessed via reflection on 1.14 which is expensive
+ * Created for 1.14 compatibility purposes, it will cache block behind sign that will be accessed
+ * via reflection on 1.14 which is expensive
  */
 public class ArenaSign {
 
-  private Sign sign;
+  private final Sign sign;
   private Block behind;
-  private BaseArena arena;
+  private final BaseArena arena;
 
   public ArenaSign(Sign sign, BaseArena arena) {
     this.sign = sign;
@@ -49,18 +49,30 @@ public class ArenaSign {
   private void setBehindBlock() {
     this.behind = null;
     if (MaterialUtil.isWallSign(sign.getBlock().getType())) {
-        this.behind = ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_14_R1) ? getBlockBehind() : getBlockBehindLegacy();
-      }
+      this.behind =
+          ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_14_R1)
+              ? getBlockBehind()
+              : getBlockBehindLegacy();
+    }
   }
 
   private Block getBlockBehind() {
     try {
-      Object blockData = sign.getBlock().getState().getClass().getMethod("getBlockData").invoke(sign.getBlock().getState());
+      Object blockData =
+          sign.getBlock()
+              .getState()
+              .getClass()
+              .getMethod("getBlockData")
+              .invoke(sign.getBlock().getState());
       BlockFace face = (BlockFace) blockData.getClass().getMethod("getFacing").invoke(blockData);
 
       Location loc = sign.getLocation();
-      Location location = new Location(sign.getWorld(), loc.getBlockX() - face.getModX(), loc.getBlockY() - face.getModY(),
-          loc.getBlockZ() - face.getModZ());
+      Location location =
+          new Location(
+              sign.getWorld(),
+              loc.getBlockX() - face.getModX(),
+              loc.getBlockY() - face.getModY(),
+              loc.getBlockZ() - face.getModZ());
       return location.getBlock();
     } catch (Exception e) {
       e.printStackTrace();
@@ -69,7 +81,8 @@ public class ArenaSign {
   }
 
   private Block getBlockBehindLegacy() {
-    return sign.getBlock().getRelative(((org.bukkit.material.Sign) sign.getData()).getAttachedFace());
+    return sign.getBlock()
+        .getRelative(((org.bukkit.material.Sign) sign.getData()).getAttachedFace());
   }
 
   public Sign getSign() {
@@ -84,5 +97,4 @@ public class ArenaSign {
   public BaseArena getArena() {
     return arena;
   }
-
 }

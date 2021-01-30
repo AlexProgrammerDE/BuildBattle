@@ -30,12 +30,10 @@ import pl.plajerlair.commonsbox.string.StringFormatUtils;
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 import plugily.projects.buildbattle.handlers.language.LanguageManager;
 
-/**
- * Created by Tom on 27/07/2014.
- */
+/** Created by Tom on 27/07/2014. */
 public class ChatManager {
 
-  private String prefix;
+  private final String prefix;
 
   public ChatManager(String prefix) {
     this.prefix = colorRawMessage(prefix);
@@ -45,24 +43,30 @@ public class ChatManager {
     String returnString = message;
     returnString = StringUtils.replace(returnString, "%ARENANAME%", arena.getMapName());
     returnString = StringUtils.replace(returnString, "%TIME%", Integer.toString(arena.getTimer()));
-    returnString = StringUtils.replace(returnString, "%FORMATTEDTIME%", StringFormatUtils.formatIntoMMSS((arena.getTimer())));
-    returnString = StringUtils.replace(returnString, "%PLAYERSIZE%", Integer.toString(arena.getPlayers().size()));
-    returnString = StringUtils.replace(returnString, "%MAXPLAYERS%", Integer.toString(arena.getMaximumPlayers()));
-    returnString = StringUtils.replace(returnString, "%MINPLAYERS%", Integer.toString(arena.getMinimumPlayers()));
+    returnString =
+        StringUtils.replace(
+            returnString, "%FORMATTEDTIME%", StringFormatUtils.formatIntoMMSS((arena.getTimer())));
+    returnString =
+        StringUtils.replace(
+            returnString, "%PLAYERSIZE%", Integer.toString(arena.getPlayers().size()));
+    returnString =
+        StringUtils.replace(
+            returnString, "%MAXPLAYERS%", Integer.toString(arena.getMaximumPlayers()));
+    returnString =
+        StringUtils.replace(
+            returnString, "%MINPLAYERS%", Integer.toString(arena.getMinimumPlayers()));
     return returnString;
   }
 
-  /**
-   * @return game prefix
-   */
+  /** @return game prefix */
   public String getPrefix() {
     return prefix;
   }
 
   public void broadcast(BaseArena arena, String message) {
-  if (message.isEmpty()) {
-    return;
-  }
+    if (message.isEmpty()) {
+      return;
+    }
 
     for (Player p : arena.getPlayers()) {
       p.sendMessage(prefix + message);
@@ -70,7 +74,7 @@ public class ChatManager {
   }
 
   public String colorMessage(String message) {
-      return message == null ? "" : colorRawMessage(LanguageManager.getLanguageMessage(message));
+    return message == null ? "" : colorRawMessage(LanguageManager.getLanguageMessage(message));
   }
 
   public String colorRawMessage(String msg) {
@@ -78,7 +82,8 @@ public class ChatManager {
       return "";
     }
 
-    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && msg.contains("#")) {
+    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1)
+        && msg.contains("#")) {
       msg = MiscUtils.matchColorRegex(msg);
     }
 
@@ -106,7 +111,7 @@ public class ChatManager {
   }
 
   public enum ActionType {
-    JOIN, LEAVE
+    JOIN,
+    LEAVE
   }
-
 }

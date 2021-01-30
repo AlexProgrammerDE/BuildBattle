@@ -44,8 +44,7 @@ import java.util.Map;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class ScoreboardManager {
 
@@ -58,19 +57,25 @@ public class ScoreboardManager {
   public ScoreboardManager(BaseArena arena) {
     this.arena = arena;
     for (ArenaState state : ArenaState.values()) {
-      //not registering RESTARTING state and registering IN_GAME and ENDING later
-      if (state == ArenaState.RESTARTING || state == ArenaState.IN_GAME || state == ArenaState.ENDING) {
+      // not registering RESTARTING state and registering IN_GAME and ENDING later
+      if (state == ArenaState.RESTARTING
+          || state == ArenaState.IN_GAME
+          || state == ArenaState.ENDING) {
         continue;
       }
-      //todo migrator
-      List<String> lines = LanguageManager.getLanguageList("Scoreboard.Content." + state.getFormattedName());
+      // todo migrator
+      List<String> lines =
+          LanguageManager.getLanguageList("Scoreboard.Content." + state.getFormattedName());
       scoreboardContents.put(state.getFormattedName(), lines);
     }
     for (BaseArena.ArenaType type : BaseArena.ArenaType.values()) {
-      List<String> playing = LanguageManager.getLanguageList("Scoreboard.Content.Playing-States." + type.getPrefix());
-      List<String> ending = LanguageManager.getLanguageList("Scoreboard.Content.Ending-States." + type.getPrefix());
-      //todo locale
-      scoreboardContents.put(ArenaState.IN_GAME.getFormattedName() + "_" + type.getPrefix(), playing);
+      List<String> playing =
+          LanguageManager.getLanguageList("Scoreboard.Content.Playing-States." + type.getPrefix());
+      List<String> ending =
+          LanguageManager.getLanguageList("Scoreboard.Content.Ending-States." + type.getPrefix());
+      // todo locale
+      scoreboardContents.put(
+          ArenaState.IN_GAME.getFormattedName() + "_" + type.getPrefix(), playing);
       scoreboardContents.put(ArenaState.ENDING.getFormattedName() + "_" + type.getPrefix(), ending);
     }
   }
@@ -82,17 +87,20 @@ public class ScoreboardManager {
    * @see User
    */
   public void createScoreboard(User user) {
-    Scoreboard scoreboard = ScoreboardLib.createScoreboard(user.getPlayer()).setHandler(new ScoreboardHandler() {
-      @Override
-      public String getTitle(Player player) {
-        return boardTitle;
-      }
+    Scoreboard scoreboard =
+        ScoreboardLib.createScoreboard(user.getPlayer())
+            .setHandler(
+                new ScoreboardHandler() {
+                  @Override
+                  public String getTitle(Player player) {
+                    return boardTitle;
+                  }
 
-      @Override
-      public List<Entry> getEntries(Player player) {
-        return formatScoreboard(user);
-      }
-    });
+                  @Override
+                  public List<Entry> getEntries(Player player) {
+                    return formatScoreboard(user);
+                  }
+                });
     scoreboard.activate();
     scoreboards.add(scoreboard);
   }
@@ -113,9 +121,7 @@ public class ScoreboardManager {
     }
   }
 
-  /**
-   * Forces all scoreboards to deactivate.
-   */
+  /** Forces all scoreboards to deactivate. */
   public void stopAllScoreboards() {
     scoreboards.forEach(Scoreboard::deactivate);
     scoreboards.clear();
@@ -125,7 +131,9 @@ public class ScoreboardManager {
     EntryBuilder builder = new EntryBuilder();
     List<String> lines = scoreboardContents.get(arena.getArenaState().getFormattedName());
     if (arena.getArenaState() == ArenaState.IN_GAME || arena.getArenaState() == ArenaState.ENDING) {
-      lines = scoreboardContents.get(arena.getArenaState().getFormattedName() + "_" + arena.getArenaType().getPrefix());
+      lines =
+          scoreboardContents.get(
+              arena.getArenaState().getFormattedName() + "_" + arena.getArenaType().getPrefix());
     }
     for (String line : lines) {
       builder.next(formatScoreboardLine(line, user));
@@ -136,28 +144,48 @@ public class ScoreboardManager {
   public String formatScoreboardLine(String string, User user) {
     Player player = user.getPlayer();
     String returnString = string;
-    returnString = StringUtils.replace(returnString, "%PLAYERS%", Integer.toString(arena.getPlayers().size()));
+    returnString =
+        StringUtils.replace(returnString, "%PLAYERS%", Integer.toString(arena.getPlayers().size()));
     returnString = StringUtils.replace(returnString, "%PLAYER%", player.getName());
     if (((SoloArena) arena).isThemeVoteTime()) {
-      returnString = StringUtils.replace(returnString, "%THEME%", plugin.getChatManager().colorMessage("In-Game.No-Theme-Yet"));
+      returnString =
+          StringUtils.replace(
+              returnString,
+              "%THEME%",
+              plugin.getChatManager().colorMessage("In-Game.No-Theme-Yet"));
     } else {
       returnString = StringUtils.replace(returnString, "%THEME%", arena.getTheme());
     }
     returnString = replaceValues(returnString);
     if (!((SoloArena) arena).isThemeVoteTime()) {
-      if (arena.getArenaType() == BaseArena.ArenaType.TEAM && arena.getPlotManager().getPlot(player) != null) {
+      if (arena.getArenaType() == BaseArena.ArenaType.TEAM
+          && arena.getPlotManager().getPlot(player) != null) {
         if (arena.getPlotManager().getPlot(player).getOwners().size() == 2) {
           if (arena.getPlotManager().getPlot(player).getOwners().get(0).equals(player)) {
-            returnString = StringUtils.replace(returnString, "%TEAMMATE%", arena.getPlotManager().getPlot(player).getOwners().get(1).getName());
+            returnString =
+                StringUtils.replace(
+                    returnString,
+                    "%TEAMMATE%",
+                    arena.getPlotManager().getPlot(player).getOwners().get(1).getName());
           } else {
-            returnString = StringUtils.replace(returnString, "%TEAMMATE%", arena.getPlotManager().getPlot(player).getOwners().get(0).getName());
+            returnString =
+                StringUtils.replace(
+                    returnString,
+                    "%TEAMMATE%",
+                    arena.getPlotManager().getPlot(player).getOwners().get(0).getName());
           }
         } else {
-          returnString = StringUtils.replace(returnString, "%TEAMMATE%", plugin.getChatManager().colorMessage("In-Game.Nobody"));
+          returnString =
+              StringUtils.replace(
+                  returnString,
+                  "%TEAMMATE%",
+                  plugin.getChatManager().colorMessage("In-Game.Nobody"));
         }
       }
     } else {
-      returnString = StringUtils.replace(returnString, "%TEAMMATE%", plugin.getChatManager().colorMessage("In-Game.Nobody"));
+      returnString =
+          StringUtils.replace(
+              returnString, "%TEAMMATE%", plugin.getChatManager().colorMessage("In-Game.Nobody"));
     }
     if (plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       returnString = PlaceholderAPI.setPlaceholders(player, returnString);
@@ -168,11 +196,20 @@ public class ScoreboardManager {
 
   public String replaceValues(String string) {
     String returnString = string;
-    returnString = StringUtils.replace(returnString, "%MIN_PLAYERS%", Integer.toString(arena.getMinimumPlayers()));
-    returnString = StringUtils.replace(returnString, "%MAX_PLAYERS%", Integer.toString(arena.getMaximumPlayers()));
+    returnString =
+        StringUtils.replace(
+            returnString, "%MIN_PLAYERS%", Integer.toString(arena.getMinimumPlayers()));
+    returnString =
+        StringUtils.replace(
+            returnString, "%MAX_PLAYERS%", Integer.toString(arena.getMaximumPlayers()));
     returnString = StringUtils.replace(returnString, "%TIMER%", Integer.toString(arena.getTimer()));
-    returnString = StringUtils.replace(returnString, "%TIME_LEFT%", Long.toString(arena.getTimer()));
-    returnString = StringUtils.replace(returnString, "%FORMATTED_TIME_LEFT%", StringFormatUtils.formatIntoMMSS(arena.getTimer()));
+    returnString =
+        StringUtils.replace(returnString, "%TIME_LEFT%", Long.toString(arena.getTimer()));
+    returnString =
+        StringUtils.replace(
+            returnString,
+            "%FORMATTED_TIME_LEFT%",
+            StringFormatUtils.formatIntoMMSS(arena.getTimer()));
     returnString = StringUtils.replace(returnString, "%ARENA_ID%", arena.getID());
     returnString = StringUtils.replace(returnString, "%MAPNAME%", arena.getMapName());
     return returnString;
@@ -185,5 +222,4 @@ public class ScoreboardManager {
   public Main getPlugin() {
     return plugin;
   }
-
 }

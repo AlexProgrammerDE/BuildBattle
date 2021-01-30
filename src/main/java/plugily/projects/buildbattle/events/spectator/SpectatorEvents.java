@@ -49,8 +49,7 @@ import java.util.List;
 
 /**
  * @author Plajer
- * <p>
- * Created at 05.08.2018
+ *     <p>Created at 05.08.2018
  */
 public class SpectatorEvents implements Listener {
 
@@ -62,8 +61,11 @@ public class SpectatorEvents implements Listener {
     this.plugin = plugin;
     chatManager = plugin.getChatManager();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    spectatorSettingsMenu = new SpectatorSettingsMenu(plugin, chatManager.colorMessage("In-Game.Spectator.Settings-Menu.Inventory-Name"),
-        chatManager.colorMessage("In-Game.Spectator.Settings-Menu.Speed-Name"));
+    spectatorSettingsMenu =
+        new SpectatorSettingsMenu(
+            plugin,
+            chatManager.colorMessage("In-Game.Spectator.Settings-Menu.Inventory-Name"),
+            chatManager.colorMessage("In-Game.Spectator.Settings-Menu.Speed-Name"));
   }
 
   @EventHandler(priority = EventPriority.HIGH)
@@ -98,7 +100,9 @@ public class SpectatorEvents implements Listener {
 
   @EventHandler
   public void onSpectatorInteract(PlayerInteractEvent e) {
-    if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() != Action.PHYSICAL) {
+    if (e.getAction() == Action.RIGHT_CLICK_AIR
+        || e.getAction() == Action.RIGHT_CLICK_BLOCK
+        || e.getAction() != Action.PHYSICAL) {
 
       if (!plugin.getUserManager().getUser(e.getPlayer()).isSpectator()) {
         return;
@@ -116,17 +120,29 @@ public class SpectatorEvents implements Listener {
 
       e.setCancelled(true);
 
-      if (stack.getItemMeta().getDisplayName().equalsIgnoreCase(chatManager.colorMessage("In-Game.Spectator.Spectator-Item-Name"))) {
+      if (stack
+          .getItemMeta()
+          .getDisplayName()
+          .equalsIgnoreCase(chatManager.colorMessage("In-Game.Spectator.Spectator-Item-Name"))) {
         openSpectatorMenu(e.getPlayer().getWorld(), e.getPlayer(), arena);
-      } else if (stack.getItemMeta().getDisplayName().equalsIgnoreCase(chatManager.colorMessage("In-Game.Spectator.Settings-Menu.Item-Name"))) {
+      } else if (stack
+          .getItemMeta()
+          .getDisplayName()
+          .equalsIgnoreCase(
+              chatManager.colorMessage("In-Game.Spectator.Settings-Menu.Item-Name"))) {
         spectatorSettingsMenu.openSpectatorSettingsMenu(e.getPlayer());
       }
     }
   }
 
   private void openSpectatorMenu(World world, Player p, BaseArena arena) {
-    Inventory inventory = plugin.getServer().createInventory(null, Utils.serializeInt(arena.getPlayers().size()),
-        chatManager.colorMessage("In-Game.Spectator.Spectator-Menu-Name"));
+    Inventory inventory =
+        plugin
+            .getServer()
+            .createInventory(
+                null,
+                Utils.serializeInt(arena.getPlayers().size()),
+                chatManager.colorMessage("In-Game.Spectator.Spectator-Menu-Name"));
     List<Player> players = arena.getPlayers();
 
     UserManager userManager = plugin.getUserManager();
@@ -158,7 +174,10 @@ public class SpectatorEvents implements Listener {
 
     e.setCancelled(true);
 
-    if (!ItemUtils.isItemStackNamed(e.getCurrentItem()) || !e.getView().getTitle().equalsIgnoreCase(chatManager.colorMessage("In-Game.Spectator.Spectator-Menu-Name"))) {
+    if (!ItemUtils.isItemStackNamed(e.getCurrentItem())
+        || !e.getView()
+            .getTitle()
+            .equalsIgnoreCase(chatManager.colorMessage("In-Game.Spectator.Spectator-Menu-Name"))) {
       return;
     }
 
@@ -171,7 +190,11 @@ public class SpectatorEvents implements Listener {
       return;
     }
 
-    p.sendMessage(chatManager.formatMessage(arena, chatManager.colorMessage("Commands.Admin-Commands.Teleported-To-Player"), target));
+    p.sendMessage(
+        chatManager.formatMessage(
+            arena,
+            chatManager.colorMessage("Commands.Admin-Commands.Teleported-To-Player"),
+            target));
     p.teleport(target);
     p.closeInventory();
   }

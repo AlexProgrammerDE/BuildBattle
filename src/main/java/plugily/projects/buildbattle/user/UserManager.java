@@ -35,13 +35,11 @@ import plugily.projects.buildbattle.user.data.MysqlManager;
 import plugily.projects.buildbattle.user.data.UserDatabase;
 import plugily.projects.buildbattle.utils.Debugger;
 
-/**
- * Created by Tom on 27/07/2014.
- */
+/** Created by Tom on 27/07/2014. */
 public class UserManager {
 
-  private UserDatabase database;
-  private Main plugin;
+  private final UserDatabase database;
+  private final Main plugin;
   private final List<User> users = new ArrayList<>();
 
   public UserManager(Main plugin) {
@@ -70,7 +68,8 @@ public class UserManager {
         return user;
       }
     }
-    Debugger.debug("Registering new user with UUID: " + player.getUniqueId() + " (" + player.getName() + ")");
+    Debugger.debug(
+        "Registering new user with UUID: " + player.getUniqueId() + " (" + player.getName() + ")");
     User user = new User(player);
     users.add(user);
     return user;

@@ -43,12 +43,11 @@ import plugily.projects.buildbattle.user.User;
 
 /**
  * @author Plajer
- * <p>
- * Created at 07.07.2018
+ *     <p>Created at 07.07.2018
  */
 public class VoteMenuListener implements Listener {
 
-  private Main plugin;
+  private final Main plugin;
 
   public VoteMenuListener(Main plugin) {
     this.plugin = plugin;
@@ -61,11 +60,16 @@ public class VoteMenuListener implements Listener {
     if (!(arena instanceof SoloArena)) {
       return;
     }
-    if (e.getView().getTitle().equals(plugin.getChatManager().colorMessage("Menus.Theme-Voting.Inventory-Name"))) {
+    if (e.getView()
+        .getTitle()
+        .equals(plugin.getChatManager().colorMessage("Menus.Theme-Voting.Inventory-Name"))) {
       if (!((SoloArena) arena).isThemeVoteTime() || arena.getArenaState() != ArenaState.IN_GAME) {
         return;
       }
-      Bukkit.getScheduler().runTask(plugin, () -> e.getPlayer().openInventory(((SoloArena) arena).getVoteMenu().getInventory()));
+      Bukkit.getScheduler()
+          .runTask(
+              plugin,
+              () -> e.getPlayer().openInventory(((SoloArena) arena).getVoteMenu().getInventory()));
     }
   }
 
@@ -78,25 +82,47 @@ public class VoteMenuListener implements Listener {
     if (!(arena instanceof SoloArena)) {
       return;
     }
-    if (e.getView().getTitle().equals(plugin.getChatManager().colorMessage("Menus.Theme-Voting.Inventory-Name"))) {
+    if (e.getView()
+        .getTitle()
+        .equals(plugin.getChatManager().colorMessage("Menus.Theme-Voting.Inventory-Name"))) {
       e.setCancelled(true);
       if (e.getCurrentItem().getType() == XMaterial.OAK_SIGN.parseMaterial()) {
         String displayName = e.getCurrentItem().getItemMeta().getDisplayName();
         displayName = ChatColor.stripColor(displayName);
-        boolean success = ((SoloArena) arena).getVotePoll().addVote((Player) e.getWhoClicked(), displayName);
-        e.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("Menus.Theme-Voting." + (!success ? "Already-Voted" : "Voted-Successfully")));
+        boolean success =
+            ((SoloArena) arena).getVotePoll().addVote((Player) e.getWhoClicked(), displayName);
+        e.getWhoClicked()
+            .sendMessage(
+                plugin.getChatManager().getPrefix()
+                    + plugin
+                        .getChatManager()
+                        .colorMessage(
+                            "Menus.Theme-Voting."
+                                + (!success ? "Already-Voted" : "Voted-Successfully")));
       }
       if (e.getCurrentItem().getType() == Material.PAPER) {
         User user = plugin.getUserManager().getUser((Player) e.getWhoClicked());
         if (user.getStat(StatsStorage.StatisticType.SUPER_VOTES) > 0) {
-          user.setStat(StatsStorage.StatisticType.SUPER_VOTES, user.getStat(StatsStorage.StatisticType.SUPER_VOTES) - 1);
-          plugin.getChatManager().broadcast(arena, plugin.getChatManager().colorMessage("Menus.Theme-Voting.Super-Vote-Used")
-              .replace("%player%", e.getWhoClicked().getName()).replace("%theme%",
-                  ((SoloArena) arena).getVotePoll().getThemeByPosition(e.getSlot() + 1)));
+          user.setStat(
+              StatsStorage.StatisticType.SUPER_VOTES,
+              user.getStat(StatsStorage.StatisticType.SUPER_VOTES) - 1);
+          plugin
+              .getChatManager()
+              .broadcast(
+                  arena,
+                  plugin
+                      .getChatManager()
+                      .colorMessage("Menus.Theme-Voting.Super-Vote-Used")
+                      .replace("%player%", e.getWhoClicked().getName())
+                      .replace(
+                          "%theme%",
+                          ((SoloArena) arena).getVotePoll().getThemeByPosition(e.getSlot() + 1)));
           ((SoloArena) arena).setThemeVoteTime(false);
           arena.setTheme(((SoloArena) arena).getVotePoll().getThemeByPosition(e.getSlot() + 1));
-          arena.setTimer(plugin.getConfigPreferences().getTimer(ConfigPreferences.TimerType.BUILD, arena));
-          String message = plugin.getChatManager().colorMessage("In-Game.Messages.Lobby-Messages.Game-Started");
+          arena.setTimer(
+              plugin.getConfigPreferences().getTimer(ConfigPreferences.TimerType.BUILD, arena));
+          String message =
+              plugin.getChatManager().colorMessage("In-Game.Messages.Lobby-Messages.Game-Started");
           for (Player p : arena.getPlayers()) {
             p.closeInventory();
             p.teleport(arena.getPlotManager().getPlot(p).getTeleportLocation());
@@ -114,7 +140,12 @@ public class VoteMenuListener implements Listener {
     if (!(arena instanceof GuessTheBuildArena)) {
       return;
     }
-    if (!e.getView().getTitle().equals(plugin.getChatManager().colorMessage("Menus.Guess-The-Build-Theme-Selector.Inventory-Name"))) {
+    if (!e.getView()
+        .getTitle()
+        .equals(
+            plugin
+                .getChatManager()
+                .colorMessage("Menus.Guess-The-Build-Theme-Selector.Inventory-Name"))) {
       return;
     }
     if (!((GuessTheBuildArena) arena).isThemeSet()) {
@@ -131,7 +162,12 @@ public class VoteMenuListener implements Listener {
     if (!(arena instanceof GuessTheBuildArena)) {
       return;
     }
-    if (e.getView().getTitle().equals(plugin.getChatManager().colorMessage("Menus.Guess-The-Build-Theme-Selector.Inventory-Name"))) {
+    if (e.getView()
+        .getTitle()
+        .equals(
+            plugin
+                .getChatManager()
+                .colorMessage("Menus.Guess-The-Build-Theme-Selector.Inventory-Name"))) {
       e.setCancelled(true);
       if (e.getCurrentItem().getType() == Material.PAPER) {
         BBTheme theme;
@@ -152,20 +188,32 @@ public class VoteMenuListener implements Listener {
         }
         ((GuessTheBuildArena) arena).setCurrentTheme(theme);
         ((GuessTheBuildArena) arena).setThemeSet(true);
-        arena.setTimer(plugin.getConfigPreferences().getTimer(ConfigPreferences.TimerType.BUILD, arena));
-        MiscUtils.sendActionBar(((Player) e.getWhoClicked()), plugin.getChatManager().colorMessage("In-Game.Guess-The-Build.Theme-Is-Name")
-            .replace("%THEME%", theme.getTheme()));
+        arena.setTimer(
+            plugin.getConfigPreferences().getTimer(ConfigPreferences.TimerType.BUILD, arena));
+        MiscUtils.sendActionBar(
+            ((Player) e.getWhoClicked()),
+            plugin
+                .getChatManager()
+                .colorMessage("In-Game.Guess-The-Build.Theme-Is-Name")
+                .replace("%THEME%", theme.getTheme()));
         e.getWhoClicked().closeInventory();
 
-        String roundMessage = plugin.getChatManager().colorMessage("In-Game.Guess-The-Build.Current-Round")
-            .replace("%ROUND%", String.valueOf(((GuessTheBuildArena) arena).getRound()))
-            .replace("%MAXPLAYERS%", String.valueOf(arena.getPlayers().size()));
+        String roundMessage =
+            plugin
+                .getChatManager()
+                .colorMessage("In-Game.Guess-The-Build.Current-Round")
+                .replace("%ROUND%", String.valueOf(((GuessTheBuildArena) arena).getRound()))
+                .replace("%MAXPLAYERS%", String.valueOf(arena.getPlayers().size()));
         for (Player p : arena.getPlayers()) {
-          p.sendTitle(plugin.getChatManager().colorMessage("In-Game.Guess-The-Build.Start-Guessing-Title"), null, 5, 25, 5);
+          p.sendTitle(
+              plugin.getChatManager().colorMessage("In-Game.Guess-The-Build.Start-Guessing-Title"),
+              null,
+              5,
+              25,
+              5);
           p.sendMessage(roundMessage);
         }
       }
     }
   }
-
 }

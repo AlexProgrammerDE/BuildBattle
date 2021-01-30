@@ -40,12 +40,11 @@ import plugily.projects.buildbattle.utils.Utils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
+ *     <p>Created at 23.12.2018
  */
 public class PlayerHeadsRegistry {
 
-  private Main plugin;
+  private final Main plugin;
   private final Map<HeadsCategory, Inventory> categories = new HashMap<>();
 
   public PlayerHeadsRegistry(OptionsRegistry registry) {
@@ -61,28 +60,39 @@ public class PlayerHeadsRegistry {
       }
       HeadsCategory category = new HeadsCategory(str);
 
-      category.setItemStack(new ItemBuilder(ItemUtils.getSkull(config.getString(str + ".texture")))
-          .name(plugin.getChatManager().colorRawMessage(config.getString(str + ".displayname")))
-          .lore(config.getStringList(str + ".lore").stream()
-              .map(lore -> lore = plugin.getChatManager().colorRawMessage(lore)).collect(Collectors.toList()))
-          .build());
+      category.setItemStack(
+          new ItemBuilder(ItemUtils.getSkull(config.getString(str + ".texture")))
+              .name(plugin.getChatManager().colorRawMessage(config.getString(str + ".displayname")))
+              .lore(
+                  config.getStringList(str + ".lore").stream()
+                      .map(lore -> lore = plugin.getChatManager().colorRawMessage(lore))
+                      .collect(Collectors.toList()))
+              .build());
       category.setPermission(config.getString(str + ".permission"));
 
       Set<ItemStack> playerHeads = new HashSet<>();
-      FileConfiguration categoryConfig = ConfigUtils.getConfig(plugin, "heads/menus/" +
-          config.getString(str + ".config"));
+      FileConfiguration categoryConfig =
+          ConfigUtils.getConfig(plugin, "heads/menus/" + config.getString(str + ".config"));
       for (String path : categoryConfig.getKeys(false)) {
         if (!categoryConfig.getBoolean(path + ".enabled", true)) {
           continue;
         }
         ItemStack stack = ItemUtils.getSkull(categoryConfig.getString(path + ".texture"));
-        Utils.setItemNameAndLore(stack, plugin.getChatManager().colorRawMessage(categoryConfig.getString(path + ".displayname")),
+        Utils.setItemNameAndLore(
+            stack,
+            plugin
+                .getChatManager()
+                .colorRawMessage(categoryConfig.getString(path + ".displayname")),
             categoryConfig.getStringList(path + ".lore").stream()
-                .map(lore -> lore = plugin.getChatManager().colorRawMessage(lore)).collect(Collectors.toList()));
+                .map(lore -> lore = plugin.getChatManager().colorRawMessage(lore))
+                .collect(Collectors.toList()));
         playerHeads.add(stack);
       }
-      Inventory inv = Bukkit.createInventory(null, Utils.serializeInt(playerHeads.size() + 1),
-          plugin.getChatManager().colorRawMessage(config.getString(str + ".menuname")));
+      Inventory inv =
+          Bukkit.createInventory(
+              null,
+              Utils.serializeInt(playerHeads.size() + 1),
+              plugin.getChatManager().colorRawMessage(config.getString(str + ".menuname")));
       playerHeads.forEach(inv::addItem);
       inv.addItem(Utils.getGoBackItem());
       category.setInventory(inv);
@@ -91,11 +101,13 @@ public class PlayerHeadsRegistry {
   }
 
   public boolean isHeadsMenu(Inventory inventory) {
-    return categories.values().stream().filter(inv -> inv.equals(inventory)).findFirst().isPresent();
+    return categories.values().stream()
+        .filter(inv -> inv.equals(inventory))
+        .findFirst()
+        .isPresent();
   }
 
   public Map<HeadsCategory, Inventory> getCategories() {
     return categories;
   }
-
 }

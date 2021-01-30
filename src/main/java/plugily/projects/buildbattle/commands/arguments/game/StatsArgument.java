@@ -31,37 +31,89 @@ import plugily.projects.buildbattle.user.User;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class StatsArgument {
 
   public StatsArgument(ArgumentsRegistry registry) {
-    registry.mapArgument("buildbattle", new CommandArgument("stats", "", CommandArgument.ExecutorType.PLAYER) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        Player player = args.length == 2 ? Bukkit.getPlayerExact(args[1]) : (Player) sender;
-        if (player == null || registry.getPlugin().getUserManager().getUser(player) == null) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Player-Not-Found"));
-          return;
-        }
-        User user = registry.getPlugin().getUserManager().getUser(player);
-        if (player.equals(sender)) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Header"));
-        } else {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Header-Other").replace("%player%", player.getName()));
-        }
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Wins") + user.getStat(StatsStorage.StatisticType.WINS));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Loses") + user.getStat(StatsStorage.StatisticType.LOSES));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Games-Played") + user.getStat(StatsStorage.StatisticType.GAMES_PLAYED));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Highest-Win") + user.getStat(StatsStorage.StatisticType.HIGHEST_WIN));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Blocks-Placed") + user.getStat(StatsStorage.StatisticType.BLOCKS_PLACED));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Blocks-Broken") + user.getStat(StatsStorage.StatisticType.BLOCKS_BROKEN));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Particles-Placed") + user.getStat(StatsStorage.StatisticType.PARTICLES_USED));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Super-Votes") + user.getStat(StatsStorage.StatisticType.SUPER_VOTES));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Footer"));
-      }
-    });
+    registry.mapArgument(
+        "buildbattle",
+        new CommandArgument("stats", "", CommandArgument.ExecutorType.PLAYER) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            Player player = args.length == 2 ? Bukkit.getPlayerExact(args[1]) : (Player) sender;
+            if (player == null || registry.getPlugin().getUserManager().getUser(player) == null) {
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry
+                          .getPlugin()
+                          .getChatManager()
+                          .colorMessage("Commands.Player-Not-Found"));
+              return;
+            }
+            User user = registry.getPlugin().getUserManager().getUser(player);
+            if (player.equals(sender)) {
+              sender.sendMessage(
+                  registry
+                      .getPlugin()
+                      .getChatManager()
+                      .colorMessage("Commands.Stats-Command.Header"));
+            } else {
+              sender.sendMessage(
+                  registry
+                      .getPlugin()
+                      .getChatManager()
+                      .colorMessage("Commands.Stats-Command.Header-Other")
+                      .replace("%player%", player.getName()));
+            }
+            sender.sendMessage(
+                registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Wins")
+                    + user.getStat(StatsStorage.StatisticType.WINS));
+            sender.sendMessage(
+                registry.getPlugin().getChatManager().colorMessage("Commands.Stats-Command.Loses")
+                    + user.getStat(StatsStorage.StatisticType.LOSES));
+            sender.sendMessage(
+                registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Commands.Stats-Command.Games-Played")
+                    + user.getStat(StatsStorage.StatisticType.GAMES_PLAYED));
+            sender.sendMessage(
+                registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Commands.Stats-Command.Highest-Win")
+                    + user.getStat(StatsStorage.StatisticType.HIGHEST_WIN));
+            sender.sendMessage(
+                registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Commands.Stats-Command.Blocks-Placed")
+                    + user.getStat(StatsStorage.StatisticType.BLOCKS_PLACED));
+            sender.sendMessage(
+                registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Commands.Stats-Command.Blocks-Broken")
+                    + user.getStat(StatsStorage.StatisticType.BLOCKS_BROKEN));
+            sender.sendMessage(
+                registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Commands.Stats-Command.Particles-Placed")
+                    + user.getStat(StatsStorage.StatisticType.PARTICLES_USED));
+            sender.sendMessage(
+                registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Commands.Stats-Command.Super-Votes")
+                    + user.getStat(StatsStorage.StatisticType.SUPER_VOTES));
+            sender.sendMessage(
+                registry
+                    .getPlugin()
+                    .getChatManager()
+                    .colorMessage("Commands.Stats-Command.Footer"));
+          }
+        });
   }
-
 }

@@ -22,18 +22,17 @@ package plugily.projects.buildbattle.utils.services.locale;
 
 import java.util.List;
 
-/**
- * Class for locales
- */
+/** Class for locales */
 public class Locale {
 
-  private String name;
-  private String originalName;
-  private String prefix;
-  private String author;
-  private List<String> aliases;
+  private final String name;
+  private final String originalName;
+  private final String prefix;
+  private final String author;
+  private final List<String> aliases;
 
-  public Locale(String name, String originalName, String prefix, String author, List<String> aliases) {
+  public Locale(
+      String name, String originalName, String prefix, String author, List<String> aliases) {
     this.prefix = prefix;
     this.name = name;
     this.originalName = originalName;
@@ -59,9 +58,7 @@ public class Locale {
     return originalName;
   }
 
-  /**
-   * @return authors of locale
-   */
+  /** @return authors of locale */
   public String getAuthor() {
     return author;
   }
@@ -83,5 +80,4 @@ public class Locale {
   public List<String> getAliases() {
     return aliases;
   }
-
 }

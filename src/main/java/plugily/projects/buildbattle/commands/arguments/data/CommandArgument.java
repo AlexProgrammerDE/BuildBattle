@@ -27,14 +27,13 @@ import org.bukkit.command.CommandSender;
 
 /**
  * @author Plajer
- * <p>
- * Created at 03.12.2018
+ *     <p>Created at 03.12.2018
  */
 public class CommandArgument {
 
-  private String argumentName;
-  private List<String> permissions;
-  private ExecutorType validExecutors;
+  private final String argumentName;
+  private final List<String> permissions;
+  private final ExecutorType validExecutors;
 
   public CommandArgument(String argumentName, String permissions, ExecutorType validExecutors) {
     this.argumentName = argumentName;
@@ -42,7 +41,8 @@ public class CommandArgument {
     this.validExecutors = validExecutors;
   }
 
-  public CommandArgument(String argumentName, List<String> permissions, ExecutorType validExecutors) {
+  public CommandArgument(
+      String argumentName, List<String> permissions, ExecutorType validExecutors) {
     this.argumentName = argumentName;
     this.permissions = permissions;
     this.validExecutors = validExecutors;
@@ -65,7 +65,8 @@ public class CommandArgument {
   }
 
   public enum ExecutorType {
-    BOTH, CONSOLE, PLAYER
+    BOTH,
+    CONSOLE,
+    PLAYER
   }
-
 }

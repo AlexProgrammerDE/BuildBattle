@@ -26,13 +26,11 @@ import org.bukkit.event.HandlerList;
 import plugily.projects.buildbattle.api.event.BBEvent;
 import plugily.projects.buildbattle.arena.impl.BaseArena;
 
-/**
- * Called when player leaves arena
- */
+/** Called when player leaves arena */
 public class BBGameLeaveEvent extends BBEvent {
 
   private static final HandlerList handlers = new HandlerList();
-  private Player player;
+  private final Player player;
 
   public BBGameLeaveEvent(Player player, BaseArena arena) {
     super(arena);

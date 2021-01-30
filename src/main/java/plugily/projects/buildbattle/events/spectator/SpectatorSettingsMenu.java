@@ -36,8 +36,7 @@ import plugily.projects.buildbattle.handlers.ChatManager;
 
 /**
  * @author Plajer
- * <p>
- * Created at 06.04.2019
+ *     <p>Created at 06.04.2019
  */
 public class SpectatorSettingsMenu implements Listener {
 
@@ -73,27 +72,32 @@ public class SpectatorSettingsMenu implements Listener {
       case LEATHER_BOOTS:
         p.removePotionEffect(PotionEffectType.SPEED);
         p.setFlySpeed(0.15f);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
+        p.addPotionEffect(
+            new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
         break;
       case CHAINMAIL_BOOTS:
         p.removePotionEffect(PotionEffectType.SPEED);
         p.setFlySpeed(0.2f);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
+        p.addPotionEffect(
+            new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
         break;
       case IRON_BOOTS:
         p.removePotionEffect(PotionEffectType.SPEED);
         p.setFlySpeed(0.25f);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false));
+        p.addPotionEffect(
+            new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false));
         break;
       case GOLDEN_BOOTS:
         p.removePotionEffect(PotionEffectType.SPEED);
         p.setFlySpeed(0.3f);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3, false, false));
+        p.addPotionEffect(
+            new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3, false, false));
         break;
       case DIAMOND_BOOTS:
         p.removePotionEffect(PotionEffectType.SPEED);
         p.setFlySpeed(0.35f);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 4, false, false));
+        p.addPotionEffect(
+            new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 4, false, false));
         break;
       default:
         break;
@@ -103,17 +107,31 @@ public class SpectatorSettingsMenu implements Listener {
   private Inventory initInventory() {
     ChatManager cm = plugin.getChatManager();
     Inventory inv = Bukkit.createInventory(null, 9 * 3, inventoryName);
-    inv.setItem(11, new ItemBuilder(Material.LEATHER_BOOTS)
-        .name(cm.colorRawMessage(speedOptionName + " I")).build());
-    inv.setItem(12, new ItemBuilder(Material.CHAINMAIL_BOOTS)
-        .name(cm.colorRawMessage(speedOptionName + " II")).build());
-    inv.setItem(13, new ItemBuilder(Material.IRON_BOOTS)
-        .name(cm.colorRawMessage(speedOptionName + " III")).build());
-    inv.setItem(14, new ItemBuilder(XMaterial.GOLDEN_BOOTS.parseItem())
-        .name(cm.colorRawMessage(speedOptionName + " IV")).build());
-    inv.setItem(15, new ItemBuilder(Material.DIAMOND_BOOTS)
-        .name(cm.colorRawMessage(speedOptionName + " V")).build());
+    inv.setItem(
+        11,
+        new ItemBuilder(Material.LEATHER_BOOTS)
+            .name(cm.colorRawMessage(speedOptionName + " I"))
+            .build());
+    inv.setItem(
+        12,
+        new ItemBuilder(Material.CHAINMAIL_BOOTS)
+            .name(cm.colorRawMessage(speedOptionName + " II"))
+            .build());
+    inv.setItem(
+        13,
+        new ItemBuilder(Material.IRON_BOOTS)
+            .name(cm.colorRawMessage(speedOptionName + " III"))
+            .build());
+    inv.setItem(
+        14,
+        new ItemBuilder(XMaterial.GOLDEN_BOOTS.parseItem())
+            .name(cm.colorRawMessage(speedOptionName + " IV"))
+            .build());
+    inv.setItem(
+        15,
+        new ItemBuilder(Material.DIAMOND_BOOTS)
+            .name(cm.colorRawMessage(speedOptionName + " V"))
+            .build());
     return inv;
   }
-
 }

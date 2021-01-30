@@ -46,16 +46,23 @@ import plugily.projects.buildbattle.utils.Utils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 23.12.2018
+ *     <p>Created at 23.12.2018
  */
 public class ParticleRegistry {
 
   private Inventory page1;
   private Inventory page2;
-  private final List<String> blackListedParticles = Arrays.asList("BLOCK_CRACK", "ITEM_CRACK", "ITEM_TAKE", "BLOCK_DUST", "MOB_APPEARANCE", "FOOTSTEP", "REDSTONE");
+  private final List<String> blackListedParticles =
+      Arrays.asList(
+          "BLOCK_CRACK",
+          "ITEM_CRACK",
+          "ITEM_TAKE",
+          "BLOCK_DUST",
+          "MOB_APPEARANCE",
+          "FOOTSTEP",
+          "REDSTONE");
   private final Set<ParticleItem> registeredParticles = new HashSet<>();
-  private Main plugin;
+  private final Main plugin;
 
   public ParticleRegistry(OptionsRegistry registry) {
     this.plugin = registry.getPlugin();
@@ -70,7 +77,9 @@ public class ParticleRegistry {
     int i = 0;
     for (Particle particle : Particle.values()) {
       if (i >= 100) {
-        Debugger.debug(Debugger.Level.WARN, "There are too many particles to register! Menu can't hold any more!");
+        Debugger.debug(
+            Debugger.Level.WARN,
+            "There are too many particles to register! Menu can't hold any more!");
         break;
       }
       boolean blacklisted = false;
@@ -87,12 +96,23 @@ public class ParticleRegistry {
         continue;
       }
       ParticleItem particleItem = new ParticleItem();
-      particleItem.setItemStack(new ItemBuilder(XMaterial.matchXMaterial(config
-              .getString(particle.toString() + ".material-name", "bedrock").toUpperCase()).orElse(XMaterial.BEDROCK).parseItem())
-          .name(plugin.getChatManager().colorRawMessage(config.getString(particle.toString() + ".displayname")))
-          .lore(config.getStringList(particle.toString() + ".lore")
-              .stream().map(lore -> lore = plugin.getChatManager().colorRawMessage(lore)).collect(Collectors.toList()))
-          .build());
+      particleItem.setItemStack(
+          new ItemBuilder(
+                  XMaterial.matchXMaterial(
+                          config
+                              .getString(particle.toString() + ".material-name", "bedrock")
+                              .toUpperCase())
+                      .orElse(XMaterial.BEDROCK)
+                      .parseItem())
+              .name(
+                  plugin
+                      .getChatManager()
+                      .colorRawMessage(config.getString(particle.toString() + ".displayname")))
+              .lore(
+                  config.getStringList(particle.toString() + ".lore").stream()
+                      .map(lore -> lore = plugin.getChatManager().colorRawMessage(lore))
+                      .collect(Collectors.toList()))
+              .build());
       particleItem.setPermission(config.getString(particle.toString() + ".permission"));
       particleItem.setEffect(particle);
       registeredParticles.add(particleItem);
@@ -107,43 +127,73 @@ public class ParticleRegistry {
     for (Particle particle : Particle.values()) {
       if (!config.isSet(particle.toString())) {
         config.set(particle.toString() + ".displayname", "&6" + particle.toString());
-        config.set(particle.toString() + ".lore", Arrays.asList("&7Click to activate", "&7on your location"));
+        config.set(
+            particle.toString() + ".lore",
+            Arrays.asList("&7Click to activate", "&7on your location"));
         config.set(particle.toString() + ".material-name", Material.PAPER.name());
         config.set(particle.toString() + ".permission", "particles.VIP");
         continue;
       }
       if (!config.isSet(particle.toString() + ".material-name")) {
         config.set(particle.toString() + ".material-name", Material.PAPER.name());
-        Debugger.debug(Debugger.Level.WARN, "Found outdated item in particles.yml! We've converted it to the newest version!");
+        Debugger.debug(
+            Debugger.Level.WARN,
+            "Found outdated item in particles.yml! We've converted it to the newest version!");
       }
     }
     ConfigUtils.saveConfig(plugin, config, "particles");
   }
 
   private void registerInventory() {
-    Inventory page1 = Bukkit.createInventory(null, Utils.serializeInt(54),
-        plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Particle.Inventory-Name"));
-    Inventory page2 = Bukkit.createInventory(null, Utils.serializeInt(54),
-            plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Particle.Inventory-Name"));
+    Inventory page1 =
+        Bukkit.createInventory(
+            null,
+            Utils.serializeInt(54),
+            plugin
+                .getChatManager()
+                .colorMessage("Menus.Option-Menu.Items.Particle.Inventory-Name"));
+    Inventory page2 =
+        Bukkit.createInventory(
+            null,
+            Utils.serializeInt(54),
+            plugin
+                .getChatManager()
+                .colorMessage("Menus.Option-Menu.Items.Particle.Inventory-Name"));
 
     int i = 0;
     for (ParticleItem item : registeredParticles) {
       (i > 50 ? page2 : page1).addItem(item.getItemStack());
       i++;
     }
-    page1.setItem(53, new ItemBuilder(new ItemStack(Material.REDSTONE_BLOCK))
-        .name(plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Name"))
-        .lore(Collections.singletonList(plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Lore")))
-        .build());
-    page2.setItem(53, new ItemBuilder(new ItemStack(Material.REDSTONE_BLOCK))
-            .name(plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Name"))
-            .lore(Collections.singletonList(plugin.getChatManager().colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Lore")))
+    page1.setItem(
+        53,
+        new ItemBuilder(new ItemStack(Material.REDSTONE_BLOCK))
+            .name(
+                plugin
+                    .getChatManager()
+                    .colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Name"))
+            .lore(
+                Collections.singletonList(
+                    plugin
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Lore")))
+            .build());
+    page2.setItem(
+        53,
+        new ItemBuilder(new ItemStack(Material.REDSTONE_BLOCK))
+            .name(
+                plugin
+                    .getChatManager()
+                    .colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Name"))
+            .lore(
+                Collections.singletonList(
+                    plugin
+                        .getChatManager()
+                        .colorMessage("Menus.Option-Menu.Items.Particle.In-Inventory-Item-Lore")))
             .build());
     page1.setItem(52, Utils.getGoBackItem());
     page2.setItem(52, Utils.getGoBackItem());
-    page1.setItem(51, new ItemBuilder(new ItemStack(Material.STONE_BUTTON))
-            .name("§7-->")
-            .build());
+    page1.setItem(51, new ItemBuilder(new ItemStack(Material.STONE_BUTTON)).name("§7-->").build());
     setPage1(page1);
     setPage2(page2);
   }

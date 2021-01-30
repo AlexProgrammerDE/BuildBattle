@@ -25,13 +25,12 @@ import org.bukkit.block.banner.PatternType;
 
 /**
  * @author Plajer
- * <p>
- * Created at 16.07.2019
+ *     <p>Created at 16.07.2019
  */
 public class BannerPattern {
 
-  private DyeColor dyeColor;
-  private PatternType patternType;
+  private final DyeColor dyeColor;
+  private final PatternType patternType;
 
   public BannerPattern(DyeColor dyeColor, PatternType patternType) {
     this.dyeColor = dyeColor;

@@ -41,17 +41,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import pl.plajerlair.commonsbox.minecraft.configuration.ConfigUtils;
 import plugily.projects.buildbattle.utils.services.ServiceRegistry;
 
-/**
- * Localization service used for fetching latest locales for minigames
- */
+/** Localization service used for fetching latest locales for minigames */
 public class LocaleService {
 
   private JavaPlugin plugin;
   private FileConfiguration localeData;
 
   public LocaleService(JavaPlugin plugin) {
-    if (ServiceRegistry.getRegisteredService() == null || !ServiceRegistry.getRegisteredService().equals(plugin)) {
-      throw new IllegalArgumentException("LocaleService cannot be used without registering service via ServiceRegistry first!");
+    if (ServiceRegistry.getRegisteredService() == null
+        || !ServiceRegistry.getRegisteredService().equals(plugin)) {
+      throw new IllegalArgumentException(
+          "LocaleService cannot be used without registering service via ServiceRegistry first!");
     }
     if (!ServiceRegistry.isServiceEnabled()) {
       return;
@@ -63,7 +63,11 @@ public class LocaleService {
       if (!file.exists()) {
         new File(plugin.getDataFolder().getPath() + "/locales").mkdir();
         if (!file.createNewFile()) {
-          plugin.getLogger().log(Level.WARNING, "Couldn't create locales folder! We must disable locales support.");
+          plugin
+              .getLogger()
+              .log(
+                  Level.WARNING,
+                  "Couldn't create locales folder! We must disable locales support.");
           return;
         }
       }
@@ -71,8 +75,12 @@ public class LocaleService {
       this.localeData = ConfigUtils.getConfig(plugin, "/locales/locale_data");
       plugin.getLogger().log(Level.INFO, "Fetched latest localization file from repository.");
     } catch (IOException ignored) {
-      //ignore exceptions
-      plugin.getLogger().log(Level.WARNING, "Couldn't access locale fetcher service or there is other problem! You should notify author!");
+      // ignore exceptions
+      plugin
+          .getLogger()
+          .log(
+              Level.WARNING,
+              "Couldn't access locale fetcher service or there is other problem! You should notify author!");
     }
   }
 
@@ -100,7 +108,9 @@ public class LocaleService {
       if (locale == null) {
         os.write(("pass=localeservice&type=" + plugin.getName()).getBytes(StandardCharsets.UTF_8));
       } else {
-        os.write(("pass=localeservice&type=" + plugin.getName() + "&locale=" + locale.getPrefix()).getBytes(StandardCharsets.UTF_8));
+        os.write(
+            ("pass=localeservice&type=" + plugin.getName() + "&locale=" + locale.getPrefix())
+                .getBytes(StandardCharsets.UTF_8));
       }
       os.flush();
       os.close();
@@ -121,14 +131,16 @@ public class LocaleService {
    * Whole repository can be seen here https://github.com/Plajer-Lair/locale_storage
    *
    * @param locale locale to download
-   * @return SUCCESS for downloaded locale, FAIL for service fault, LATEST when locale is latest as one in repository
+   * @return SUCCESS for downloaded locale, FAIL for service fault, LATEST when locale is latest as
+   *     one in repository
    */
   public DownloadStatus demandLocaleDownload(Locale locale) {
-    //service fault
+    // service fault
     if (localeData == null) {
       return DownloadStatus.FAIL;
     }
-    File localeFile = new File(plugin.getDataFolder() + "/locales/" + locale.getPrefix() + ".properties");
+    File localeFile =
+        new File(plugin.getDataFolder() + "/locales/" + locale.getPrefix() + ".properties");
     if (!localeFile.exists() || !isExact(locale, localeFile)) {
       return writeFile(locale);
     }
@@ -138,12 +150,26 @@ public class LocaleService {
   private DownloadStatus writeFile(Locale locale) {
     try (Scanner scanner = new Scanner(requestLocaleFetch(locale), "UTF-8").useDelimiter("\\A")) {
       String data = scanner.hasNext() ? scanner.next() : "";
-      try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(new File(plugin.getDataFolder().getPath() + "/locales/" + locale.getPrefix() + ".properties")), StandardCharsets.UTF_8)) {
+      try (OutputStreamWriter writer =
+          new OutputStreamWriter(
+              new FileOutputStream(
+                  new File(
+                      plugin.getDataFolder().getPath()
+                          + "/locales/"
+                          + locale.getPrefix()
+                          + ".properties")),
+              StandardCharsets.UTF_8)) {
         writer.write(data);
       }
       return DownloadStatus.SUCCESS;
     } catch (IOException ignored) {
-      plugin.getLogger().log(Level.WARNING, "Demanded locale " + locale.getPrefix() + " cannot be downloaded! You should notify author!");
+      plugin
+          .getLogger()
+          .log(
+              Level.WARNING,
+              "Demanded locale "
+                  + locale.getPrefix()
+                  + " cannot be downloaded! You should notify author!");
       return DownloadStatus.FAIL;
     }
   }
@@ -154,11 +180,13 @@ public class LocaleService {
    * @return true if locale can be updated for this version else cannot
    */
   public boolean isValidVersion() {
-    //service fault
+    // service fault
     if (localeData == null) {
       return false;
     }
-    return !checkHigher(plugin.getDescription().getVersion(), localeData.getString("locales.valid-version", plugin.getDescription().getVersion()));
+    return !checkHigher(
+        plugin.getDescription().getVersion(),
+        localeData.getString("locales.valid-version", plugin.getDescription().getVersion()));
   }
 
   private boolean isExact(Locale locale, File file) {
@@ -180,11 +208,10 @@ public class LocaleService {
     return current.compareTo(newVer) < 0;
   }
 
-  /**
-   * Download status enum for locale download demands
-   */
+  /** Download status enum for locale download demands */
   public enum DownloadStatus {
-    SUCCESS, FAIL, LATEST
+    SUCCESS,
+    FAIL,
+    LATEST
   }
-
 }

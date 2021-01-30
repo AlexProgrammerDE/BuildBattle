@@ -27,13 +27,11 @@ import plugily.projects.buildbattle.Main;
 import plugily.projects.buildbattle.api.StatsStorage;
 import plugily.projects.buildbattle.user.User;
 
-/**
- * Created by Tom on 17/06/2015.
- */
+/** Created by Tom on 17/06/2015. */
 public class FileStats implements UserDatabase {
 
-  private FileConfiguration config;
-  private Main plugin;
+  private final FileConfiguration config;
+  private final Main plugin;
 
   public FileStats(Main plugin) {
     this.plugin = plugin;
@@ -42,7 +40,8 @@ public class FileStats implements UserDatabase {
 
   @Override
   public void saveStatistic(User user, StatsStorage.StatisticType stat) {
-    config.set(user.getPlayer().getUniqueId().toString() + "." + stat.getName(), user.getStat(stat));
+    config.set(
+        user.getPlayer().getUniqueId().toString() + "." + stat.getName(), user.getStat(stat));
     ConfigUtils.saveConfig(plugin, config, "stats");
   }
 
@@ -52,7 +51,8 @@ public class FileStats implements UserDatabase {
       if (!stat.isPersistent()) {
         continue;
       }
-      config.set(user.getPlayer().getUniqueId().toString() + "." + stat.getName(), user.getStat(stat));
+      config.set(
+          user.getPlayer().getUniqueId().toString() + "." + stat.getName(), user.getStat(stat));
     }
     ConfigUtils.saveConfig(plugin, config, "stats");
   }
@@ -60,7 +60,8 @@ public class FileStats implements UserDatabase {
   @Override
   public void loadStatistics(User user) {
     for (StatsStorage.StatisticType stat : StatsStorage.StatisticType.values()) {
-      user.setStat(stat, config.getInt(user.getPlayer().getUniqueId().toString() + "." + stat.getName(), 0));
+      user.setStat(
+          stat, config.getInt(user.getPlayer().getUniqueId().toString() + "." + stat.getName(), 0));
     }
   }
 }

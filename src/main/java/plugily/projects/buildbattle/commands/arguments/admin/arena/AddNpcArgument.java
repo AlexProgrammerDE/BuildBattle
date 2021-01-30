@@ -33,28 +33,49 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class AddNpcArgument {
 
   public AddNpcArgument(ArgumentsRegistry registry) {
-    registry.mapArgument("buildbattleadmin", new LabeledCommandArgument("addnpc", "buildbattle.admin.addnpc", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/bba addnpc &6<arena>", "/bba addnpc <arena>",
-            "&7Deletes specified arena\n&6Permission: &7buildbattle.admin.addnpc")) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        if (registry.getPlugin().getServer().getPluginManager().isPluginEnabled("Citizens")) {
-          NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.VILLAGER, registry.getPlugin().getChatManager().colorMessage("In-Game.NPC.Floor-Change-NPC-Name"));
-          npc.spawn(((Player) sender).getLocation());
-          npc.setProtected(true);
-          npc.setName(registry.getPlugin().getChatManager().colorMessage("In-Game.NPC.Floor-Change-NPC-Name"));
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("In-Game.NPC.NPC-Created"));
-        } else {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("In-Game.NPC.Install-Citizens"));
-        }
-      }
-    });
+    registry.mapArgument(
+        "buildbattleadmin",
+        new LabeledCommandArgument(
+            "addnpc",
+            "buildbattle.admin.addnpc",
+            CommandArgument.ExecutorType.PLAYER,
+            new LabelData(
+                "/bba addnpc &6<arena>",
+                "/bba addnpc <arena>",
+                "&7Deletes specified arena\n&6Permission: &7buildbattle.admin.addnpc")) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            if (registry.getPlugin().getServer().getPluginManager().isPluginEnabled("Citizens")) {
+              NPC npc =
+                  CitizensAPI.getNPCRegistry()
+                      .createNPC(
+                          EntityType.VILLAGER,
+                          registry
+                              .getPlugin()
+                              .getChatManager()
+                              .colorMessage("In-Game.NPC.Floor-Change-NPC-Name"));
+              npc.spawn(((Player) sender).getLocation());
+              npc.setProtected(true);
+              npc.setName(
+                  registry
+                      .getPlugin()
+                      .getChatManager()
+                      .colorMessage("In-Game.NPC.Floor-Change-NPC-Name"));
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().colorMessage("In-Game.NPC.NPC-Created"));
+            } else {
+              sender.sendMessage(
+                  registry
+                      .getPlugin()
+                      .getChatManager()
+                      .colorMessage("In-Game.NPC.Install-Citizens"));
+            }
+          }
+        });
   }
-
 }

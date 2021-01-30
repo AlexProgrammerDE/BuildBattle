@@ -22,26 +22,19 @@ package plugily.projects.buildbattle.arena.options;
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public enum ArenaOption {
-  /**
-   * Current arena timer, ex. 30 seconds before game starts.
-   */
+  /** Current arena timer, ex. 30 seconds before game starts. */
   TIMER(0),
-  /**
-   * Minimum players in arena needed to start.
-   */
+  /** Minimum players in arena needed to start. */
   MINIMUM_PLAYERS(2),
-  /**
-   * Maximum players arena can hold, users with full games permission can bypass this!
-   */
+  /** Maximum players arena can hold, users with full games permission can bypass this! */
   MAXIMUM_PLAYERS(10),
   /**
    * Value for checking whether player is in plot or not, otherwise teleport him back.
-   * <p>
-   * Each time values reach 1 check will be run.
+   *
+   * <p>Each time values reach 1 check will be run.
    */
   IN_PLOT_CHECKER(0);
 
@@ -54,5 +47,4 @@ public enum ArenaOption {
   public int getDefaultValue() {
     return defaultValue;
   }
-
 }

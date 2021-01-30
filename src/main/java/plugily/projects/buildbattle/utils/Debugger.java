@@ -27,8 +27,7 @@ import pl.plajerlair.commonsbox.minecraft.misc.MiscUtils;
 
 /**
  * @author Plajer
- * <p>
- * Created at 28.04.2019
+ *     <p>Created at 28.04.2019
  */
 public class Debugger {
 
@@ -44,8 +43,7 @@ public class Debugger {
   }
 
   /**
-   * Prints debug message with selected log level.
-   * Messages of level INFO or TASK won't be posted if
+   * Prints debug message with selected log level. Messages of level INFO or TASK won't be posted if
    * debugger is enabled, warnings and errors will be.
    *
    * @param level level of debugged message
@@ -76,7 +74,8 @@ public class Debugger {
   }
 
   public static void sendConsoleMsg(String msg) {
-    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && msg.contains("#")) {
+    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1)
+        && msg.contains("#")) {
       msg = MiscUtils.matchColorRegex(msg);
     }
 
@@ -84,7 +83,10 @@ public class Debugger {
   }
 
   public enum Level {
-    INFO, WARN, ERROR, WTF, TASK
+    INFO,
+    WARN,
+    ERROR,
+    WTF,
+    TASK
   }
-
 }

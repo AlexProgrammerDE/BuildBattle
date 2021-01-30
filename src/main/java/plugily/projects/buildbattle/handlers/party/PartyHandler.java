@@ -24,8 +24,7 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Plajer
- * <p>
- * Created at 09.02.2020
+ *     <p>Created at 09.02.2020
  */
 public interface PartyHandler {
 
@@ -38,7 +37,9 @@ public interface PartyHandler {
   PartyPluginType getPartyPluginType();
 
   enum PartyPluginType {
-    PARTIES, PAFSpigot, PAFBungee, NONE
+    PARTIES,
+    PAFSpigot,
+    PAFBungee,
+    NONE
   }
-
 }

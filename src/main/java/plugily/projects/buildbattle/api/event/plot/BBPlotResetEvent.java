@@ -29,13 +29,12 @@ import plugily.projects.buildbattle.arena.managers.plots.Plot;
 /**
  * @author Plajer
  * @since 4.0.0-pre-12
- * <p>
- * Called when plot is being reset
+ *     <p>Called when plot is being reset
  */
 public class BBPlotResetEvent extends BBEvent {
 
   private static final HandlerList HANDLERS = new HandlerList();
-  private Plot plot;
+  private final Plot plot;
 
   public BBPlotResetEvent(BaseArena eventArena, Plot plot) {
     super(eventArena);
@@ -54,5 +53,4 @@ public class BBPlotResetEvent extends BBEvent {
   public Plot getPlot() {
     return plot;
   }
-
 }

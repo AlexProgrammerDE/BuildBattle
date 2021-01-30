@@ -70,12 +70,10 @@ import plugily.projects.buildbattle.user.data.MysqlManager;
 import plugily.projects.buildbattle.utils.*;
 import plugily.projects.buildbattle.utils.services.ServiceRegistry;
 
-/**
- * Created by Tom on 17/08/2015.
- */
-//todo setup handler recode
-//todo arenas handler recode
-//todo inventoryframework
+/** Created by Tom on 17/08/2015. */
+// todo setup handler recode
+// todo arenas handler recode
+// todo inventoryframework
 public class Main extends JavaPlugin {
 
   private ArgumentsRegistry registry;
@@ -134,10 +132,21 @@ public class Main extends JavaPlugin {
 
     ServiceRegistry.registerService(this);
     exceptionLogHandler = new ExceptionLogHandler(this);
-    Debugger.setEnabled(getDescription().getVersion().contains("debug") || getConfig().getBoolean("Debug"));
+    Debugger.setEnabled(
+        getDescription().getVersion().contains("debug") || getConfig().getBoolean("Debug"));
     Debugger.debug("Main setup started");
     saveDefaultConfig();
-    for (String s : Arrays.asList("arenas", "particles", "lobbyitems", "stats", "voteItems", "mysql", "biomes", "bungee", "rewards")) {
+    for (String s :
+        Arrays.asList(
+            "arenas",
+            "particles",
+            "lobbyitems",
+            "stats",
+            "voteItems",
+            "mysql",
+            "biomes",
+            "bungee",
+            "rewards")) {
       ConfigUtils.getConfig(this, s);
     }
     LanguageManager.init(this);
@@ -151,23 +160,34 @@ public class Main extends JavaPlugin {
     if (!getConfig().getBoolean("Update-Notifier.Enabled", true)) {
       return;
     }
-    UpdateChecker.init(this, 44703).requestUpdateCheck().whenComplete((result, exception) -> {
-      if (!result.requiresUpdate()) {
-        return;
-      }
-      if (result.getNewestVersion().contains("b")) {
-        if (getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true)) {
-          Debugger.sendConsoleMsg("&c[BuildBattle] Your software is ready for update! However it's a BETA VERSION. Proceed with caution.");
-          Debugger.sendConsoleMsg("&c[BuildBattle] Current version %old%, latest version %new%".replace("%old%", getDescription().getVersion()).replace("%new%",
-              result.getNewestVersion()));
-        }
-        return;
-      }
-      MessageUtils.updateIsHere();
-      Debugger.sendConsoleMsg("&aYour Build Battle plugin is outdated! Download it to keep with latest changes and fixes.");
-      Debugger.sendConsoleMsg("&aDisable this option in config.yml if you wish.");
-      Debugger.sendConsoleMsg("&eCurrent version: &c" + getDescription().getVersion() + " &eLatest version: &a" + result.getNewestVersion());
-    });
+    UpdateChecker.init(this, 44703)
+        .requestUpdateCheck()
+        .whenComplete(
+            (result, exception) -> {
+              if (!result.requiresUpdate()) {
+                return;
+              }
+              if (result.getNewestVersion().contains("b")) {
+                if (getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true)) {
+                  Debugger.sendConsoleMsg(
+                      "&c[BuildBattle] Your software is ready for update! However it's a BETA VERSION. Proceed with caution.");
+                  Debugger.sendConsoleMsg(
+                      "&c[BuildBattle] Current version %old%, latest version %new%"
+                          .replace("%old%", getDescription().getVersion())
+                          .replace("%new%", result.getNewestVersion()));
+                }
+                return;
+              }
+              MessageUtils.updateIsHere();
+              Debugger.sendConsoleMsg(
+                  "&aYour Build Battle plugin is outdated! Download it to keep with latest changes and fixes.");
+              Debugger.sendConsoleMsg("&aDisable this option in config.yml if you wish.");
+              Debugger.sendConsoleMsg(
+                  "&eCurrent version: &c"
+                      + getDescription().getVersion()
+                      + " &eLatest version: &a"
+                      + result.getNewestVersion());
+            });
   }
 
   private boolean validateIfPluginShouldStart() {
@@ -184,7 +204,8 @@ public class Main extends JavaPlugin {
     if (ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_11_R1)) {
       MessageUtils.thisVersionIsNotSupported();
       Debugger.sendConsoleMsg("&cYour server version is not supported by Build Battle!");
-      Debugger.sendConsoleMsg("&cSadly, we must shut off. Maybe you consider updating your server version?");
+      Debugger.sendConsoleMsg(
+          "&cSadly, we must shut off. Maybe you consider updating your server version?");
       forceDisable = true;
       getServer().getPluginManager().disablePlugin(this);
       return false;
@@ -192,7 +213,7 @@ public class Main extends JavaPlugin {
     return true;
   }
 
-  //order matters
+  // order matters
   private void initializeClasses() {
     ScoreboardLib.setPluginInstance(this);
     if (getConfig().getBoolean("BungeeActivated")) {
@@ -200,7 +221,9 @@ public class Main extends JavaPlugin {
     }
     if (configPreferences.getOption(ConfigPreferences.Option.DATABASE_ENABLED)) {
       FileConfiguration config = ConfigUtils.getConfig(this, "mysql");
-      database = new MysqlDatabase(config.getString("user"), config.getString("password"), config.getString("address"));
+      database =
+          new MysqlDatabase(
+              config.getString("user"), config.getString("password"), config.getString("address"));
     }
     registry = new ArgumentsRegistry(this);
     userManager = new UserManager(this);
@@ -218,14 +241,27 @@ public class Main extends JavaPlugin {
     optionsRegistry = new OptionsRegistry(this);
     new OptionsMenuHandler(this);
     Metrics metrics = new Metrics(this);
-    metrics.addCustomChart(new Metrics.SimplePie("bungeecord_hooked", () -> String.valueOf(configPreferences.getOption(ConfigPreferences.Option.BUNGEE_ENABLED))));
-    metrics.addCustomChart(new Metrics.SimplePie("locale_used", LanguageManager.getPluginLocale()::getPrefix));
-    metrics.addCustomChart(new Metrics.SimplePie("update_notifier", () -> {
-      if (getConfig().getBoolean("Update-Notifier.Enabled", true)) {
-        return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true) ? "Enabled with beta notifier" : "Enabled";
-      }
-      return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true) ? "Beta notifier only" : "Disabled";
-    }));
+    metrics.addCustomChart(
+        new Metrics.SimplePie(
+            "bungeecord_hooked",
+            () ->
+                String.valueOf(
+                    configPreferences.getOption(ConfigPreferences.Option.BUNGEE_ENABLED))));
+    metrics.addCustomChart(
+        new Metrics.SimplePie("locale_used", LanguageManager.getPluginLocale()::getPrefix));
+    metrics.addCustomChart(
+        new Metrics.SimplePie(
+            "update_notifier",
+            () -> {
+              if (getConfig().getBoolean("Update-Notifier.Enabled", true)) {
+                return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true)
+                    ? "Enabled with beta notifier"
+                    : "Enabled";
+              }
+              return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true)
+                  ? "Beta notifier only"
+                  : "Disabled";
+            }));
     new JoinEvents(this);
     new QuitEvents(this);
     if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -284,9 +320,17 @@ public class Main extends JavaPlugin {
           update.append(", ").append(stat.getName()).append('=').append(user.getStat(stat));
         }
         String finalUpdate = update.toString();
-        //copy of userManager#saveStatistic but without async database call that's not allowed in onDisable method.
-        ((MysqlManager) userManager.getDatabase()).getDatabase().executeUpdate("UPDATE " + ((MysqlManager) getUserManager().getDatabase()).getTableName()
-                + finalUpdate + " WHERE UUID='" + user.getPlayer().getUniqueId().toString() + "';");
+        // copy of userManager#saveStatistic but without async database call that's not allowed in
+        // onDisable method.
+        ((MysqlManager) userManager.getDatabase())
+            .getDatabase()
+            .executeUpdate(
+                "UPDATE "
+                    + ((MysqlManager) getUserManager().getDatabase()).getTableName()
+                    + finalUpdate
+                    + " WHERE UUID='"
+                    + user.getPlayer().getUniqueId().toString()
+                    + "';");
         continue;
       }
       for (StatsStorage.StatisticType stat : StatsStorage.StatisticType.values()) {
@@ -314,5 +358,4 @@ public class Main extends JavaPlugin {
   public RewardsFactory getRewardsHandler() {
     return rewardsHandler;
   }
-
 }

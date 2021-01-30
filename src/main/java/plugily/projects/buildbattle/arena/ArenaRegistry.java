@@ -44,9 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by Tom on 27/07/2014.
- */
+/** Created by Tom on 27/07/2014. */
 public class ArenaRegistry {
 
   private static final List<BaseArena> ARENAS = new ArrayList<>();
@@ -112,7 +110,9 @@ public class ArenaRegistry {
     FileConfiguration config = ConfigUtils.getConfig(plugin, "arenas");
     ConfigurationSection section = config.getConfigurationSection("instances");
     if (section == null) {
-      Debugger.debug(Debugger.Level.WARN, "No instances configuration section in arenas.yml, skipping registration process! Was it manually edited?");
+      Debugger.debug(
+          Debugger.Level.WARN,
+          "No instances configuration section in arenas.yml, skipping registration process! Was it manually edited?");
       return;
     }
     for (String id : section.getKeys(false)) {
@@ -151,7 +151,8 @@ public class ArenaRegistry {
         arena.setMapName(config.getString("instances.default.mapname"));
       }
       if (config.contains(s + "lobbylocation")) {
-        arena.setLobbyLocation(LocationSerializer.getLocation(config.getString(s + "lobbylocation")));
+        arena.setLobbyLocation(
+            LocationSerializer.getLocation(config.getString(s + "lobbylocation")));
       }
       if (config.contains(s + "Endlocation")) {
         arena.setEndLocation(LocationSerializer.getLocation(config.getString(s + "Endlocation")));
@@ -164,22 +165,34 @@ public class ArenaRegistry {
         }
       }
       if (config.contains(s + "gametype")) {
-        arena.setArenaType(BaseArena.ArenaType.valueOf(config.getString(s + "gametype").toUpperCase()));
+        arena.setArenaType(
+            BaseArena.ArenaType.valueOf(config.getString(s + "gametype").toUpperCase()));
       } else {
-        //assuming that arena is from 3.1.x releases we set arena type to SOLO by default
+        // assuming that arena is from 3.1.x releases we set arena type to SOLO by default
         arena.setArenaType(BaseArena.ArenaType.SOLO);
       }
       if (config.contains(s + "plots")) {
         if (config.isConfigurationSection(s + "plots")) {
           for (String plotName : config.getConfigurationSection(s + "plots").getKeys(false)) {
-            if (config.isSet(s + "plots." + plotName + ".maxpoint") && config.isSet(s + "plots." + plotName + ".minpoint")) {
-              Location minPoint = LocationSerializer.getLocation(config.getString(s + "plots." + plotName + ".minpoint"));
+            if (config.isSet(s + "plots." + plotName + ".maxpoint")
+                && config.isSet(s + "plots." + plotName + ".minpoint")) {
+              Location minPoint =
+                  LocationSerializer.getLocation(
+                      config.getString(s + "plots." + plotName + ".minpoint"));
               if (minPoint != null && minPoint.getWorld() != null) {
-                Biome biome = Version.isCurrentHigher(Version.v1_15_R1) ?
-                    minPoint.getWorld().getBiome(minPoint.getBlockX(), minPoint.getBlockY(), minPoint.getBlockZ())
-                    : minPoint.getWorld().getBiome(minPoint.getBlockX(), minPoint.getBlockZ());
+                Biome biome =
+                    Version.isCurrentHigher(Version.v1_15_R1)
+                        ? minPoint
+                            .getWorld()
+                            .getBiome(
+                                minPoint.getBlockX(), minPoint.getBlockY(), minPoint.getBlockZ())
+                        : minPoint.getWorld().getBiome(minPoint.getBlockX(), minPoint.getBlockZ());
                 Plot buildPlot = new Plot(arena, biome);
-                buildPlot.setCuboid(new Cuboid(minPoint, LocationSerializer.getLocation(config.getString(s + "plots." + plotName + ".maxpoint"))));
+                buildPlot.setCuboid(
+                    new Cuboid(
+                        minPoint,
+                        LocationSerializer.getLocation(
+                            config.getString(s + "plots." + plotName + ".maxpoint"))));
                 buildPlot.fullyResetPlot();
                 arena.getPlotManager().addBuildPlot(buildPlot);
               }

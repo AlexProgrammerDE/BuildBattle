@@ -54,23 +54,20 @@ import plugily.projects.buildbattle.utils.Debugger;
 
 /**
  * @author Plajer
- * <p>
- * Created at 25.05.2018
+ *     <p>Created at 25.05.2018
  */
 public class ArenaManager {
 
   private static final Main plugin = JavaPlugin.getPlugin(Main.class);
 
-  private ArenaManager() {
-  }
+  private ArenaManager() {}
 
   /**
-   * Attempts player to join arena.
-   * Calls BBGameJoinEvent.
-   * Can be cancelled only via above-mentioned event
+   * Attempts player to join arena. Calls BBGameJoinEvent. Can be cancelled only via above-mentioned
+   * event
    *
    * @param player player to join
-   * @param arena  arena to join
+   * @param arena arena to join
    * @see BBGameJoinEvent
    */
   public static void joinAttempt(Player player, BaseArena arena) {
@@ -81,19 +78,22 @@ public class ArenaManager {
     ChatManager chatManager = plugin.getChatManager();
 
     if (!arena.isReady()) {
-      player.sendMessage(chatManager.getPrefix() + chatManager.colorMessage("In-Game.Arena-Not-Configured"));
+      player.sendMessage(
+          chatManager.getPrefix() + chatManager.colorMessage("In-Game.Arena-Not-Configured"));
       return;
     }
     if (bbGameJoinEvent.isCancelled()) {
-      player.sendMessage(chatManager.getPrefix() + chatManager.colorMessage("In-Game.Join-Cancelled-Via-API"));
+      player.sendMessage(
+          chatManager.getPrefix() + chatManager.colorMessage("In-Game.Join-Cancelled-Via-API"));
       return;
     }
     if (ArenaRegistry.getArena(player) != null) {
-      player.sendMessage(chatManager.getPrefix() + chatManager.colorMessage("In-Game.Messages.Already-Playing"));
+      player.sendMessage(
+          chatManager.getPrefix() + chatManager.colorMessage("In-Game.Messages.Already-Playing"));
       return;
     }
 
-    //check if player is in party and send party members to the game
+    // check if player is in party and send party members to the game
     if (plugin.getPartyHandler().isPlayerInParty(player)) {
       GameParty party = plugin.getPartyHandler().getParty(player);
       if (party.getLeader() == player) {
@@ -108,22 +108,39 @@ public class ArenaManager {
               }
               leaveAttempt(partyPlayer, ArenaRegistry.getArena(partyPlayer));
             }
-            partyPlayer.sendMessage(chatManager.getPrefix() + chatManager.formatMessage(arena, chatManager.colorMessage("In-Game.Join-As-Party-Member"), partyPlayer));
+            partyPlayer.sendMessage(
+                chatManager.getPrefix()
+                    + chatManager.formatMessage(
+                        arena,
+                        chatManager.colorMessage("In-Game.Join-As-Party-Member"),
+                        partyPlayer));
             joinAttempt(partyPlayer, arena);
           }
         } else {
-          player.sendMessage(chatManager.getPrefix() + chatManager.formatMessage(arena, chatManager.colorMessage("In-Game.Messages.Lobby-Messages.Not-Enough-Space-For-Party"), player));
+          player.sendMessage(
+              chatManager.getPrefix()
+                  + chatManager.formatMessage(
+                      arena,
+                      chatManager.colorMessage(
+                          "In-Game.Messages.Lobby-Messages.Not-Enough-Space-For-Party"),
+                      player));
           return;
         }
       }
     }
 
-    //Arena join permission when bungee false
-    if (!plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED) &&
-          (!(player.hasPermission(PermissionManager.getJoinPerm().replace("<arena>", "*"))
-          || player.hasPermission(PermissionManager.getJoinPerm().replace("<arena>", arena.getID()))))) {
-      player.sendMessage(chatManager.getPrefix() + chatManager.colorMessage("In-Game.Join-No-Permission")
-          .replace("%permission%", PermissionManager.getJoinPerm().replace("<arena>", arena.getID())));
+    // Arena join permission when bungee false
+    if (!plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED)
+        && (!(player.hasPermission(PermissionManager.getJoinPerm().replace("<arena>", "*"))
+            || player.hasPermission(
+                PermissionManager.getJoinPerm().replace("<arena>", arena.getID()))))) {
+      player.sendMessage(
+          chatManager.getPrefix()
+              + chatManager
+                  .colorMessage("In-Game.Join-No-Permission")
+                  .replace(
+                      "%permission%",
+                      PermissionManager.getJoinPerm().replace("<arena>", arena.getID())));
       return;
     }
 
@@ -134,16 +151,20 @@ public class ArenaManager {
 
     if (arena.getArenaState() == ArenaState.RESTARTING) {
       if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.BUNGEE_ENABLED)) {
-        player.kickPlayer(chatManager.getPrefix() + chatManager.colorMessage("Commands.Arena-Restarting"));
+        player.kickPlayer(
+            chatManager.getPrefix() + chatManager.colorMessage("Commands.Arena-Restarting"));
       } else {
-        player.sendMessage(chatManager.getPrefix() + chatManager.colorMessage("Commands.Arena-Restarting"));
+        player.sendMessage(
+            chatManager.getPrefix() + chatManager.colorMessage("Commands.Arena-Restarting"));
       }
       return;
     }
 
-    if (arena.getPlayers().size() >= arena.getMaximumPlayers() && arena.getArenaState() == ArenaState.STARTING) {
+    if (arena.getPlayers().size() >= arena.getMaximumPlayers()
+        && arena.getArenaState() == ArenaState.STARTING) {
       if (!player.hasPermission(PermissionManager.getJoinFullGames())) {
-        player.sendMessage(chatManager.getPrefix() + chatManager.colorMessage("In-Game.Full-Game-No-Permission"));
+        player.sendMessage(
+            chatManager.getPrefix() + chatManager.colorMessage("In-Game.Full-Game-No-Permission"));
         return;
       }
       boolean foundSlot = false;
@@ -152,13 +173,22 @@ public class ArenaManager {
           continue;
         }
         leaveAttempt(loopPlayer, arena);
-        loopPlayer.sendMessage(chatManager + chatManager.colorMessage("In-Game.Messages.Lobby-Messages.You-Were-Kicked-For-Premium-Slot"));
-        chatManager.broadcast(arena, chatManager.formatMessage(arena, chatManager.colorMessage("In-Game.Messages.Lobby-Messages.Kicked-For-Premium-Slot"), loopPlayer));
+        loopPlayer.sendMessage(
+            chatManager
+                + chatManager.colorMessage(
+                    "In-Game.Messages.Lobby-Messages.You-Were-Kicked-For-Premium-Slot"));
+        chatManager.broadcast(
+            arena,
+            chatManager.formatMessage(
+                arena,
+                chatManager.colorMessage("In-Game.Messages.Lobby-Messages.Kicked-For-Premium-Slot"),
+                loopPlayer));
         foundSlot = true;
         break;
       }
       if (!foundSlot) {
-        player.sendMessage(chatManager.getPrefix() + chatManager.colorMessage("In-Game.No-Slots-For-Premium"));
+        player.sendMessage(
+            chatManager.getPrefix() + chatManager.colorMessage("In-Game.No-Slots-For-Premium"));
         return;
       }
     }
@@ -166,22 +196,33 @@ public class ArenaManager {
     Debugger.debug("Final join attempt, " + player.getName());
     User user = plugin.getUserManager().getUser(player);
     arena.getScoreboardManager().createScoreboard(user);
-    if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.INVENTORY_MANAGER_ENABLED)) {
+    if (plugin
+        .getConfigPreferences()
+        .getOption(ConfigPreferences.Option.INVENTORY_MANAGER_ENABLED)) {
       InventorySerializer.saveInventoryToFile(plugin, player);
     }
 
     player.setExp(1);
     player.setFoodLevel(20);
-    MiscUtils.getEntityAttribute(player, Attribute.GENERIC_MAX_HEALTH).ifPresent(ai -> player.setHealth(ai.getBaseValue()));
+    MiscUtils.getEntityAttribute(player, Attribute.GENERIC_MAX_HEALTH)
+        .ifPresent(ai -> player.setHealth(ai.getBaseValue()));
     player.setLevel(0);
     player.setWalkSpeed(0.2f);
     player.setFlySpeed(0.1f);
 
     arena.doBarAction(BaseArena.BarAction.ADD, player);
     player.getInventory().clear();
-    player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
+    player
+        .getInventory()
+        .setArmorContents(
+            new ItemStack[] {
+              new ItemStack(Material.AIR),
+              new ItemStack(Material.AIR),
+              new ItemStack(Material.AIR),
+              new ItemStack(Material.AIR)
+            });
 
-    //Set player as spectator as the game is already started
+    // Set player as spectator as the game is already started
     SpecialItem leaveItem = plugin.getSpecialItemsRegistry().getSpecialItem("Leave");
     if (arena.getArenaState() == ArenaState.IN_GAME || arena.getArenaState() == ArenaState.ENDING) {
       if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.DISABLE_SPECTATORS)) {
@@ -194,15 +235,31 @@ public class ArenaManager {
       player.sendMessage(chatManager.colorMessage("In-Game.Spectator.You-Are-Spectator"));
       player.getInventory().clear();
 
-      player.getInventory().setItem(0, new ItemBuilder(XMaterial.COMPASS.parseItem()).name(chatManager.colorMessage("In-Game.Spectator.Spectator-Item-Name")).build());
-      player.getInventory().setItem(4, new ItemBuilder(XMaterial.COMPARATOR.parseItem()).name(chatManager.colorMessage("In-Game.Spectator.Settings-Menu.Item-Name")).build());
+      player
+          .getInventory()
+          .setItem(
+              0,
+              new ItemBuilder(XMaterial.COMPASS.parseItem())
+                  .name(chatManager.colorMessage("In-Game.Spectator.Spectator-Item-Name"))
+                  .build());
+      player
+          .getInventory()
+          .setItem(
+              4,
+              new ItemBuilder(XMaterial.COMPARATOR.parseItem())
+                  .name(chatManager.colorMessage("In-Game.Spectator.Settings-Menu.Item-Name"))
+                  .build());
       player.getInventory().setItem(8, leaveItem.getItemStack());
 
-      player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
+      player
+          .getActivePotionEffects()
+          .forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
       player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
 
-      //Hide player from other players
-      arena.getPlayers().forEach(onlinePlayer -> MiscUtils.hidePlayer(plugin, onlinePlayer, player));
+      // Hide player from other players
+      arena
+          .getPlayers()
+          .forEach(onlinePlayer -> MiscUtils.hidePlayer(plugin, onlinePlayer, player));
 
       user.setSpectator(true);
       player.setCollidable(false);
@@ -227,17 +284,24 @@ public class ArenaManager {
     player.updateInventory();
 
     chatManager.broadcastAction(arena, player, ChatManager.ActionType.JOIN);
-    player.sendTitle(chatManager.colorMessage("In-Game.Messages.Join-Title").replace("%THEME%", arena.getTheme()),
-        chatManager.colorMessage("In-Game.Messages.Join-Title").replace("%THEME%", arena.getTheme()), 5, 40, 5);
+    player.sendTitle(
+        chatManager
+            .colorMessage("In-Game.Messages.Join-Title")
+            .replace("%THEME%", arena.getTheme()),
+        chatManager
+            .colorMessage("In-Game.Messages.Join-Title")
+            .replace("%THEME%", arena.getTheme()),
+        5,
+        40,
+        5);
     plugin.getSignManager().updateSigns();
   }
 
   /**
-   * Attempts player to leave arena.
-   * Calls BBGameLeaveEvent event.
+   * Attempts player to leave arena. Calls BBGameLeaveEvent event.
    *
    * @param player player to leave
-   * @param arena  arena to leave
+   * @param arena arena to leave
    * @see BBGameLeaveEvent
    */
   public static void leaveAttempt(Player player, BaseArena arena) {
@@ -249,7 +313,8 @@ public class ArenaManager {
 
     arena.doBarAction(BaseArena.BarAction.REMOVE, player);
     player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
-    MiscUtils.getEntityAttribute(player, Attribute.GENERIC_MAX_HEALTH).ifPresent(ai -> ai.setBaseValue(20.0));
+    MiscUtils.getEntityAttribute(player, Attribute.GENERIC_MAX_HEALTH)
+        .ifPresent(ai -> ai.setBaseValue(20.0));
     player.getInventory().clear();
     player.getInventory().setArmorContents(null);
     player.resetPlayerTime();
@@ -266,7 +331,9 @@ public class ArenaManager {
     User user = plugin.getUserManager().getUser(player);
     arena.getScoreboardManager().removeScoreboard(user);
 
-    if (plugin.getConfigPreferences().getOption(ConfigPreferences.Option.INVENTORY_MANAGER_ENABLED)) {
+    if (plugin
+        .getConfigPreferences()
+        .getOption(ConfigPreferences.Option.INVENTORY_MANAGER_ENABLED)) {
       InventorySerializer.loadInventory(plugin, player);
     }
 
@@ -296,7 +363,7 @@ public class ArenaManager {
       user.addStat(StatsStorage.StatisticType.GAMES_PLAYED, 1);
     }
 
-    //todo maybe not
+    // todo maybe not
     user.setStat(StatsStorage.StatisticType.LOCAL_GUESS_THE_BUILD_POINTS, 0);
 
     Plot plot = arena.getPlotManager().getPlot(player);
@@ -306,8 +373,7 @@ public class ArenaManager {
         if (plot.getOwners().size() > 1) {
           plot.fullyResetPlot();
         }
-      } else
-        plot.fullyResetPlot();
+      } else plot.fullyResetPlot();
     }
     if (arena instanceof GuessTheBuildArena) {
       ((GuessTheBuildArena) arena).getWhoGuessed().remove(player);
@@ -325,7 +391,7 @@ public class ArenaManager {
    * Stops current arena. Calls BBGameEndEvent event
    *
    * @param quickStop should arena be stopped immediately? (use only in important cases)
-   * @param arena     arena to stop
+   * @param arena arena to stop
    * @see BBGameEndEvent
    */
   public static void stopGame(boolean quickStop, BaseArena arena) {
@@ -364,5 +430,4 @@ public class ArenaManager {
       }
     }.runTaskTimer(plugin, 30, 30);
   }
-
 }

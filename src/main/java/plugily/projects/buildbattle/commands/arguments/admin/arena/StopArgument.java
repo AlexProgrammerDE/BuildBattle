@@ -34,28 +34,40 @@ import plugily.projects.buildbattle.commands.arguments.data.LabeledCommandArgume
 
 /**
  * @author Plajer
- * <p>
- * Created at 11.01.2019
+ *     <p>Created at 11.01.2019
  */
 public class StopArgument {
 
   public StopArgument(ArgumentsRegistry registry) {
-    registry.mapArgument("buildbattleadmin", new LabeledCommandArgument("stop", "buildbattle.admin.stop", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/bba stop", "/bba stop",
-            "&7Stops the arena you're in\n&7&lYou must be in target arena!\n&6Permission: &7buildbattle.admin.stop")) {
-      @Override
-      public void execute(CommandSender sender, String[] args) {
-        BaseArena arena = ArenaRegistry.getArena((Player) sender);
-        if (arena == null) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Not-Playing"));
-          return;
-        }
-        if (arena.getArenaState() != ArenaState.ENDING) {
-          ArenaManager.stopGame(false, arena);
-        }
-        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("Commands.Arguments.Success"));
-      }
-    });
+    registry.mapArgument(
+        "buildbattleadmin",
+        new LabeledCommandArgument(
+            "stop",
+            "buildbattle.admin.stop",
+            CommandArgument.ExecutorType.PLAYER,
+            new LabelData(
+                "/bba stop",
+                "/bba stop",
+                "&7Stops the arena you're in\n&7&lYou must be in target arena!\n&6Permission: &7buildbattle.admin.stop")) {
+          @Override
+          public void execute(CommandSender sender, String[] args) {
+            BaseArena arena = ArenaRegistry.getArena((Player) sender);
+            if (arena == null) {
+              sender.sendMessage(
+                  registry.getPlugin().getChatManager().getPrefix()
+                      + registry.getPlugin().getChatManager().colorMessage("Commands.Not-Playing"));
+              return;
+            }
+            if (arena.getArenaState() != ArenaState.ENDING) {
+              ArenaManager.stopGame(false, arena);
+            }
+            sender.sendMessage(
+                registry.getPlugin().getChatManager().getPrefix()
+                    + registry
+                        .getPlugin()
+                        .getChatManager()
+                        .colorMessage("Commands.Arguments.Success"));
+          }
+        });
   }
-
 }

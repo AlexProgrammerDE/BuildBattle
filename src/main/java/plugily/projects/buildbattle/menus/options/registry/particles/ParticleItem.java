@@ -23,9 +23,7 @@ package plugily.projects.buildbattle.menus.options.registry.particles;
 import org.bukkit.Particle;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Created by Tom on 23/08/2015.
- */
+/** Created by Tom on 23/08/2015. */
 public class ParticleItem {
 
   private ItemStack itemStack;
@@ -59,5 +57,4 @@ public class ParticleItem {
   public void setItemStack(ItemStack itemStack) {
     this.itemStack = itemStack;
   }
-
 }
